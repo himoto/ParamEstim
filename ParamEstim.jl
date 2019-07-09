@@ -2,7 +2,10 @@ module ParamEstim
 
 using Printf;
 
-export runGA, runSim
+export
+    runGA,
+    data2param,
+    runSim
 
 include("ga/ga.jl");
 using .GA;
