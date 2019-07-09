@@ -1,6 +1,7 @@
 module ParamEstim
 
 using Printf;
+using DelimitedFiles;
 
 export
     runGA,
