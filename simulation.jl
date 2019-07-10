@@ -1,7 +1,5 @@
 module Sim
-import ..GA; 
-import ..C;
-import ..V;
+using ..GA;
 
 using Sundials;
 
@@ -28,7 +26,7 @@ function numericalIntegration!(p::Vector{Float64},u0::Vector{Float64})
             p[C.Ligand] = p[C.HRG];
         end
 
-        prob = ODEProblem(GA.diffeq,u0,tspan,p);
+        prob = ODEProblem(diffeq,u0,tspan,p);
 
         try
             sol = solve(prob,CVODE_BDF(),saveat=1.0,dtmin=(tspan[end]-tspan[1])/1e9,abstol=1e-9,reltol=1e-9,verbose=false);

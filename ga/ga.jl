@@ -1,10 +1,13 @@
 module GA
 
 export
+    C,
+    V,
     Sim,
     Exp,
     f_params,
     initialValues,
+    diffeq,
     searchParameterIndex,
     getSearchRegion,
     plotFunc_timecourse,
