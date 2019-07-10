@@ -1,5 +1,5 @@
 module Sim
-using ..GA;
+using ..Model;
 
 using Sundials;
 
