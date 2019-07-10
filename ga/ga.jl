@@ -7,7 +7,6 @@ export
     Exp,
     f_params,
     initialValues,
-    diffeq,
     searchParameterIndex,
     getSearchRegion,
     plotFunc_timecourse,
