@@ -1,4 +1,7 @@
 function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
+    if !isdir("./Fig")
+        mkdir("./Fig");
+    end
 
     if !(viz_type in ["best","average","original"])
         try
@@ -63,8 +66,13 @@ function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool
         else
             error(@sprintf("%d is larger than n_fitparam(%d)",parse(Int64,viz_type),n_file));
         end
+
+        if n_file > 1
+            saveParamRange(n_file,p,u0);
+        end
+
     else
-        if !(Sim.numericalIntegration!(p,u0) isa Nothing)
+        if Sim.numericalIntegration!(p,u0) !== nothing
             error("Simulation failed.");
         end
 
@@ -81,8 +89,6 @@ function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool
         PcFos_all
     )
 end
-
-
 
 
 function runSimulation(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vector{Float64})
@@ -110,4 +116,52 @@ function runSimulation(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vec
     end
 
     return Sim
+end
+
+
+function saveParamRange(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
+    searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
+    searchParamMatrix::Matrix{Float64} = zeros(n_file,length(searchIdx[1]));
+
+    for nthParamSet=1:n_file
+        local bestIndiv::Vector{Float64};
+        try
+            generation::Int64 = readdlm("./FitParam/$nthParamSet/generation.dat")[1,1];
+            bestIndiv = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
+        catch
+            bestIndiv = zeros(length(searchIdx[1])+length(searchIdx[2]));
+            for i =1:length(searchIdx[1])
+                bestIndiv[i] = p[searchIdx[1][i]];
+            end
+            for i=1:length(searchIdx[2])
+                bestIndiv[i+length(searchIdx[1])] = u0[searchIdx[2][i]];
+            end
+        end
+        searchParamMatrix[nthParamSet,:] = bestIndiv;
+    end
+
+    # ==========================================================================
+    # Seaborn.boxplot
+
+    fig = figure(figsize=(8,24));
+    gca().spines["right"].set_visible(false);
+    gca().spines["top"].set_visible(false);
+    gca().yaxis.set_ticks_position("left");
+    gca().xaxis.set_ticks_position("bottom");
+
+    ax = Seaborn.boxplot(
+        data=searchParamMatrix,
+        orient="h",
+        linewidth=1,
+        palette="Set2"
+    );
+
+    ax.set_xlabel("Parameter value");
+    ax.set_ylabel("");
+    ax.set_yticklabels([C.F_P[i] for i in searchIdx[1]]);
+    ax.set_xscale("log");
+
+    savefig("./Fig/param_range.pdf",bbox_inches="tight");
+    close(fig);
+    # ==========================================================================
 end

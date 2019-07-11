@@ -21,6 +21,8 @@ using Statistics;
 using DelimitedFiles;
 using PyPlot;
 
+import Seaborn;
+
 include("../model/model.jl");
 using .Model;
 
