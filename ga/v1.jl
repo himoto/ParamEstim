@@ -28,6 +28,10 @@ function gaV1(
         write(f,@sprintf("%d",1));
     end
 
+    open("../FitParam/$nthParamSet/bestFitness.dat", "w") do f
+        write(f,@sprintf("%e",bestFitness));
+    end
+
     if population[1,end] <= allowable_error
         bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
         bestFitness = population[1,end];
@@ -56,6 +60,11 @@ function gaV1(
         end
 
         bestFitness = population[1,end];
+
+        open("../FitParam/$nthParamSet/bestFitness.dat", "w") do f
+            write(f,@sprintf("%e",bestFitness));
+        end
+
         if population[1,end] <= allowable_error
             bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
             bestFitness = population[1,end];

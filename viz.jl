@@ -44,22 +44,20 @@ function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool
             PcFos_all[i,:,:] = Sim.PcFos
         end
 
-        #=
-        best_fitness_all = Inf.*ones(n_file);
+        bestFitness_all::Vector{Float64} = Inf.*ones(n_file);
         for i=1:n_file
             if isfile("./FitParam/$i/BestFitness.dat")
-                best_fitness_all[i] = readdlm("./FitParam/$i/BestFitness.dat");
+                bestFitness_all[i] = readdlm("./FitParam/$i/BestFitness.dat")[1,1];
             else
-                best_fitness_all[i] = Inf;
-
-        best_paramset = argmin(best_fitness_all);
-        =#
+                bestFitness_all[i] = Inf;
+            end
+        end
+        bestParamset::Int = argmin(bestFitness_all);
 
         if viz_type == "average"
             nothing
         elseif viz_type == "best"
-            nothing
-            # Sim = runSimulation(Int(best_paramset),Sim,p,u0);
+            Sim = runSimulation(bestParamset,Sim,p,u0);
         elseif parse(Int64,viz_type) <= n_file
             Sim = runSimulation(parse(Int64,viz_type),Sim,p,u0);
         else
@@ -107,7 +105,7 @@ function runSimulation(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vec
         # pass
     end
 
-    if !(Sim.numericalIntegration!(p,u0) isa Nothing)
+    if Sim.numericalIntegration!(p,u0) !== nothing
         print("Simulation failed.\nparameter_set #$nthParamSet")
     end
 
