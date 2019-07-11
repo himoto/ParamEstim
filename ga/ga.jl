@@ -9,7 +9,7 @@ export
     initialValues,
     searchParameterIndex,
     getSearchRegion,
-    plotFunc_timecourse,
+    visualizeResult,
     gaV1,
     gaV2
 
@@ -33,6 +33,7 @@ using .Sim;
 include("../fitness.jl");
 include("../searchParameter.jl");
 include("../plotFunc.jl");
+include("../viz.jl");
 
 include("initPop.jl");
 include("transformation.jl");

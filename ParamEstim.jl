@@ -1,17 +1,18 @@
 module ParamEstim
 
+import .Main;
+
 using Printf;
 using DelimitedFiles;
 
 export
+    Sim,
     runGA,
-    data2param,
-    runSim
+    visualizeResult
 
 include("ga/ga.jl");
 using .GA;
 
 include("runGA.jl");
-include("runSim.jl");
 
 end # module

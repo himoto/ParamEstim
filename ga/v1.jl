@@ -1,4 +1,5 @@
 function gaV1(
+    nthParamSet::Int64,
     n_generation::Int64,
     n_population::Int64,
     n_children::Int64,
@@ -14,7 +15,7 @@ function gaV1(
     bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
     bestFitness = population[1,end];
 
-    f = open("./FitParam/fitParam1.dat", "w");
+    f = open("../FitParam/$nthParamSet/fitParam1.dat", "w");
     for i=1:length(searchIdx[1])
         write(f,@sprintf("%e\n",bestIndiv[i]));
     end
@@ -23,7 +24,7 @@ function gaV1(
     end
     close(f);
 
-    open("./FitParam/generation.dat", "w") do f
+    open("../FitParam/$nthParamSet/generation.dat", "w") do f
         write(f,@sprintf("%d",1));
     end
 
@@ -40,7 +41,7 @@ function gaV1(
         bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
 
         if population[1,end] < bestFitness
-            f = open("./FitParam/fitParam$i.dat", "w");
+            f = open("../FitParam/$nthParamSet/fitParam$i.dat", "w");
             for i=1:length(searchIdx[1])
                 write(f,@sprintf("%e\n",bestIndiv[i]));
             end
@@ -49,7 +50,7 @@ function gaV1(
             end
             close(f);
 
-            open("./FitParam/generation.dat", "w") do f
+            open("../FitParam/$nthParamSet/generation.dat", "w") do f
                 write(f,@sprintf("%d",i));
             end
         end
