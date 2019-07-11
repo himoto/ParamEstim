@@ -8,15 +8,29 @@ Using Genetic Algorithm to Fit ODE Models to Data
 ## Usage
 - Parameter Estimation
 ```julia
-include("ParamEstim.jl")
+display("text/html", """<script charset="utf-8">
+    IPython.notebook.kernel.execute(
+        'current_ipynb = "'+IPython.notebook.notebook_name+'" '
+    );
+    </script>"""
+)
+```
+```julia
+include("../ParamEstim.jl")
 using .ParamEstim
 runGA()
 ```
 - Visualization of Simulation Results
 ```julia
-include("ParamEstim.jl")
+include("ParamEstim.jl");
 using .ParamEstim
-runSim()
+#==============================================================================
+    viz_type::String => "best", "average", "original" or int(1~n_fitparam)
+    show_all::Bool
+    stdev::Bool (Only when viz_type == "average")
+==============================================================================#
+
+visualizeResult(Sim,viz_type="average",show_all=false,stdev=true)
 ```
 
 ## Installation
