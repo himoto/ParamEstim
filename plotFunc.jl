@@ -57,12 +57,18 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
         plot(Sim.t,vec(mean(PERK_cyt_norm[:,:,1],dims=1)),"b");
         plot(Sim.t,vec(mean(PERK_cyt_norm[:,:,2],dims=1)),"r");
         if stdev
-            errorbar(Sim.t,vec(mean(PERK_cyt_norm[:,:,1],dims=1)),
-                yerr=[std(PERK_cyt_norm[:,i,1]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="b",lw=0.05,alpha=0.1);
-            errorbar(Sim.t,vec(mean(PERK_cyt_norm[:,:,2],dims=1)),
-                yerr=[std(PERK_cyt_norm[:,i,2]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="r",lw=0.05,alpha=0.1);
+            mean_egf = vec(mean(PERK_cyt_norm[:,:,1],dims=1));
+            yerr_egf = [std(PERK_cyt_norm[:,i,1]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_egf - yerr_egf, mean_egf + yerr_egf,
+                lw=0, color="b", alpha=0.1
+            );
+            mean_hrg = vec(mean(PERK_cyt_norm[:,:,2],dims=1));
+            yerr_hrg = [std(PERK_cyt_norm[:,i,2]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_hrg - yerr_hrg, mean_hrg + yerr_hrg,
+                lw=0, color="r", alpha=0.1
+            );
         end
     end
 
@@ -102,12 +108,18 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
         plot(Sim.t,vec(mean(PRSK_wcl_norm[:,:,1],dims=1)),"b");
         plot(Sim.t,vec(mean(PRSK_wcl_norm[:,:,2],dims=1)),"r");
         if stdev
-            errorbar(Sim.t,vec(mean(PRSK_wcl_norm[:,:,1],dims=1)),
-                yerr=[std(PRSK_wcl_norm[:,i,1]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="b",lw=0.05,alpha=0.1);
-            errorbar(Sim.t,vec(mean(PRSK_wcl_norm[:,:,2],dims=1)),
-                yerr=[std(PRSK_wcl_norm[:,i,2]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="r",lw=0.05,alpha=0.1);
+            mean_egf = vec(mean(PRSK_wcl_norm[:,:,1],dims=1));
+            yerr_egf = [std(PRSK_wcl_norm[:,i,1]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_egf - yerr_egf, mean_egf + yerr_egf,
+                lw=0, color="b", alpha=0.1
+            );
+            mean_hrg = vec(mean(PRSK_wcl_norm[:,:,2],dims=1));
+            yerr_hrg = [std(PRSK_wcl_norm[:,i,2]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_hrg - yerr_hrg, mean_hrg + yerr_hrg,
+                lw=0, color="r", alpha=0.1
+            );
         end
     end
 
@@ -147,12 +159,18 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
         plot(Sim.t,vec(mean(PCREB_wcl_norm[:,:,1],dims=1)),"b");
         plot(Sim.t,vec(mean(PCREB_wcl_norm[:,:,2],dims=1)),"r");
         if stdev
-            errorbar(Sim.t,vec(mean(PCREB_wcl_norm[:,:,1],dims=1)),
-                yerr=[std(PCREB_wcl_norm[:,i,1]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="b",lw=0.05,alpha=0.1);
-            errorbar(Sim.t,vec(mean(PCREB_wcl_norm[:,:,2],dims=1)),
-                yerr=[std(PCREB_wcl_norm[:,i,2]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="r",lw=0.05,alpha=0.1);
+            mean_egf = vec(mean(PCREB_wcl_norm[:,:,1],dims=1));
+            yerr_egf = [std(PCREB_wcl_norm[:,i,1]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_egf - yerr_egf, mean_egf + yerr_egf,
+                lw=0, color="b", alpha=0.1
+            );
+            mean_hrg = vec(mean(PCREB_wcl_norm[:,:,2],dims=1));
+            yerr_hrg = [std(PCREB_wcl_norm[:,i,2]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_hrg - yerr_hrg, mean_hrg + yerr_hrg,
+                lw=0, color="r", alpha=0.1
+            );
         end
     end
 
@@ -192,12 +210,18 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
         plot(Sim.t,vec(mean(DUSPmRNA_norm[:,:,1],dims=1)),"b");
         plot(Sim.t,vec(mean(DUSPmRNA_norm[:,:,2],dims=1)),"r");
         if stdev
-            errorbar(Sim.t,vec(mean(DUSPmRNA_norm[:,:,1],dims=1)),
-                yerr=[std(DUSPmRNA_norm[:,i,1]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="b",lw=0.05,alpha=0.1);
-            errorbar(Sim.t,vec(mean(DUSPmRNA_norm[:,:,2],dims=1)),
-                yerr=[std(DUSPmRNA_norm[:,i,2]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="r",lw=0.05,alpha=0.1);
+            mean_egf = vec(mean(DUSPmRNA_norm[:,:,1],dims=1));
+            yerr_egf = [std(DUSPmRNA_norm[:,i,1]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_egf - yerr_egf, mean_egf + yerr_egf,
+                lw=0, color="b", alpha=0.1
+            );
+            mean_hrg = vec(mean(DUSPmRNA_norm[:,:,2],dims=1));
+            yerr_hrg = [std(DUSPmRNA_norm[:,i,2]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_hrg - yerr_hrg, mean_hrg + yerr_hrg,
+                lw=0, color="r", alpha=0.1
+            );
         end
     end
 
@@ -237,12 +261,18 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
         plot(Sim.t,vec(mean(cFosmRNA_norm[:,:,1],dims=1)),"b");
         plot(Sim.t,vec(mean(cFosmRNA_norm[:,:,2],dims=1)),"r");
         if stdev
-            errorbar(Sim.t,vec(mean(cFosmRNA_norm[:,:,1],dims=1)),
-                yerr=[std(cFosmRNA_norm[:,i,1]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="b",lw=0.05,alpha=0.1);
-            errorbar(Sim.t,vec(mean(cFosmRNA_norm[:,:,2],dims=1)),
-                yerr=[std(cFosmRNA_norm[:,i,2]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="r",lw=0.05,alpha=0.1);
+            mean_egf = vec(mean(cFosmRNA_norm[:,:,1],dims=1));
+            yerr_egf = [std(cFosmRNA_norm[:,i,1]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_egf - yerr_egf, mean_egf + yerr_egf,
+                lw=0, color="b", alpha=0.1
+            );
+            mean_hrg = vec(mean(cFosmRNA_norm[:,:,2],dims=1));
+            yerr_hrg = [std(cFosmRNA_norm[:,i,2]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_hrg - yerr_hrg, mean_hrg + yerr_hrg,
+                lw=0, color="r", alpha=0.1
+            );
         end
     end
 
@@ -282,12 +312,18 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
         plot(Sim.t,vec(mean(cFosPro_norm[:,:,1],dims=1)),"b");
         plot(Sim.t,vec(mean(cFosPro_norm[:,:,2],dims=1)),"r");
         if stdev
-            errorbar(Sim.t,vec(mean(cFosPro_norm[:,:,1],dims=1)),
-                yerr=[std(cFosPro_norm[:,i,1]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="b",lw=0.05,alpha=0.1);
-            errorbar(Sim.t,vec(mean(cFosPro_norm[:,:,2],dims=1)),
-                yerr=[std(cFosPro_norm[:,i,2]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="r",lw=0.05,alpha=0.1);
+            mean_egf = vec(mean(cFosPro_norm[:,:,1],dims=1));
+            yerr_egf = [std(cFosPro_norm[:,i,1]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_egf - yerr_egf, mean_egf + yerr_egf,
+                lw=0, color="b", alpha=0.1
+            );
+            mean_hrg = vec(mean(cFosPro_norm[:,:,2],dims=1));
+            yerr_hrg = [std(cFosPro_norm[:,i,2]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_hrg - yerr_hrg, mean_hrg + yerr_hrg,
+                lw=0, color="r", alpha=0.1
+            );
         end
     end
 
@@ -327,12 +363,18 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
         plot(Sim.t,vec(mean(PcFos_norm[:,:,1],dims=1)),"b");
         plot(Sim.t,vec(mean(PcFos_norm[:,:,2],dims=1)),"r");
         if stdev
-            errorbar(Sim.t,vec(mean(PcFos_norm[:,:,1],dims=1)),
-                yerr=[std(PcFos_norm[:,i,1]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="b",lw=0.05,alpha=0.1);
-            errorbar(Sim.t,vec(mean(PcFos_norm[:,:,2],dims=1)),
-                yerr=[std(PcFos_norm[:,i,2]) for i=1:length(Sim.t)],
-                fmt="None",ecolor="r",lw=0.05,alpha=0.1);
+            mean_egf = vec(mean(PcFos_norm[:,:,1],dims=1));
+            yerr_egf = [std(PcFos_norm[:,i,1]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_egf - yerr_egf, mean_egf + yerr_egf,
+                lw=0, color="b", alpha=0.1
+            );
+            mean_hrg = vec(mean(PcFos_norm[:,:,2],dims=1));
+            yerr_hrg = [std(PcFos_norm[:,i,2]) for i=1:length(Sim.t)];
+            fill_between(
+                Sim.t, mean_hrg - yerr_hrg, mean_hrg + yerr_hrg,
+                lw=0, color="r", alpha=0.1
+            );
         end
     end
 
@@ -353,6 +395,8 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
     xlabel("Time (min)");
     ylabel("Phosphorylated c-Fos\nProtein expression");
 
+
     show();
+    #savefig("./Fig/sim_$viz_type");
 
 end
