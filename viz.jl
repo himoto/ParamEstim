@@ -57,13 +57,11 @@ function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool
         end
         bestParamset::Int = argmin(bestFitness_all);
 
-        if viz_type == "average"
-            nothing
-        elseif viz_type == "best"
+        if viz_type == "best"
             Sim = runSimulation(bestParamset,Sim,p,u0);
-        elseif parse(Int64,viz_type) <= n_file
+        elseif viz_type != "average" && parse(Int64,viz_type) <= n_file
             Sim = runSimulation(parse(Int64,viz_type),Sim,p,u0);
-        else
+        elseif viz_type != "average" && parse(Int64,viz_type) > n_file
             error(@sprintf("%d is larger than n_fitparam(%d)",parse(Int64,viz_type),n_file));
         end
 
