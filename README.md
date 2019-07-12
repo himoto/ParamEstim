@@ -5,6 +5,13 @@ Using Genetic Algorithm to Fit ODE Models to Data
 
  Points (blue diamonds, EGF; red squares, HRG) denote experimental data, solid lines denote simulations.
 
+## Requirements
+- **[Julia 1.0+](https://julialang.org)**
+    - [Sundials](https://github.com/JuliaDiffEq/Sundials.jl)
+    - [StatsBase](https://github.com/JuliaStats/StatsBase.jl)
+    - [PyPlot](https://github.com/JuliaPy/PyPlot.jl)
+    - [Seaborn](https://github.com/JuliaPy/Seaborn.jl)
+
 ## Usage
 - Parameter Estimation
 ```julia
@@ -18,12 +25,14 @@ display("text/html", """<script charset="utf-8">
 ```julia
 include("../ParamEstim.jl")
 using .ParamEstim
-runGA()
+runGA();
 ```
 - Visualization of Simulation Results
 ```julia
 include("ParamEstim.jl");
 using .ParamEstim
+```
+```julia
 #==============================================================================
     viz_type::String => "best", "average", "original" or int(1~n_fitparam)
     show_all::Bool
@@ -32,6 +41,13 @@ using .ParamEstim
 
 visualizeResult(Sim,viz_type="average",show_all=false,stdev=true)
 ```
+1. **viz_type="best", show_all=true, stdev=false**
+
+![sim_best](https://user-images.githubusercontent.com/31299606/61094142-bd4da280-a488-11e9-858c-0b876e213846.png)
+
+2. **viz_type="average", show_all=false, stdev=true**
+
+![sim_average](https://user-images.githubusercontent.com/31299606/61094205-1a495880-a489-11e9-8d5e-33ecaa39c5d3.png)
 
 ## Installation
     $ git clone https://github.com/himoto/ParamEstim.git
