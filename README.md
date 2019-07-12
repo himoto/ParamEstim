@@ -43,11 +43,11 @@ visualizeResult(Sim,viz_type="average",show_all=false,stdev=true)
 ```
 1. **viz_type="best", show_all=true, stdev=false**
 
-![sim_best](https://user-images.githubusercontent.com/31299606/61094142-bd4da280-a488-11e9-858c-0b876e213846.png)
+![sim_best](https://user-images.githubusercontent.com/31299606/61113999-5f41af00-a4ca-11e9-80d6-ae95d2897ced.png)
 
 2. **viz_type="average", show_all=false, stdev=true**
 
-![sim_average](https://user-images.githubusercontent.com/31299606/61094205-1a495880-a489-11e9-8d5e-33ecaa39c5d3.png)
+![sim_average](https://user-images.githubusercontent.com/31299606/61113976-56e97400-a4ca-11e9-9013-ff21fb7e27a2.png)
 
 ## Installation
     $ git clone https://github.com/himoto/ParamEstim.git
