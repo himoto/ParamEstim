@@ -14,7 +14,7 @@ Using Genetic Algorithm to Fit ODE Models to Data
     - [Seaborn](https://github.com/JuliaPy/Seaborn.jl)
 
 ## Usage
-- Parameter Estimation
+- Parameter Estimation (runGA/runGA_*n*.ipynb, *n*=1, 2, 3, · · ·)
 ```julia
 display("text/html", """<script charset="utf-8">
     IPython.notebook.kernel.execute(
@@ -28,7 +28,7 @@ include("../ParamEstim.jl")
 using .ParamEstim
 runGA();
 ```
-- Visualization of Simulation Results
+- Visualization of Simulation Results (runSim.ipynb)
 ```julia
 include("ParamEstim.jl");
 using .ParamEstim
