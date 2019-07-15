@@ -7,7 +7,7 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
     cFosmRNA_all,
     cFosPro_all,
     PcFos_all
-    );
+    )
 
     rc("figure",figsize = (20,8));
     rc("font",family = "Arial");
@@ -41,8 +41,8 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
     subplot(2,4,2);
     if show_all
         for i=1:n_file
-            plot(Sim.t,PERK_cyt_all[i,:,1]./maximum(PERK_cyt_all[i,:,:]),"b",alpha=0.1);
-            plot(Sim.t,PERK_cyt_all[i,:,2]./maximum(PERK_cyt_all[i,:,:]),"r",alpha=0.1);
+            plot(Sim.t,PERK_cyt_all[i,:,1]./maximum(PERK_cyt_all[i,:,:]),"b",alpha=0.05);
+            plot(Sim.t,PERK_cyt_all[i,:,2]./maximum(PERK_cyt_all[i,:,:]),"r",alpha=0.05);
         end
     end
     if viz_type != "average"
@@ -92,8 +92,8 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
     subplot(2,4,3);
     if show_all
         for i=1:n_file
-            plot(Sim.t,PRSK_wcl_all[i,:,1]./maximum(PRSK_wcl_all[i,:,:]),"b",alpha=0.1);
-            plot(Sim.t,PRSK_wcl_all[i,:,2]./maximum(PRSK_wcl_all[i,:,:]),"r",alpha=0.1);
+            plot(Sim.t,PRSK_wcl_all[i,:,1]./maximum(PRSK_wcl_all[i,:,:]),"b",alpha=0.05);
+            plot(Sim.t,PRSK_wcl_all[i,:,2]./maximum(PRSK_wcl_all[i,:,:]),"r",alpha=0.05);
         end
     end
     if viz_type != "average"
@@ -143,8 +143,8 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
     subplot(2,4,4);
     if show_all
         for i=1:n_file
-            plot(Sim.t,PCREB_wcl_all[i,:,1]./maximum(PCREB_wcl_all[i,:,:]),"b",alpha=0.1);
-            plot(Sim.t,PCREB_wcl_all[i,:,2]./maximum(PCREB_wcl_all[i,:,:]),"r",alpha=0.1);
+            plot(Sim.t,PCREB_wcl_all[i,:,1]./maximum(PCREB_wcl_all[i,:,:]),"b",alpha=0.05);
+            plot(Sim.t,PCREB_wcl_all[i,:,2]./maximum(PCREB_wcl_all[i,:,:]),"r",alpha=0.05);
         end
     end
     if viz_type != "average"
@@ -194,8 +194,8 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
     subplot(2,4,5);
     if show_all
         for i=1:n_file
-            plot(Sim.t,DUSPmRNA_all[i,:,1]./maximum(DUSPmRNA_all[i,:,:]),"b",alpha=0.1);
-            plot(Sim.t,DUSPmRNA_all[i,:,2]./maximum(DUSPmRNA_all[i,:,:]),"r",alpha=0.1);
+            plot(Sim.t,DUSPmRNA_all[i,:,1]./maximum(DUSPmRNA_all[i,:,:]),"b",alpha=0.05);
+            plot(Sim.t,DUSPmRNA_all[i,:,2]./maximum(DUSPmRNA_all[i,:,:]),"r",alpha=0.05);
         end
     end
     if viz_type != "average"
@@ -245,8 +245,8 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
     subplot(2,4,6);
     if show_all
         for i=1:n_file
-            plot(Sim.t,cFosmRNA_all[i,:,1]./maximum(cFosmRNA_all[i,:,:]),"b",alpha=0.1);
-            plot(Sim.t,cFosmRNA_all[i,:,2]./maximum(cFosmRNA_all[i,:,:]),"r",alpha=0.1);
+            plot(Sim.t,cFosmRNA_all[i,:,1]./maximum(cFosmRNA_all[i,:,:]),"b",alpha=0.05);
+            plot(Sim.t,cFosmRNA_all[i,:,2]./maximum(cFosmRNA_all[i,:,:]),"r",alpha=0.05);
         end
     end
     if viz_type != "average"
@@ -296,8 +296,8 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
     subplot(2,4,7);
     if show_all
         for i=1:n_file
-            plot(Sim.t,cFosPro_all[i,:,1]./maximum(cFosPro_all[i,:,:]),"b",alpha=0.1);
-            plot(Sim.t,cFosPro_all[i,:,2]./maximum(cFosPro_all[i,:,:]),"r",alpha=0.1);
+            plot(Sim.t,cFosPro_all[i,:,1]./maximum(cFosPro_all[i,:,:]),"b",alpha=0.05);
+            plot(Sim.t,cFosPro_all[i,:,2]./maximum(cFosPro_all[i,:,:]),"r",alpha=0.05);
         end
     end
     if viz_type != "average"
@@ -347,8 +347,8 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
     subplot(2,4,8);
     if show_all
         for i=1:n_file
-            plot(Sim.t,PcFos_all[i,:,1]./maximum(PcFos_all[i,:,:]),"b",alpha=0.1);
-            plot(Sim.t,PcFos_all[i,:,2]./maximum(PcFos_all[i,:,:]),"r",alpha=0.1);
+            plot(Sim.t,PcFos_all[i,:,1]./maximum(PcFos_all[i,:,:]),"b",alpha=0.05);
+            plot(Sim.t,PcFos_all[i,:,2]./maximum(PcFos_all[i,:,:]),"r",alpha=0.05);
         end
     end
     if viz_type != "average"
