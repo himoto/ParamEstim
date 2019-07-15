@@ -44,7 +44,7 @@ visualizeResult(Sim,viz_type="average",show_all=false,stdev=true)
 ```
 1. **viz_type="best", show_all=true, stdev=false**
 
-![sim_best](https://user-images.githubusercontent.com/31299606/61113999-5f41af00-a4ca-11e9-80d6-ae95d2897ced.png)
+![sim_best](https://user-images.githubusercontent.com/31299606/61200460-6a8c1900-a71c-11e9-8010-77a2f13294d8.png)
 
 2. **viz_type="average", show_all=false, stdev=true**
 
