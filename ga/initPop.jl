@@ -6,17 +6,15 @@ function getInitialPopulation(
     )::Matrix{Float64}
     population::Matrix{Float64} = Inf.*ones(n_population,n_gene+1);
     println("initpop\n");
+    flush(stdout);
 
     for i = 1:n_population
         while isinf(population[i,end]) || isnan(population[i,end])
             for j = 1:n_gene
                 population[i,j] = rand();
             end
-
             population[i,end] = getFitness(population[i,1:n_gene],searchIdx,searchRegion);
-
         end
-        
         print(@sprintf("%d / %d\r", i, n_population));
         flush(stdout);
     end
