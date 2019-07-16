@@ -142,6 +142,9 @@ function saveParamRange(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
     # Seaborn.boxplot
 
     fig = figure(figsize=(8,24));
+    rc("font",family = "Arial");
+    rc("font",size = 12);
+    rc("axes",linewidth = 1);
     gca().spines["right"].set_visible(false);
     gca().spines["top"].set_visible(false);
     gca().yaxis.set_ticks_position("left");
