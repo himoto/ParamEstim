@@ -1,9 +1,5 @@
 # Parameter Estimation
 Using Genetic Algorithm to Fit ODE Models to Data
-***
-![cfos](https://user-images.githubusercontent.com/31299606/50464653-81b02700-09d5-11e9-910a-e3e2dcbd4fdd.png)
-
- Points (blue diamonds, EGF; red squares, HRG) denote experimental data, solid lines denote simulations.
 
 ## Requirements
 - **[Julia 1.0+](https://julialang.org)**
@@ -50,11 +46,11 @@ visualizeResult(Sim,viz_type="average",show_all=false,stdev=true)
 ```
 1. **viz_type="best", show_all=true, stdev=false**
 
-![sim_best](https://user-images.githubusercontent.com/31299606/61200460-6a8c1900-a71c-11e9-8010-77a2f13294d8.png)
+![sim_best](https://user-images.githubusercontent.com/31299606/61284133-54a05600-a7f9-11e9-93ea-2e249bcffd16.png)
 
 2. **viz_type="average", show_all=false, stdev=true**
 
-![sim_average](https://user-images.githubusercontent.com/31299606/61113976-56e97400-a4ca-11e9-9013-ff21fb7e27a2.png)
+![sim_average](https://user-images.githubusercontent.com/31299606/61284148-5c5ffa80-a7f9-11e9-8dec-3b1f018f649a.png)
 
 ## Installation
     $ git clone https://github.com/himoto/ParamEstim.git
