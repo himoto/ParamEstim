@@ -27,6 +27,12 @@ display("text/html", """<script charset="utf-8">
 include("../ParamEstim.jl")
 using .ParamEstim
 runGA();
+
+#= If you want to continue from where you stopeed in the last parameter search,
+
+runGA_continue();
+
+=#
 ```
 - Visualization of Simulation Results (runSim.ipynb)
 ```julia
