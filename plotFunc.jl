@@ -11,6 +11,8 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
 
     rc("figure",figsize = (20,8));
     rc("font",family = "Arial");
+    rc("mathtext",fontset = "custom");
+    rc("mathtext",it = "Arial:italic");
     rc("font",size = 16);
     rc("axes",linewidth = 2);
     rc("lines",linewidth = 2.5);
