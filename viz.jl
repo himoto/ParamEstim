@@ -135,7 +135,7 @@ function saveParamRange(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
                 bestIndiv[i+length(searchIdx[1])] = u0[searchIdx[2][i]];
             end
         end
-        searchParamMatrix[nthParamSet,:] = bestIndiv;
+        searchParamMatrix[nthParamSet,:] = bestIndiv[1:length(searchIdx[1])];
     end
 
     # ==========================================================================
