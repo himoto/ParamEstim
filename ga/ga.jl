@@ -11,7 +11,9 @@ export
     getSearchRegion,
     visualizeResult,
     gaV1,
-    gaV2
+    gaV1_continue,
+    gaV2,
+    gaV2_continue
 
 using Printf;
 using LinearAlgebra;
