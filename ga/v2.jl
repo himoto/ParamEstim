@@ -13,7 +13,7 @@ function gaV2(
 
     population = getInitialPopulation(n_population,n_gene,searchIdx,searchRegion);
     N0[1] = population[1,end]
-    print(@sprintf("Generation%d: Best Fitness = %e\n",1,population[1,end]));
+    print(@sprintf("Generation%d: Best Fitness = %.6e\n",1,population[1,end]));
     flush(stdout);
 
     bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
@@ -21,10 +21,10 @@ function gaV2(
 
     f = open("../FitParam/$nthParamSet/fitParam1.dat", "w");
     for i=1:length(searchIdx[1])
-        write(f,@sprintf("%e\n",bestIndiv[i]));
+        write(f,@sprintf("%.6e\n",bestIndiv[i]));
     end
     for i=1:length(searchIdx[2])
-        write(f,@sprintf("%e\n",bestIndiv[i+length(searchIdx[1])]));
+        write(f,@sprintf("%.6e\n",bestIndiv[i+length(searchIdx[1])]));
     end
     close(f);
 
@@ -33,7 +33,7 @@ function gaV2(
     end
 
     open("../FitParam/$nthParamSet/bestFitness.dat", "w") do f
-        write(f,@sprintf("%e",bestFitness));
+        write(f,@sprintf("%.6e",bestFitness));
     end
 
     if population[1,end] <= allowable_error
@@ -67,16 +67,16 @@ function gaV2(
             N0[i%length(N0)] = population[1,end];
         end
 
-        print(@sprintf("Generation%d: Best Fitness = %e\n",i,population[1,end]));
+        print(@sprintf("Generation%d: Best Fitness = %.6e\n",i,population[1,end]));
         flush(stdout);
         bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
         if population[1,end] < bestFitness
             f = open("../FitParam/$nthParamSet/fitParam$i.dat", "w");
             for i=1:length(searchIdx[1])
-                write(f,@sprintf("%e\n",bestIndiv[i]));
+                write(f,@sprintf("%.6e\n",bestIndiv[i]));
             end
             for i=1:length(searchIdx[2])
-                write(f,@sprintf("%e\n",bestIndiv[i+length(searchIdx[1])]));
+                write(f,@sprintf("%.6e\n",bestIndiv[i+length(searchIdx[1])]));
             end
             close(f);
 
@@ -87,7 +87,7 @@ function gaV2(
         bestFitness = population[1,end];
 
         open("../FitParam/$nthParamSet/bestFitness.dat", "w") do f
-            write(f,@sprintf("%e",bestFitness));
+            write(f,@sprintf("%.6e",bestFitness));
         end
 
         if population[1,end] <= allowable_error
@@ -142,14 +142,14 @@ function gaV2_continue(
         bestFitness = population[1,end];
         open("../FitParam/$nthParamSet/fitParam$count.dat", "w") do f
             for i=1:n_gene
-                write(f,@sprintf("%e",bestIndiv[i]));
+                write(f,@sprintf("%.6e",bestIndiv[i]));
             end
         end
     end
 
     N0[1] = population[1,end]
 
-    print(@sprintf("Generation%d: Best Fitness = %e\n",count+1,population[1,end]));
+    print(@sprintf("Generation%d: Best Fitness = %.6e\n",count+1,population[1,end]));
     flush(stdout);
 
     if population[1,end] <= allowable_error
@@ -183,17 +183,17 @@ function gaV2_continue(
             N0[i%length(N0)] = population[1,end];
         end
 
-        print(@sprintf("Generation%d: Best Fitness = %e\n",i+count,population[1,end]));
+        print(@sprintf("Generation%d: Best Fitness = %.6e\n",i+count,population[1,end]));
         flush(stdout);
         bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
 
         if population[1,end] < bestFitness
             f = open(@sprintf("../FitParam/%d/fitParam%d.dat",nthParamSet,i+count), "w");
             for i=1:length(searchIdx[1])
-                write(f,@sprintf("%e\n",bestIndiv[i]));
+                write(f,@sprintf("%.6e\n",bestIndiv[i]));
             end
             for i=1:length(searchIdx[2])
-                write(f,@sprintf("%e\n",bestIndiv[i+length(searchIdx[1])]));
+                write(f,@sprintf("%.6e\n",bestIndiv[i+length(searchIdx[1])]));
             end
             close(f);
 
@@ -205,7 +205,7 @@ function gaV2_continue(
         bestFitness = population[1,end];
 
         open("../FitParam/$nthParamSet/bestFitness.dat", "w") do f
-            write(f,@sprintf("%e",bestFitness));
+            write(f,@sprintf("%.6e",bestFitness));
         end
 
         if population[1,end] <= allowable_error

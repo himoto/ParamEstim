@@ -8,7 +8,7 @@ function decodeGene2Variable(
         X[i] = 10.0^(individualGene[i]*(searchRegion[2,i] - searchRegion[1,i]) + searchRegion[1,i]);
     end
 
-    return X
+    return round.(X,sigdigits=7)
 end
 
 

@@ -9,7 +9,7 @@ function gaV1(
     searchRegion::Matrix{Float64}
     )::Tuple{Array{Float64,1},Float64}
     population = getInitialPopulation(n_population,n_gene,searchIdx,searchRegion);
-    print(@sprintf("Generation%d: Best Fitness = %e\n",1,population[1,end]));
+    print(@sprintf("Generation%d: Best Fitness = %.6e\n",1,population[1,end]));
     flush(stdout);
 
     bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
@@ -17,10 +17,10 @@ function gaV1(
 
     f = open("../FitParam/$nthParamSet/fitParam1.dat", "w");
     for i=1:length(searchIdx[1])
-        write(f,@sprintf("%e\n",bestIndiv[i]));
+        write(f,@sprintf("%.6e\n",bestIndiv[i]));
     end
     for i=1:length(searchIdx[2])
-        write(f,@sprintf("%e\n",bestIndiv[i+length(searchIdx[1])]));
+        write(f,@sprintf("%.6e\n",bestIndiv[i+length(searchIdx[1])]));
     end
     close(f);
 
@@ -29,7 +29,7 @@ function gaV1(
     end
 
     open("../FitParam/$nthParamSet/bestFitness.dat", "w") do f
-        write(f,@sprintf("%e",bestFitness));
+        write(f,@sprintf("%.6e",bestFitness));
     end
 
     if population[1,end] <= allowable_error
@@ -40,17 +40,17 @@ function gaV1(
 
     for i = 2:n_generation
         population = mggVariant(population,n_population,n_children,n_gene,searchIdx,searchRegion);
-        print(@sprintf("Generation%d: Best Fitness = %e\n",i,population[1,end]));
+        print(@sprintf("Generation%d: Best Fitness = %.6e\n",i,population[1,end]));
         flush(stdout);
         bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
 
         if population[1,end] < bestFitness
             f = open("../FitParam/$nthParamSet/fitParam$i.dat", "w");
             for i=1:length(searchIdx[1])
-                write(f,@sprintf("%e\n",bestIndiv[i]));
+                write(f,@sprintf("%.6e\n",bestIndiv[i]));
             end
             for i=1:length(searchIdx[2])
-                write(f,@sprintf("%e\n",bestIndiv[i+length(searchIdx[1])]));
+                write(f,@sprintf("%.6e\n",bestIndiv[i+length(searchIdx[1])]));
             end
             close(f);
 
@@ -62,7 +62,7 @@ function gaV1(
         bestFitness = population[1,end];
 
         open("../FitParam/$nthParamSet/bestFitness.dat", "w") do f
-            write(f,@sprintf("%e",bestFitness));
+            write(f,@sprintf("%.6e",bestFitness));
         end
 
         if population[1,end] <= allowable_error
@@ -115,12 +115,12 @@ function gaV1_continue(
         bestFitness = population[1,end];
         open("../FitParam/$nthParamSet/fitParam$count.dat", "w") do f
             for i=1:n_gene
-                write(f,@sprintf("%e",bestIndiv[i]));
+                write(f,@sprintf("%.6e",bestIndiv[i]));
             end
         end
     end
 
-    print(@sprintf("Generation%d: Best Fitness = %e\n",count+1,population[1,end]));
+    print(@sprintf("Generation%d: Best Fitness = %.6e\n",count+1,population[1,end]));
     flush(stdout);
 
     if population[1,end] <= allowable_error
@@ -131,17 +131,17 @@ function gaV1_continue(
 
     for i = 2:n_generation
         population = mggVariant(population,n_population,n_children,n_gene,searchIdx,searchRegion);
-        print(@sprintf("Generation%d: Best Fitness = %e\n",i+count,population[1,end]));
+        print(@sprintf("Generation%d: Best Fitness = %.6e\n",i+count,population[1,end]));
         flush(stdout);
         bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
 
         if population[1,end] < bestFitness
             f = open(@sprintf("../FitParam/%d/fitParam%d.dat",nthParamSet,i+count), "w");
             for i=1:length(searchIdx[1])
-                write(f,@sprintf("%e\n",bestIndiv[i]));
+                write(f,@sprintf("%.6e\n",bestIndiv[i]));
             end
             for i=1:length(searchIdx[2])
-                write(f,@sprintf("%e\n",bestIndiv[i+length(searchIdx[1])]));
+                write(f,@sprintf("%.6e\n",bestIndiv[i+length(searchIdx[1])]));
             end
             close(f);
 
@@ -153,7 +153,7 @@ function gaV1_continue(
         bestFitness = population[1,end];
 
         open("../FitParam/$nthParamSet/bestFitness.dat", "w") do f
-            write(f,@sprintf("%e",bestFitness));
+            write(f,@sprintf("%.6e",bestFitness));
         end
 
         if population[1,end] <= allowable_error
