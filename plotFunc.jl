@@ -399,6 +399,6 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
 
 
     show();
-    #savefig("./Fig/sim_$viz_type");
+    #savefig("./Fig/sim_$viz_type.pdf");
 
 end
