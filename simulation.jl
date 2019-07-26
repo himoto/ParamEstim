@@ -1,7 +1,7 @@
 module Sim
 using ..Model;
 
-using Sundials;
+using DifferentialEquations;
 
 const tspan = (0.0,5400.0);
 const t = collect(tspan[1]:1.0:tspan[end])./60.0;
