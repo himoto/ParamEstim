@@ -74,14 +74,14 @@ end
 # Normal Distribution Mutation
 function NDM(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     child::Vector{Float64} = zeros(n_gene+1);
-    GAMMA::Float64 = 0.35/sqrt(n_gene);
+    γ::Float64 = 0.35/sqrt(n_gene);
 
     p1::Vector{Float64} = parents[1,1:n_gene];
     t2::Vector{Float64} = zeros(n_gene);
     centroid::Vector{Float64} = reshape(mean(parents[2:end,1:n_gene],dims=1),n_gene);
 
     for i=1:n_gene+1
-        t2 += randn()*GAMMA*(parents[i+1,1:n_gene] - centroid);
+        t2 += randn()*γ*(parents[i+1,1:n_gene] - centroid);
     end
 
     for i = 1:n_gene

@@ -77,8 +77,8 @@ end
 # Unimodal Normal Distribution Xover
 function UNDX(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     child::Vector{Float64} = zeros(n_gene+1);
-    ALPHA::Float64 = 0.5;
-    BETA::Float64 = 0.35/sqrt(n_gene);
+    α::Float64 = 0.5;
+    β::Float64 = 0.35/sqrt(n_gene);
 
     p1::Vector{Float64} = [parents[1,i] for i=1:n_gene];
     p2::Vector{Float64} = [parents[2,i] for i=1:n_gene];
@@ -87,9 +87,9 @@ function UNDX(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     d2::Float64 = norm((p3-p1) - (dot((p3-p1),(p2-p1))/(d1^2))*(p2-p1));
     e1::Vector{Float64} = p1./d1;
 
-    t::Vector{Float64} = randn(n_gene)*BETA*d2;
+    t::Vector{Float64} = randn(n_gene)*β*d2;
     t = t - dot(t,e1)*e1;
-    t = t + randn()*ALPHA*d1*e1;
+    t = t + randn()*α*d1*e1;
 
     for i = 1:n_gene
         child[i] = t[i] + (parents[1,i]+parents[2,i])/2.0;
