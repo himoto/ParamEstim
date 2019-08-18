@@ -55,10 +55,11 @@ function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool
                 bestFitness_all[i] = Inf;
             end
         end
-        bestParamset::Int = argmin(bestFitness_all);
+        bestParamSet::Int = argmin(bestFitness_all);
+        write_bestFitParam(bestParamSet);
 
         if viz_type == "best"
-            Sim = runSimulation(bestParamset,Sim,p,u0);
+            Sim = runSimulation(bestParamSet,Sim,p,u0);
         elseif viz_type != "average" && parse(Int64,viz_type) <= n_file
             Sim = runSimulation(parse(Int64,viz_type),Sim,p,u0);
         elseif viz_type != "average" && parse(Int64,viz_type) > n_file
