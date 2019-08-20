@@ -8,6 +8,10 @@ function gaV2(
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
     searchRegion::Matrix{Float64}
     )::Tuple{Array{Float64,1},Float64}
+    if n_population < n_gene+2
+        error("n_population must be larger than $(n_gene+2)");
+    end
+
     N_iter::Int64 = 1;
     N0::Vector{Float64} = zeros(2*n_population);
 
@@ -118,6 +122,10 @@ function gaV2_continue(
     searchRegion::Matrix{Float64},
     p0_bounds::Vector{Float64}
     )::Tuple{Array{Float64,1},Float64}
+    if n_population < n_gene+2
+        error("n_population must be larger than $(n_gene+2)");
+    end
+    
     N_iter::Int64 = 1;
     N0::Vector{Float64} = zeros(2*n_population);
 
