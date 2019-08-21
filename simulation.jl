@@ -8,14 +8,14 @@ const t = collect(tspan[1]:1.0:tspan[end])./60.0;
 
 const condition = 2;
 
-PMEK_cyt  = zeros(length(t),condition);
-PERK_cyt  = zeros(length(t),condition);
-PRSK_wcl  = zeros(length(t),condition);
-PCREB_wcl = zeros(length(t),condition);
-DUSPmRNA  = zeros(length(t),condition);
-cFosmRNA  = zeros(length(t),condition);
-cFosPro   = zeros(length(t),condition);
-PcFos     = zeros(length(t),condition);
+PMEK_cyt  = Matrix{Float64}(undef,length(t),condition);
+PERK_cyt  = Matrix{Float64}(undef,length(t),condition);
+PRSK_wcl  = Matrix{Float64}(undef,length(t),condition);
+PCREB_wcl = Matrix{Float64}(undef,length(t),condition);
+DUSPmRNA  = Matrix{Float64}(undef,length(t),condition);
+cFosmRNA  = Matrix{Float64}(undef,length(t),condition);
+cFosPro   = Matrix{Float64}(undef,length(t),condition);
+PcFos     = Matrix{Float64}(undef,length(t),condition);
 
 function numericalIntegration!(p::Vector{Float64},u0::Vector{Float64})
 
