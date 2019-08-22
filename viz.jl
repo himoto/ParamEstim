@@ -16,11 +16,15 @@ function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool
 
     n_file::Int = 0;
     if viz_type != "original"
-        fitparamFiles::Vector{String} = readdir("./FitParam");
-        for file in fitparamFiles
-            if occursin(r"\d",file)
-                n_file += 1;
+        try
+            fitparamFiles::Vector{String} = readdir("./FitParam");
+            for file in fitparamFiles
+                if occursin(r"\d",file)
+                    n_file += 1;
+                end
             end
+        catch
+            viz_type = "original";
         end
     end
 
