@@ -31,7 +31,7 @@ function runGA()
     n_population::Int64 = 5*size(searchRegion,2);
     n_children::Int64 = 50;
     n_gene::Int64 = size(searchRegion,2);
-    allowable_error::Float64 = 0.5;
+    allowable_error::Float64 = 0.35;
 
     (bestIndiv,bestFitness) = gaV2(
         nthParamSet,
