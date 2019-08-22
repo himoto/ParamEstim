@@ -8,11 +8,13 @@ using DelimitedFiles;
 export
     Sim,
     runGA,
+    runGA_continue,
     visualizeResult
 
 include("ga/ga.jl");
 using .GA;
 
-include("runGA.jl");
+include("parest1.jl");
+include("parest2.jl");
 
 end # module
