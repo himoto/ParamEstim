@@ -250,6 +250,28 @@ function lin2log!(
     nParamConst::Int,
     nSearchParam::Int
     )
+    for i=1:size(searchRegion,2)
+        if minimum(searchRegion[:,i]) < 0.0
+            if i <= nParamConst
+                error(@sprintf("`C.%s` searchRegion[lb,ub] must be positive.\n",C.F_P[i]));
+            else
+                error(@sprintf("`V.%s` searchRegion[lb,ub] must be positive.\n",V.F_V[i-nParamConst]));
+            end
+        elseif minimum(searchRegion[:,i]) == 0.0 && maximum(searchRegion[:,i]) != 0.0
+            if i <= nParamConst
+                error(@sprintf("`C.%s` lower_bound must be larger than 0.\n",C.F_P[i]));
+            else
+                error(@sprintf("`V.%s` lower_bound must be larger than 0.\n",V.F_V[i-nParamConst]));
+            end
+        elseif searchRegion[2,i] - searchRegion[1,i] < 0.0
+            if i <= nParamConst
+                error(@sprintf("`C.%s` lower_bound < upper_bound\n",C.F_P[i]));
+            else
+                error(@sprintf("`V.%s` lower_bound < upper_bound\n",V.F_V[i-nParamConst]));
+            end
+        end
+    end
+
     nonZeroIdx::Vector{Int} = [];
     for i=1:size(searchRegion,2)
         if searchRegion[:,i] != [0.0,0.0]
@@ -266,19 +288,15 @@ function lin2log!(
     if length(difference) > 0
         for i=1:length(difference)
             if difference[i] <= nParamConst
-                print(@sprintf("`%s`\n",C.F_P[Int(difference[i])]));
+                print(@sprintf("`C.%s`\n",C.F_P[Int(difference[i])]));
             else
-                print(@sprintf("`%s`\n",V.F_V[Int(difference[i])-nParamConst]));
+                print(@sprintf("`V.%s`\n",V.F_V[Int(difference[i])-nParamConst]));
             end
         end
         error("Set these searchParams in both searchIdxInit and searchRegion.");
     end
 
     searchRegion = searchRegion[:,nonZeroIdx];
-
-    if nSearchParam != size(searchRegion,2) || minimum(searchRegion) <= 0.0
-        error("Error: searchRegion[lb,ub] must be positive.\n");
-    end
 
     return log10.(searchRegion)
 end
