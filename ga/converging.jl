@@ -9,14 +9,14 @@ function converging(
     
     n_children::Int8 = 10;
     children::Matrix{Float64} = zeros(n_children,n_gene+1);
-    for i = 1:n_children
+    @inbounds for i = 1:n_children
         ip[3:end] = sample([i for i=1:n_population],n_gene,replace=false);
         children[i,:] = crossover(population[ip,:],n_gene);
     end
 
     family::Matrix{Float64} = zeros(n_children+2,n_gene+1);
-    for i = 1:n_gene+1
-        for j = 1:n_children
+    @inbounds for i = 1:n_gene+1
+        @simd for j = 1:n_children
             family[j,i] = children[j,i];
         end
         family[n_children+1,i] = population[ip[1],i];
@@ -26,7 +26,7 @@ function converging(
     family = sortslices(family,dims=1,by=x->x[end]);
 
     ic2::Int8 = rand(2:n_children+2);
-    for i = 1:n_gene+1
+    @inbounds for i = 1:n_gene+1
         population[ip[1],i] = family[1,i];  # Best
         population[ip[2],i] = family[ic2,i];  # Random
     end
@@ -87,7 +87,7 @@ function ENDX(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     end
 
     for i = 1:n_gene
-        child[i] = t1[i] + t2[i] + t3[i];
+        @inbounds child[i] = t1[i] + t2[i] + t3[i];
     end
 
     return child

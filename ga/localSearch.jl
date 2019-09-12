@@ -13,14 +13,14 @@ function localsearch(
 
     children::Matrix{Float64} = zeros(n_children,n_gene+1);
 
-    for i=1:n_children
+    @inbounds for i=1:n_children
         ip[2:end] = sample([i for i=1:n_population][idx],n_gene+1,replace=false);
         children[i,:] = mutation(population[ip,:],n_gene,searchIdx,searchRegion);
     end
 
     family::Matrix{Float64} = zeros(n_children+1,n_gene+1);
-    for i = 1:n_gene+1
-        for j = 1:n_children
+    @inbounds for i = 1:n_gene+1
+        @simd for j = 1:n_children
             family[j,i] = children[j,i];
         end
         family[n_children+1,i] = population[ip[1],i];
@@ -87,7 +87,7 @@ function NDM(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     end
 
     for i = 1:n_gene
-        child[i] = p1[i] + t2[i];
+        @inbounds child[i] = p1[i] + t2[i];
     end
 
     return child

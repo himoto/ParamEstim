@@ -20,8 +20,8 @@ function mggVariant(
     end
 
     family::Matrix{Float64} = zeros(n_children+2,n_gene+1);
-    for i = 1:n_gene+1
-        for j = 1:n_children
+    @inbounds for i = 1:n_gene+1
+        @simd for j = 1:n_children
             family[j,i] = children[j,i];
         end
         family[n_children+1,i] = population[ip[1],i];
@@ -30,7 +30,7 @@ function mggVariant(
 
     family = sortslices(family,dims=1,by=x->x[end]);
     ic2::Int64 = rankSelection(n_children+2);
-    for i = 1:n_gene+1
+    @inbounds for i = 1:n_gene+1
         population[ip[1],i] = family[1,i];  # Elite
         population[ip[2],i] = family[ic2,i];  # Rank-based Roulette Selection
     end
@@ -94,7 +94,7 @@ function UNDX(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     t = t + randn()*α*d1*e1;
 
     for i = 1:n_gene
-        child[i] = t[i] + (parents[1,i]+parents[2,i])/2.0;
+        @inbounds child[i] = t[i] + (parents[1,i]+parents[2,i])/2.0;
     end
 
     return child
