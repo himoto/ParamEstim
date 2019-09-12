@@ -103,11 +103,11 @@ function runSimulation(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vec
         generation::Int64 = readdlm("./FitParam/$nthParamSet/generation.dat")[1,1];
         bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
 
-        for i=1:length(searchIdx[1])
-            p[searchIdx[1][i]] = bestIndiv[i];
+        for (i,j) in enumerate(searchIdx[1])
+            p[j] = bestIndiv[i];
         end
-        for i=1:length(searchIdx[2])
-            u0[searchIdx[2][i]] = bestIndiv[i+length(searchIdx[1])];
+        for (i,j) in enumerate(searchIdx[2])
+            u0[j] = bestIndiv[i+length(searchIdx[1])];
         end
 
     catch
@@ -133,11 +133,11 @@ function saveParamRange(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
             bestIndiv = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
         catch
             bestIndiv = zeros(length(searchIdx[1])+length(searchIdx[2]));
-            for i =1:length(searchIdx[1])
-                bestIndiv[i] = p[searchIdx[1][i]];
+            for (i,j) in enumerate(searchIdx[1])
+                @inbounds bestIndiv[i] = p[j];
             end
-            for i=1:length(searchIdx[2])
-                bestIndiv[i+length(searchIdx[1])] = u0[searchIdx[2][i]];
+            for (i,j) in enumerate(searchIdx[2])
+                @inbounds bestIndiv[i+length(searchIdx[1])] = u0[j];
             end
         end
         searchParamMatrix[nthParamSet,:] = bestIndiv[1:length(searchIdx[1])];

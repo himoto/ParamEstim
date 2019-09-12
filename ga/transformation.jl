@@ -24,12 +24,12 @@ function updateParam(
     
     X::Vector{Float64} = decodeGene2Variable(individualGene,searchRegion);
 
-    for i in eachindex(searchIdx[1])
-        @inbounds p[searchIdx[1][i]] = X[i];
+    for (i,j) in enumerate(searchIdx[1])
+        @inbounds p[j] = X[i];
     end
     
-    for i in eachindex(searchIdx[2])
-        @inbounds u0[searchIdx[2][i]] = X[i+length(searchIdx[1])];
+    for (i,j) in enumerate(searchIdx[2])
+        @inbounds u0[j] = X[i+length(searchIdx[1])];
     end
     
     return p,u0

@@ -93,11 +93,11 @@ function getSearchRegion()::Matrix{Float64}
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
 
     searchParam = zeros(length(searchIdx[1])+length(searchIdx[2]));
-    for i in eachindex(searchIdx[1])
-        searchParam[i] = p[searchIdx[1][i]];
+    for (i,j) in enumerate(searchIdx[1])
+        searchParam[i] = p[j];
     end
-    for i in eachindex(searchIdx[2])
-        searchParam[i+length(searchIdx[1])] = u0[searchIdx[2][i]];
+    for (i,j) in enumerate(searchIdx[2])
+        searchParam[i+length(searchIdx[1])] = u0[j];
     end
 
     for i in eachindex(searchParam)
@@ -110,15 +110,15 @@ function getSearchRegion()::Matrix{Float64}
 
     #=
     # Default: 0.1 ~ 10x
-    for i in eachindex(searchIdx[1])
-        searchRegion[1,searchIdx[1][i]] = searchParam[i]*0.1;  # lower bound
-        searchRegion[2,searchIdx[1][i]] = searchParam[i]*10.0;  # upper bound
+    for (i,j) in enumerate(searchIdx[1])
+        searchRegion[1,j] = searchParam[i]*0.1;  # lower bound
+        searchRegion[2,j] = searchParam[i]*10.0;  # upper bound
     end
 
     # Default: 0.5 ~ 2x
-    for i in eachindex(searchIdx[2])
-        searchRegion[1,searchIdx[2][i]+length(p)] = searchParam[i+length(searchIdx[1])]*0.5;  # lower bound
-        searchRegion[2,searchIdx[2][i]+length(p)] = searchParam[i+length(searchIdx[1])]*2.0;  # upper bound
+    for (i,j) in enumerate(searchIdx[2])
+        searchRegion[1,j+length(p)] = searchParam[i+length(searchIdx[1])]*0.5;  # lower bound
+        searchRegion[2,j+length(p)] = searchParam[i+length(searchIdx[1])]*2.0;  # upper bound
     end
     =#
 
@@ -217,11 +217,11 @@ function write_bestFitParam(bestParamSet::Int)
         generation::Int64 = readdlm("./FitParam/$bestParamSet/generation.dat")[1,1];
         bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",bestParamSet,generation))[:,1];
 
-        for i in eachindex(searchIdx[1])
-            p[searchIdx[1][i]] = bestIndiv[i];
+        for (i,j) in enumerate(searchIdx[1])
+            p[j] = bestIndiv[i];
         end
-        for i in eachindex(searchIdx[2])
-            u0[searchIdx[2][i]] = bestIndiv[i+length(searchIdx[1])];
+        for (i,j) in enumerate(searchIdx[2])
+            u0[j] = bestIndiv[i+length(searchIdx[1])];
         end
 
     catch
@@ -286,11 +286,11 @@ function lin2log!(
     );
 
     if length(difference) > 0
-        for i in eachindex(difference)
-            if difference[i] <= nParamConst
-                print(@sprintf("`C.%s`\n",C.F_P[Int(difference[i])]));
+        for (i,j) in enumerate(difference)
+            if j <= nParamConst
+                print(@sprintf("`C.%s`\n",C.F_P[Int(j)]));
             else
-                print(@sprintf("`V.%s`\n",V.F_V[Int(difference[i])-nParamConst]));
+                print(@sprintf("`V.%s`\n",V.F_V[Int(j)-nParamConst]));
             end
         end
         error("Set these searchParams in both searchIdxInit and searchRegion.");
