@@ -8,6 +8,7 @@ function gaV1(
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
     searchRegion::Matrix{Float64}
     )::Tuple{Array{Float64,1},Float64}
+
     population = getInitialPopulation(n_population,n_gene,searchIdx,searchRegion);
     print(@sprintf("Generation%d: Best Fitness = %.6e\n",1,population[1,end]));
     flush(stdout);
@@ -94,10 +95,11 @@ function gaV1_continue(
     searchRegion::Matrix{Float64},
     p0_bounds::Vector{Float64}
     )::Tuple{Array{Float64,1},Float64}
+    
     count::Int64 = readdlm("../FitParam/$nthParamSet/count.dat")[1,1];
     generation::Int64 = readdlm("../FitParam/$nthParamSet/generation.dat")[1,1];
     bestIndiv::Vector{Float64} = readdlm(@sprintf("../FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
-    bestFitness::Float64 = getFitness(
+    bestFitness::Float64 = objective(
         (log10.(bestIndiv) .- searchRegion[1,:])./(searchRegion[2,:] .- searchRegion[1,:]),
         searchIdx,
         searchRegion

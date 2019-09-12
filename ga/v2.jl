@@ -8,6 +8,7 @@ function gaV2(
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
     searchRegion::Matrix{Float64}
     )::Tuple{Array{Float64,1},Float64}
+
     if n_population < n_gene+2
         error("n_population must be larger than $(n_gene+2)");
     end
@@ -122,6 +123,7 @@ function gaV2_continue(
     searchRegion::Matrix{Float64},
     p0_bounds::Vector{Float64}
     )::Tuple{Array{Float64,1},Float64}
+    
     if n_population < n_gene+2
         error("n_population must be larger than $(n_gene+2)");
     end
@@ -132,7 +134,7 @@ function gaV2_continue(
     count::Int64 = readdlm("../FitParam/$nthParamSet/count.dat")[1,1];
     generation::Int64 = readdlm("../FitParam/$nthParamSet/generation.dat")[1,1];
     bestIndiv::Vector{Float64} = readdlm(@sprintf("../FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
-    bestFitness::Float64 = getFitness(
+    bestFitness::Float64 = objective(
         (log10.(bestIndiv) .- searchRegion[1,:])./(searchRegion[2,:] .- searchRegion[1,:]),
         searchIdx,
         searchRegion

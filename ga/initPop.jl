@@ -4,6 +4,7 @@ function getInitialPopulation(
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
     searchRegion::Matrix{Float64}
     )::Matrix{Float64}
+
     population::Matrix{Float64} = Inf.*ones(n_population,n_gene+1);
     
     println("initpop\n");
@@ -14,7 +15,7 @@ function getInitialPopulation(
             for j = 1:n_gene
                 population[i,j] = rand();
             end
-            population[i,end] = getFitness(population[i,1:n_gene],searchIdx,searchRegion);
+            population[i,end] = objective(population[i,1:n_gene],searchIdx,searchRegion);
         end
         print(@sprintf("%d / %d\r", i, n_population));
         flush(stdout);
@@ -35,6 +36,7 @@ function getInitialPopulation_continue(
     searchRegion::Matrix{Float64},
     p0_bounds::Vector{Float64}
     )::Matrix{Float64}
+    
     generation::Int64 = readdlm("../FitParam/$nthParamSet/generation.dat")[1,1];
     bestIndiv::Vector{Float64} = readdlm(@sprintf("../FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
 
@@ -61,7 +63,7 @@ function getInitialPopulation_continue(
                     population[i,j] = 0.0;
                 end
             end
-            population[i,end] = getFitness(population[i,1:n_gene],searchIdx,searchRegion);
+            population[i,end] = objective(population[i,1:n_gene],searchIdx,searchRegion);
         end
         print(@sprintf("%d / %d\r", i, n_population));
         flush(stdout);

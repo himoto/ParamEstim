@@ -2,6 +2,7 @@ function decodeGene2Variable(
     individualGene::Vector{Float64},
     searchRegion::Matrix{Float64}
     )::Vector{Float64}
+    
     X::Vector{Float64} = zeros(length(individualGene));
     
     for i = 1:length(individualGene)
@@ -17,6 +18,7 @@ function updateParam(
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
     searchRegion::Matrix{Float64}
     )::Tuple{Array{Float64,1},Array{Float64,1}}
+
     p::Vector{Float64} = f_params();
     u0::Vector{Float64} = initialValues();
     

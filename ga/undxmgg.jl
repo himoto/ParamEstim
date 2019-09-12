@@ -7,6 +7,7 @@ function mggVariant(
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
     SearchRegion::Matrix{Float64}
     )::Matrix{Float64}
+
     idx::Vector{Int64} = randperm(n_population);
     ip::Vector{Int64} = zeros(3);
     ip[1] = idx[1];
@@ -46,6 +47,7 @@ function getNewChild(
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
     SearchRegion::Matrix{Float64}
     )::Vector{Float64}
+    
     local child::Vector{Float64};
     MAXITER::Int8 = typemax(Int8);
 
@@ -68,7 +70,7 @@ function getNewChild(
         end
     end
 
-    child[end] = getFitness(child[1:n_gene],searchIdx,SearchRegion);
+    child[end] = objective(child[1:n_gene],searchIdx,SearchRegion);
 
     return child
 end

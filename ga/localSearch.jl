@@ -7,6 +7,7 @@ function localsearch(
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
     searchRegion::Matrix{Float64}
     )::Tuple{Array{Int64,1},Array{Float64,2}}
+
     idx::BitArray{1} = trues(n_population);
     idx[ip[1]] = false;
 
@@ -43,6 +44,7 @@ function mutation(
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
     searchRegion::Matrix{Float64}
     )::Vector{Float64}
+    
     local child::Vector{Float64};
     MAXITER::Int8 = typemax(Int8);
 
@@ -65,7 +67,7 @@ function mutation(
         end
     end
 
-    child[end] = getFitness(child[1:n_gene],searchIdx,searchRegion);
+    child[end] = objective(child[1:n_gene],searchIdx,searchRegion);
 
     return child
 end

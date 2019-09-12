@@ -6,6 +6,7 @@ function converging(
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
     searchRegion::Matrix{Float64}
     )::Tuple{Array{Int64,1},Array{Float64,2}}
+    
     n_children::Int8 = 10;
     children::Matrix{Float64} = zeros(n_children,n_gene+1);
     for i = 1:n_children
@@ -31,7 +32,7 @@ function converging(
     end
 
     if isinf(population[ip[2],end])
-        population[ip[2],end] = getFitness(population[ip[2],1:n_gene],searchIdx,searchRegion);
+        population[ip[2],end] = objective(population[ip[2],1:n_gene],searchIdx,searchRegion);
     end
 
     population = sortslices(population,dims=1,by=x->x[end]);
