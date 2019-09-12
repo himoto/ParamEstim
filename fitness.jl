@@ -80,7 +80,7 @@ function compute_objval_abs(
     )::Float64
     error::Float64 = 0.0;
 
-    for i=1:length(expData)
+    for i in eachindex(expData)
         error += (simData[i]-expData[i])^2;
     end
 

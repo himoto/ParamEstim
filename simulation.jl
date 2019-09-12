@@ -31,7 +31,7 @@ function numericalIntegration!(p::Vector{Float64},u0::Vector{Float64})
         try
             sol = solve(prob,CVODE_BDF(),saveat=1.0,dtmin=(tspan[end]-tspan[1])/1e9,abstol=1e-9,reltol=1e-9,verbose=false);
 
-            @simd for j=1:length(t)
+            @simd for j in eachindex(t)
                 PMEK_cyt[j,i] = sol.u[j][V.ppMEKc];
                 PERK_cyt[j,i] = sol.u[j][V.pERKc] + sol.u[j][V.ppERKc];
                 PRSK_wcl[j,i] = sol.u[j][V.pRSKc] + sol.u[j][V.pRSKn]*(p[C.Vn]/p[C.Vc]);

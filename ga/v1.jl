@@ -17,10 +17,10 @@ function gaV1(
     bestFitness = population[1,end];
 
     f = open("../FitParam/$nthParamSet/fitParam1.dat", "w");
-    for i=1:length(searchIdx[1])
+    for i in eachindex(searchIdx[1])
         write(f,@sprintf("%.6e\n",bestIndiv[i]));
     end
-    for i=1:length(searchIdx[2])
+    for i in eachindex(searchIdx[2])
         write(f,@sprintf("%.6e\n",bestIndiv[i+length(searchIdx[1])]));
     end
     close(f);
@@ -47,10 +47,10 @@ function gaV1(
 
         if population[1,end] < bestFitness
             f = open("../FitParam/$nthParamSet/fitParam$i.dat", "w");
-            for i=1:length(searchIdx[1])
+            for i in eachindex(searchIdx[1])
                 write(f,@sprintf("%.6e\n",bestIndiv[i]));
             end
-            for i=1:length(searchIdx[2])
+            for i in eachindex(searchIdx[2])
                 write(f,@sprintf("%.6e\n",bestIndiv[i+length(searchIdx[1])]));
             end
             close(f);
@@ -139,10 +139,10 @@ function gaV1_continue(
 
         if population[1,end] < bestFitness
             f = open(@sprintf("../FitParam/%d/fitParam%d.dat",nthParamSet,i+count), "w");
-            for i=1:length(searchIdx[1])
+            for i in eachindex(searchIdx[1])
                 write(f,@sprintf("%.6e\n",bestIndiv[i]));
             end
-            for i=1:length(searchIdx[2])
+            for i in eachindex(searchIdx[2])
                 write(f,@sprintf("%.6e\n",bestIndiv[i+length(searchIdx[1])]));
             end
             close(f);

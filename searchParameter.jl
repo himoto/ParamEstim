@@ -93,14 +93,14 @@ function getSearchRegion()::Matrix{Float64}
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
 
     searchParam = zeros(length(searchIdx[1])+length(searchIdx[2]));
-    for i=1:length(searchIdx[1])
+    for i in eachindex(searchIdx[1])
         searchParam[i] = p[searchIdx[1][i]];
     end
-    for i=1:length(searchIdx[2])
+    for i in eachindex(searchIdx[2])
         searchParam[i+length(searchIdx[1])] = u0[searchIdx[2][i]];
     end
 
-    for i=1:length(searchParam)
+    for i in eachindex(searchParam)
         if searchParam[i] == 0.0
             error("Error: searchParam must not contain zero.\n");
         end
@@ -110,13 +110,13 @@ function getSearchRegion()::Matrix{Float64}
 
     #=
     # Default: 0.1 ~ 10x
-    for i=1:length(searchIdx[1])
+    for i in eachindex(searchIdx[1])
         searchRegion[1,searchIdx[1][i]] = searchParam[i]*0.1;  # lower bound
         searchRegion[2,searchIdx[1][i]] = searchParam[i]*10.0;  # upper bound
     end
 
     # Default: 0.5 ~ 2x
-    for i=1:length(searchIdx[2])
+    for i in eachindex(searchIdx[2])
         searchRegion[1,searchIdx[2][i]+length(p)] = searchParam[i+length(searchIdx[1])]*0.5;  # lower bound
         searchRegion[2,searchIdx[2][i]+length(p)] = searchParam[i+length(searchIdx[1])]*2.0;  # upper bound
     end
@@ -217,10 +217,10 @@ function write_bestFitParam(bestParamSet::Int)
         generation::Int64 = readdlm("./FitParam/$bestParamSet/generation.dat")[1,1];
         bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",bestParamSet,generation))[:,1];
 
-        for i=1:length(searchIdx[1])
+        for i in eachindex(searchIdx[1])
             p[searchIdx[1][i]] = bestIndiv[i];
         end
-        for i=1:length(searchIdx[2])
+        for i in eachindex(searchIdx[2])
             u0[searchIdx[2][i]] = bestIndiv[i+length(searchIdx[1])];
         end
 
@@ -286,7 +286,7 @@ function lin2log!(
     );
 
     if length(difference) > 0
-        for i=1:length(difference)
+        for i in eachindex(difference)
             if difference[i] <= nParamConst
                 print(@sprintf("`C.%s`\n",C.F_P[Int(difference[i])]));
             else
