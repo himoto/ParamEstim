@@ -94,10 +94,10 @@ function getSearchRegion()::Matrix{Float64}
 
     searchParam = zeros(length(searchIdx[1])+length(searchIdx[2]));
     for (i,j) in enumerate(searchIdx[1])
-        searchParam[i] = p[j];
+        @inbounds searchParam[i] = p[j];
     end
     for (i,j) in enumerate(searchIdx[2])
-        searchParam[i+length(searchIdx[1])] = u0[j];
+        @inbounds searchParam[i+length(searchIdx[1])] = u0[j];
     end
 
     for i in eachindex(searchParam)
@@ -218,10 +218,10 @@ function write_bestFitParam(bestParamSet::Int)
         bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",bestParamSet,generation))[:,1];
 
         for (i,j) in enumerate(searchIdx[1])
-            p[j] = bestIndiv[i];
+            @inbounds p[j] = bestIndiv[i];
         end
         for (i,j) in enumerate(searchIdx[2])
-            u0[j] = bestIndiv[i+length(searchIdx[1])];
+            @inbounds u0[j] = bestIndiv[i+length(searchIdx[1])];
         end
 
     catch
@@ -230,11 +230,11 @@ function write_bestFitParam(bestParamSet::Int)
 
     open("bestFitParam.txt","w") do f
         write(f,@sprintf("# param set: %d\n",bestParamSet));
-        write(f,"\n### param_const\n");
+        write(f,"\n### Param const\n");
         for i=1:C.len_f_params
             write(f,@sprintf("p[C.%s] = %e\n",C.F_P[i],p[i]));
         end
-        write(f,"\n### initial_values\n");
+        write(f,"\n### Non-zero initial conditions\n");
         for i=1:V.len_f_vars
             if u0[i] != 0.0
                 write(f,@sprintf("u0[V.%s] = %e\n",V.F_V[i],u0[i]));
@@ -249,7 +249,8 @@ function lin2log!(
     searchRegion::Matrix{Float64},
     nParamConst::Int,
     nSearchParam::Int
-    )
+    )::Matrix{Float64}
+
     for i=1:size(searchRegion,2)
         if minimum(searchRegion[:,i]) < 0.0
             if i <= nParamConst
