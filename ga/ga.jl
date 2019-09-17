@@ -40,7 +40,7 @@ include("../plotFunc.jl");
 include("../viz.jl");
 
 include("initPop.jl");
-include("transformation.jl");
+include("converter.jl");
 include("undxmgg.jl");
 include("converging.jl");
 include("localSearch.jl");

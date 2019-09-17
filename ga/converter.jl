@@ -3,13 +3,13 @@ function decodeGene2Variable(
     searchRegion::Matrix{Float64}
     )::Vector{Float64}
     
-    X::Vector{Float64} = zeros(length(individualGene));
+    indiv::Vector{Float64} = zeros(length(individualGene));
     
     for i in eachindex(individualGene)
-        @inbounds X[i] = 10.0^(individualGene[i]*(searchRegion[2,i] - searchRegion[1,i]) + searchRegion[1,i]);
+        @inbounds indiv[i] = 10.0^(individualGene[i]*(searchRegion[2,i] - searchRegion[1,i]) + searchRegion[1,i]);
     end
 
-    return round.(X,sigdigits=7)
+    return round.(indiv,sigdigits=7)
 end
 
 
@@ -22,14 +22,14 @@ function updateParam(
     p::Vector{Float64} = f_params();
     u0::Vector{Float64} = initialValues();
     
-    X::Vector{Float64} = decodeGene2Variable(individualGene,searchRegion);
+    indiv::Vector{Float64} = decodeGene2Variable(individualGene,searchRegion);
 
     for (i,j) in enumerate(searchIdx[1])
-        @inbounds p[j] = X[i];
+        @inbounds p[j] = indiv[i];
     end
     
     for (i,j) in enumerate(searchIdx[2])
-        @inbounds u0[j] = X[i+length(searchIdx[1])];
+        @inbounds u0[j] = indiv[i+length(searchIdx[1])];
     end
     
     return p,u0
