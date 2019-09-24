@@ -2,7 +2,7 @@ module Name2Idx
 
 export C, V
 
-include("f_parameter.jl");
-include("f_variable.jl");
+include("parameters.jl");
+include("variables.jl");
 
 end # module

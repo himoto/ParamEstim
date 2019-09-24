@@ -232,12 +232,12 @@ function write_bestFitParam(bestParamSet::Int)
         write(f,@sprintf("# param set: %d\n",bestParamSet));
         write(f,"\n### Param const\n");
         for i=1:C.len_f_params
-            write(f,@sprintf("p[C.%s] = %e\n",C.F_P[i],p[i]));
+            write(f,@sprintf("p[C.%s] = %e\n",C.param_names[i],p[i]));
         end
         write(f,"\n### Non-zero initial conditions\n");
         for i=1:V.len_f_vars
             if u0[i] != 0.0
-                write(f,@sprintf("u0[V.%s] = %e\n",V.F_V[i],u0[i]));
+                write(f,@sprintf("u0[V.%s] = %e\n",V.var_names[i],u0[i]));
             end
         end
     end
@@ -254,21 +254,21 @@ function lin2log!(
     for i=1:size(searchRegion,2)
         if minimum(searchRegion[:,i]) < 0.0
             if i <= nParamConst
-                error(@sprintf("`C.%s` searchRegion[lb,ub] must be positive.\n",C.F_P[i]));
+                error(@sprintf("`C.%s` searchRegion[lb,ub] must be positive.\n",C.param_names[i]));
             else
-                error(@sprintf("`V.%s` searchRegion[lb,ub] must be positive.\n",V.F_V[i-nParamConst]));
+                error(@sprintf("`V.%s` searchRegion[lb,ub] must be positive.\n",V.var_names[i-nParamConst]));
             end
         elseif minimum(searchRegion[:,i]) == 0.0 && maximum(searchRegion[:,i]) != 0.0
             if i <= nParamConst
-                error(@sprintf("`C.%s` lower_bound must be larger than 0.\n",C.F_P[i]));
+                error(@sprintf("`C.%s` lower_bound must be larger than 0.\n",C.param_names[i]));
             else
-                error(@sprintf("`V.%s` lower_bound must be larger than 0.\n",V.F_V[i-nParamConst]));
+                error(@sprintf("`V.%s` lower_bound must be larger than 0.\n",V.var_names[i-nParamConst]));
             end
         elseif searchRegion[2,i] - searchRegion[1,i] < 0.0
             if i <= nParamConst
-                error(@sprintf("`C.%s` lower_bound < upper_bound\n",C.F_P[i]));
+                error(@sprintf("`C.%s` lower_bound < upper_bound\n",C.param_names[i]));
             else
-                error(@sprintf("`V.%s` lower_bound < upper_bound\n",V.F_V[i-nParamConst]));
+                error(@sprintf("`V.%s` lower_bound < upper_bound\n",V.var_names[i-nParamConst]));
             end
         end
     end
@@ -289,9 +289,9 @@ function lin2log!(
     if length(difference) > 0
         for (i,j) in enumerate(difference)
             if j <= nParamConst
-                print(@sprintf("`C.%s`\n",C.F_P[Int(j)]));
+                print(@sprintf("`C.%s`\n",C.param_names[Int(j)]));
             else
-                print(@sprintf("`V.%s`\n",V.F_V[Int(j)-nParamConst]));
+                print(@sprintf("`V.%s`\n",V.var_names[Int(j)-nParamConst]));
             end
         end
         error("Set these searchParams in both searchIdxInit and searchRegion.");
