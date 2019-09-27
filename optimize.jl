@@ -1,4 +1,4 @@
-function runGA()
+function optimize()
 
     if !isdir("../FitParam")
         mkdir("../FitParam");

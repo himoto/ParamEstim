@@ -1,4 +1,4 @@
-function runGA_continue()
+function optimize_continue()
 
     nthParamSet::Int64 = parse(Int64,replace(Main.current_ipynb,r"\D"=>""));
 

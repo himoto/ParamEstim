@@ -7,14 +7,14 @@ using DelimitedFiles;
 
 export
     Sim,
-    runGA,
-    runGA_continue,
+    optimize,
+    optimize_continue,
     visualizeResult
 
 include("ga/ga.jl");
 using .GA;
 
-include("parest1.jl");
-include("parest2.jl");
+include("optimize.jl");
+include("optimize_continue.jl");
 
 end # module

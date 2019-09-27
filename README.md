@@ -22,11 +22,11 @@ display("text/html", """<script charset="utf-8">
 ```julia
 include("../ParamEstim.jl")
 using .ParamEstim
-runGA();
+optimize();
 
 #= If you want to continue from where you stopeed in the last parameter search,
 
-runGA_continue();
+optimize_continue();
 
 =#
 ```
