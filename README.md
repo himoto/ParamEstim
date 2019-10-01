@@ -24,7 +24,7 @@ include("../ParamEstim.jl")
 using .ParamEstim
 optimize();
 
-#= If you want to continue from where you stopeed in the last parameter search,
+#= If you want to continue from where you stopped in the last parameter search,
 
 optimize_continue();
 
