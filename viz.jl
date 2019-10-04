@@ -164,7 +164,7 @@ function saveParamRange(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
 
     ax.set_xlabel("Parameter value");
     ax.set_ylabel("");
-    ax.set_yticklabels([C.F_P[i] for i in searchIdx[1]]);
+    ax.set_yticklabels([C.param_names[i] for i in searchIdx[1]]);
     ax.set_xscale("log");
 
     savefig("./Fig/param_range.pdf",bbox_inches="tight");
