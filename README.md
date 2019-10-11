@@ -46,11 +46,11 @@ visualizeResult(Sim,viz_type="average",show_all=false,stdev=true)
 ```
 1. **viz_type="best", show_all=true, stdev=false**
 
-![sim_best](https://user-images.githubusercontent.com/31299606/61284133-54a05600-a7f9-11e9-93ea-2e249bcffd16.png)
+![simulation_best](images/simulation_best.png)
 
 2. **viz_type="average", show_all=false, stdev=true**
 
-![sim_average](https://user-images.githubusercontent.com/31299606/61284148-5c5ffa80-a7f9-11e9-8dec-3b1f018f649a.png)
+![simulation_average](images/simulation_average.png)
 
 - Points (blue diamonds, EGF; red squares, HRG) denote experimental data, solid lines denote simulations.
 ## Installation
