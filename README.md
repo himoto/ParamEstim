@@ -3,7 +3,7 @@ Using Genetic Algorithm to Fit ODE Models to Data
 
 ## Requirements
 - **[Julia 1.0+](https://julialang.org)**
-    - [DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl)
+    - [Sundials](https://github.com/JuliaDiffEq/Sundials.jl)
     - [StatsBase](https://github.com/JuliaStats/StatsBase.jl)
     - [PyPlot](https://github.com/JuliaPy/PyPlot.jl)
     - [Seaborn](https://github.com/JuliaPy/Seaborn.jl)
