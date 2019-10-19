@@ -17,7 +17,7 @@ cFosmRNA  = Matrix{Float64}(undef,length(t),condition);
 cFosPro   = Matrix{Float64}(undef,length(t),condition);
 PcFos     = Matrix{Float64}(undef,length(t),condition);
 
-function numericalIntegration!(p::Vector{Float64},u0::Vector{Float64})
+function simulate!(p::Vector{Float64},u0::Vector{Float64})
 
     @inbounds for i=1:condition
         if i==1

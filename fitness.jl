@@ -27,7 +27,7 @@ function objective(
     p[C.p56] = p[C.p51];
     p[C.m56] = p[C.m51];
 
-    if Sim.numericalIntegration!(p,u0) isa Nothing
+    if Sim.simulate!(p,u0) isa Nothing
         error::Vector{Float64} = zeros(14);
 
         # ERK

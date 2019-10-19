@@ -75,7 +75,7 @@ function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool
         end
 
     else
-        if Sim.numericalIntegration!(p,u0) !== nothing
+        if Sim.simulate!(p,u0) !== nothing
             error("Simulation failed.");
         end
 
@@ -114,7 +114,7 @@ function runSimulation(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vec
         # pass
     end
 
-    if Sim.numericalIntegration!(p,u0) !== nothing
+    if Sim.simulate!(p,u0) !== nothing
         print("Simulation failed.\nparameter_set #$nthParamSet")
     end
 
