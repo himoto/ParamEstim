@@ -7,14 +7,15 @@ using DelimitedFiles;
 
 export
     Sim,
-    optimize,
-    optimize_continue,
-    visualizeResult
+    searchParameterIndex,
+    getSearchRegion,
+    visualizeResult,
+    gaV1,
+    gaV1_continue,
+    gaV2,
+    gaV2_continue
 
 include("ga/ga.jl");
 using .GA;
 
-include("optimize.jl");
-include("optimize_continue.jl");
-
-end # module
+end  # module

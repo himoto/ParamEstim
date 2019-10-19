@@ -1,27 +1,21 @@
-function optimize()
+include("ParamEstim.jl");
+using .ParamEstim;
 
-    if !isdir("../FitParam")
-        mkdir("../FitParam");
+function optimize(nthParamSet::Int64)
+
+    if !isdir("./FitParam")
+        mkdir("./FitParam");
     end
 
-    nthParamSet::Int64 = parse(Int64,replace(Main.current_ipynb,r"\D"=>""));
-
     try
-        files = readdir("../FitParam/$nthParamSet");
+        files = readdir("./FitParam/$nthParamSet");
         for file in files
             if occursin(".dat",file)
-                rm("../FitParam/$nthParamSet/$file");
+                rm("./FitParam/$nthParamSet/$file");
             end
         end
     catch
-        mkdir("../FitParam/$nthParamSet")
-    end
-
-    if !isfile(@sprintf("./runGA_%d.ipynb",nthParamSet+1))
-        cp(
-            @sprintf("./runGA_%d.ipynb",nthParamSet),
-            @sprintf("./runGA_%d.ipynb",nthParamSet+1)
-        )
+        mkdir("./FitParam/$nthParamSet")
     end
 
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
@@ -44,3 +38,6 @@ function optimize()
         searchRegion
         );
 end
+
+###
+optimize(parse(Int64,ARGS[1]));

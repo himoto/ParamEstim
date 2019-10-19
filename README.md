@@ -3,47 +3,27 @@ Using Genetic Algorithm to Fit ODE Models to Data
 
 ## Requirements
 - **[Julia 1.0+](https://julialang.org)**
-    - [IJulia](https://github.com/JuliaLang/IJulia.jl)
     - [DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl)
     - [StatsBase](https://github.com/JuliaStats/StatsBase.jl)
     - [PyPlot](https://github.com/JuliaPy/PyPlot.jl)
     - [Seaborn](https://github.com/JuliaPy/Seaborn.jl)
 
 ## Usage
-- Parameter Estimation (runGA/runGA_*n*.ipynb, *n*=1, 2, 3, · · ·)
-```julia
-display("text/html", """<script charset="utf-8">
-    IPython.notebook.kernel.execute(
-        'current_ipynb = "'+IPython.notebook.notebook_name+'" '
-    );
-    </script>"""
-)
+Parameter Estimation (*n*=1, 2, 3, · · ·)
+```bash
+$ mkdir out
+$ nohup julia optimize.jl n >> out/n.log 2>&1 &
 ```
-```julia
-include("../ParamEstim.jl")
-using .ParamEstim
-optimize();
-
-#= If you want to continue from where you stopped in the last parameter search,
-
-optimize_continue();
-
-=#
+- If you want to continue from where you stopped in the last parameter search,
+```bash
+$ nohup julia optimize_continue.jl n >> out/n.log 2>&1 &
 ```
-- Visualization of Simulation Results (runSim.ipynb)
-```julia
-include("ParamEstim.jl");
-using .ParamEstim
+---
+Visualization of Simulation Results
+```bash
+$ julia runSim.jl
 ```
-```julia
-#==============================================================================
-    viz_type::String => "best", "average", "original" or int(1~n_fitparam)
-    show_all::Bool
-    stdev::Bool (Only when viz_type == "average")
-==============================================================================#
 
-visualizeResult(Sim,viz_type="average",show_all=false,stdev=true)
-```
 1. **viz_type="best", show_all=true, stdev=false**
 
 ![simulation_best](images/simulation_best.png)

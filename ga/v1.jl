@@ -16,7 +16,7 @@ function gaV1(
     bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
     bestFitness = population[1,end];
 
-    f = open("../FitParam/$nthParamSet/fitParam1.dat", "w");
+    f = open("./FitParam/$nthParamSet/fitParam1.dat", "w");
     for i in eachindex(searchIdx[1])
         write(f,@sprintf("%.6e\n",bestIndiv[i]));
     end
@@ -25,11 +25,11 @@ function gaV1(
     end
     close(f);
 
-    open("../FitParam/$nthParamSet/generation.dat", "w") do f
+    open("./FitParam/$nthParamSet/generation.dat", "w") do f
         write(f,@sprintf("%d",1));
     end
 
-    open("../FitParam/$nthParamSet/bestFitness.dat", "w") do f
+    open("./FitParam/$nthParamSet/bestFitness.dat", "w") do f
         write(f,@sprintf("%.6e",bestFitness));
     end
 
@@ -46,7 +46,7 @@ function gaV1(
         bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
 
         if population[1,end] < bestFitness
-            f = open("../FitParam/$nthParamSet/fitParam$i.dat", "w");
+            f = open("./FitParam/$nthParamSet/fitParam$i.dat", "w");
             for i in eachindex(searchIdx[1])
                 write(f,@sprintf("%.6e\n",bestIndiv[i]));
             end
@@ -55,14 +55,14 @@ function gaV1(
             end
             close(f);
 
-            open("../FitParam/$nthParamSet/generation.dat", "w") do f
+            open("./FitParam/$nthParamSet/generation.dat", "w") do f
                 write(f,@sprintf("%d",i));
             end
         end
 
         bestFitness = population[1,end];
 
-        open("../FitParam/$nthParamSet/bestFitness.dat", "w") do f
+        open("./FitParam/$nthParamSet/bestFitness.dat", "w") do f
             write(f,@sprintf("%.6e",bestFitness));
         end
 
@@ -72,7 +72,7 @@ function gaV1(
             return bestIndiv,bestFitness
         end
 
-        open("../FitParam/$nthParamSet/count.dat", "w") do f
+        open("./FitParam/$nthParamSet/count.dat", "w") do f
             write(f,@sprintf("%d",i));
         end
     end
@@ -96,9 +96,9 @@ function gaV1_continue(
     p0_bounds::Vector{Float64}
     )::Tuple{Array{Float64,1},Float64}
     
-    count::Int64 = readdlm("../FitParam/$nthParamSet/count.dat")[1,1];
-    generation::Int64 = readdlm("../FitParam/$nthParamSet/generation.dat")[1,1];
-    bestIndiv::Vector{Float64} = readdlm(@sprintf("../FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
+    count::Int64 = readdlm("./FitParam/$nthParamSet/count.dat")[1,1];
+    generation::Int64 = readdlm("./FitParam/$nthParamSet/generation.dat")[1,1];
+    bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
     bestFitness::Float64 = objective(
         (log10.(bestIndiv) .- searchRegion[1,:])./(searchRegion[2,:] .- searchRegion[1,:]),
         searchIdx,
@@ -115,7 +115,7 @@ function gaV1_continue(
     else
         bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
         bestFitness = population[1,end];
-        open("../FitParam/$nthParamSet/fitParam$count.dat", "w") do f
+        open("./FitParam/$nthParamSet/fitParam$count.dat", "w") do f
             for i=1:n_gene
                 write(f,@sprintf("%.6e",bestIndiv[i]));
             end
@@ -138,7 +138,7 @@ function gaV1_continue(
         bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion);
 
         if population[1,end] < bestFitness
-            f = open(@sprintf("../FitParam/%d/fitParam%d.dat",nthParamSet,i+count), "w");
+            f = open(@sprintf("./FitParam/%d/fitParam%d.dat",nthParamSet,i+count), "w");
             for i in eachindex(searchIdx[1])
                 write(f,@sprintf("%.6e\n",bestIndiv[i]));
             end
@@ -147,14 +147,14 @@ function gaV1_continue(
             end
             close(f);
 
-            open("../FitParam/$nthParamSet/generation.dat", "w") do f
+            open("./FitParam/$nthParamSet/generation.dat", "w") do f
                 write(f,@sprintf("%d",i+count));
             end
         end
 
         bestFitness = population[1,end];
 
-        open("../FitParam/$nthParamSet/bestFitness.dat", "w") do f
+        open("./FitParam/$nthParamSet/bestFitness.dat", "w") do f
             write(f,@sprintf("%.6e",bestFitness));
         end
 
@@ -164,7 +164,7 @@ function gaV1_continue(
             return bestIndiv,bestFitness
         end
 
-        open("../FitParam/$nthParamSet/count.dat", "w") do f
+        open("./FitParam/$nthParamSet/count.dat", "w") do f
             write(f,@sprintf("%d",i+count));
         end
     end

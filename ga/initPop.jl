@@ -7,7 +7,7 @@ function getInitialPopulation(
 
     population::Matrix{Float64} = Inf.*ones(n_population,n_gene+1);
     
-    println("initpop\n");
+    println("Generating the initial population...\n");
     flush(stdout);
 
     for i = 1:n_population
@@ -17,10 +17,10 @@ function getInitialPopulation(
             end
             population[i,end] = objective(population[i,1:n_gene],searchIdx,searchRegion);
         end
-        print(@sprintf("%d / %d\r", i, n_population));
+        print(@sprintf("%d / %d\n", i, n_population));
         flush(stdout);
     end
-    print(@sprintf("%d / %d\n",n_population,n_population));
+    print("\n######\n\n");
 
     population = sortslices(population,dims=1,by=x->x[end]);
 
@@ -37,12 +37,12 @@ function getInitialPopulation_continue(
     p0_bounds::Vector{Float64}
     )::Matrix{Float64}
     
-    generation::Int64 = readdlm("../FitParam/$nthParamSet/generation.dat")[1,1];
-    bestIndiv::Vector{Float64} = readdlm(@sprintf("../FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
+    generation::Int64 = readdlm("./FitParam/$nthParamSet/generation.dat")[1,1];
+    bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
 
     population::Matrix{Float64} = Inf.*ones(n_population,n_gene+1);
 
-    println("initpop\n");
+    println("Generating the initial population...\n");
     flush(stdout);
 
     for i = 1:n_population
@@ -65,10 +65,10 @@ function getInitialPopulation_continue(
             end
             population[i,end] = objective(population[i,1:n_gene],searchIdx,searchRegion);
         end
-        print(@sprintf("%d / %d\r", i, n_population));
+        print(@sprintf("%d / %d\n", i, n_population));
         flush(stdout);
     end
-    print(@sprintf("%d / %d\n",n_population,n_population));
+    print("\n######\n\n");
 
     population = sortslices(population,dims=1,by=x->x[end]);
 

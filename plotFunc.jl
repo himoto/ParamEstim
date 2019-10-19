@@ -398,7 +398,6 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
     ylabel("Phosphorylated c-Fos\nProtein expression");
 
 
-    show();
-    #savefig("./Fig/sim_$viz_type.pdf");
+    savefig("./Fig/sim_$viz_type.pdf");
 
 end

@@ -1,6 +1,7 @@
-function optimize_continue()
+include("ParamEstim.jl");
+using .ParamEstim;
 
-    nthParamSet::Int64 = parse(Int64,replace(Main.current_ipynb,r"\D"=>""));
+function optimize_continue(nthParamSet::Int64)
 
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
     searchRegion::Matrix{Float64} = getSearchRegion();
@@ -13,14 +14,9 @@ function optimize_continue()
 
     p0_bounds = [0.1,10.0];  # [lower_bound,upper_bound]
 
-    if !isdir("../FitParam/$nthParamSet")
-        mkdir("../FitParam/$nthParamSet");
-        if !isfile(@sprintf("./runGA_%d.ipynb",nthParamSet+1))
-            cp(
-                @sprintf("./runGA_%d.ipynb",nthParamSet),
-                @sprintf("./runGA_%d.ipynb",nthParamSet+1)
-            )
-        end
+    if !isdir("./FitParam/$nthParamSet")
+        mkdir("./FitParam/$nthParamSet");
+        
         (bestIndiv,bestFitness) = gaV2(
             nthParamSet,
             n_generation,
@@ -45,3 +41,6 @@ function optimize_continue()
             );
     end
 end
+
+###
+optimize_continue(parse(Int64,ARGS[1]));
