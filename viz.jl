@@ -38,6 +38,9 @@ function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool
     PcFos_all     = zeros((n_file,length(Sim.t),Sim.condition));
 
     if n_file > 0
+        if n_file == 1 && viz_type == "average"
+            viz_type = "best";
+        end
         for i=1:n_file
             Sim = runSimulation(i,Sim,p,u0);
 
