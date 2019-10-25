@@ -107,10 +107,10 @@ function runSimulation(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vec
         bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
 
         for (i,j) in enumerate(searchIdx[1])
-            p[j] = bestIndiv[i];
+            @inbounds p[j] = bestIndiv[i];
         end
         for (i,j) in enumerate(searchIdx[2])
-            u0[j] = bestIndiv[i+length(searchIdx[1])];
+            @inbounds u0[j] = bestIndiv[i+length(searchIdx[1])];
         end
 
     catch
