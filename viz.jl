@@ -102,7 +102,7 @@ function runSimulation(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vec
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
 
     # get_best_param
-    try
+    if isfile("./FitParam/$nthParamSet/generation.dat")
         generation::Int64 = readdlm("./FitParam/$nthParamSet/generation.dat")[1,1];
         bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
 
@@ -112,9 +112,6 @@ function runSimulation(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vec
         for (i,j) in enumerate(searchIdx[2])
             @inbounds u0[j] = bestIndiv[i+length(searchIdx[1])];
         end
-
-    catch
-        # pass
     end
 
     if Sim.simulate!(p,u0) !== nothing
