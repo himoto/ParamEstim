@@ -213,7 +213,7 @@ function write_bestFitParam(bestParamSet::Int)
 
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
 
-    try
+    if isfile("./FitParam/$bestParamSet/generation.dat")
         generation::Int64 = readdlm("./FitParam/$bestParamSet/generation.dat")[1,1];
         bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",bestParamSet,generation))[:,1];
 
@@ -223,9 +223,6 @@ function write_bestFitParam(bestParamSet::Int)
         for (i,j) in enumerate(searchIdx[2])
             @inbounds u0[j] = bestIndiv[i+length(searchIdx[1])];
         end
-
-    catch
-        # pass
     end
 
     open("bestFitParam.txt","w") do f
