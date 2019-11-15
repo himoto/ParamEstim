@@ -4,3 +4,7 @@
 # Jupyter files
 *.ipynb
 .ipynb_checkpoints
+
+# Temporary result
+out/
+FitParam/
