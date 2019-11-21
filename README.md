@@ -24,11 +24,18 @@ Visualization of Simulation Results
 $ julia runSim.jl
 ```
 
-1. **viz_type="best", show_all=true, stdev=false**
+|viz_type|Description|
+|--------|-----------|
+|'average'|The average of simulation results with parameter sets in ```FitParam/```|
+|'best'|The best simulation result in ```FitParam/```, simulation with ```bestFitParam```|
+|'original'|Simulation with the default parameters and initial values defined in ```biomass/model/```|
+|'n(=1,2,...)'|Use the parameter set in ```FitParam/n/```|
+
+1. ```viz_type="best", show_all=true, stdev=false```
 
 ![simulation_best](images/simulation_best.png)
 
-2. **viz_type="average", show_all=false, stdev=true**
+2. ```viz_type="average", show_all=false, stdev=true```
 
 ![simulation_average](images/simulation_average.png)
 
