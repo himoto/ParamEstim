@@ -29,7 +29,7 @@ function localsearch(
     family = sortslices(family,dims=1,by=x->x[end]);
 
     for i = 1:n_gene+1
-        population[ip[1],i] = family[1,i];  # Best
+        @inbounds population[ip[1],i] = family[1,i];  # Best
     end
 
     population = sortslices(population,dims=1,by=x->x[end]);
@@ -49,7 +49,7 @@ function mutation(
     MAXITER::Int8 = typemax(Int8);
 
     in_range::Bool = false;
-    for i = 1:MAXITER
+    for _ in 1:MAXITER
         child = NDM(parents,n_gene);
         if 0.0 <= minimum(child[1:n_gene]) && maximum(child[1:n_gene]) <= 1.0
             in_range = true;

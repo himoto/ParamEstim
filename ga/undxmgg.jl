@@ -52,7 +52,7 @@ function getNewChild(
     MAXITER::Int8 = typemax(Int8);
 
     in_range::Bool = false;
-    for i = 1:MAXITER
+    for _ in 1:MAXITER
         child = UNDX(parents,n_gene);
         if 0.0 <= minimum(child[1:n_gene]) && maximum(child[1:n_gene]) <= 1.0
             in_range = true;

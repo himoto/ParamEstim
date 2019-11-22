@@ -45,7 +45,7 @@ function crossover(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     local child::Vector{Float64};
     MAXITER::Int8 = typemax(Int8);
     in_range::Bool = false;
-    for i = 1:MAXITER
+    for _ in 1:MAXITER
         child = ENDX(parents,n_gene);
         if 0.0 <= minimum(child[1:n_gene]) && maximum(child[1:n_gene]) <= 1.0
             in_range = true;
