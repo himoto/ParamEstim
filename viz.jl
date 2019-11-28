@@ -28,30 +28,19 @@ function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool
         end
     end
 
-    PMEK_cyt_all  = zeros((n_file,length(Sim.t),Sim.condition));
-    PERK_cyt_all  = zeros((n_file,length(Sim.t),Sim.condition));
-    PRSK_wcl_all  = zeros((n_file,length(Sim.t),Sim.condition));
-    PCREB_wcl_all = zeros((n_file,length(Sim.t),Sim.condition));
-    DUSPmRNA_all  = zeros((n_file,length(Sim.t),Sim.condition));
-    cFosmRNA_all  = zeros((n_file,length(Sim.t),Sim.condition));
-    cFosPro_all   = zeros((n_file,length(Sim.t),Sim.condition));
-    PcFos_all     = zeros((n_file,length(Sim.t),Sim.condition));
+    simulaitons_all::Array{Float64,4}  = ones((numObservables,n_file,length(Sim.t),Sim.condition)).*NaN;
 
     if n_file > 0
         if n_file == 1 && viz_type == "average"
             viz_type = "best";
         end
         for i=1:n_file
-            Sim = runSimulation(i,Sim,p,u0);
-
-            PMEK_cyt_all[i,:,:] = Sim.PMEK_cyt
-            PERK_cyt_all[i,:,:] = Sim.PERK_cyt
-            PRSK_wcl_all[i,:,:] = Sim.PRSK_wcl
-            PCREB_wcl_all[i,:,:] = Sim.PCREB_wcl
-            DUSPmRNA_all[i,:,:] = Sim.DUSPmRNA
-            cFosmRNA_all[i,:,:] = Sim.cFosmRNA
-            cFosPro_all[i,:,:] = Sim.cFosPro
-            PcFos_all[i,:,:] = Sim.PcFos
+            (Sim,successful) = runSimulation(i,Sim,p,u0);
+            if successful
+                for j=1:numObservables
+                    @inbounds simulaitons_all[j,i,:,:] = Sim.simulations[j,:,:]
+                end
+            end
         end
 
         bestFitness_all::Vector{Float64} = Inf.*ones(n_file);
@@ -66,9 +55,9 @@ function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool
         write_bestFitParam(bestParamSet);
 
         if viz_type == "best"
-            Sim = runSimulation(bestParamSet,Sim,p,u0);
+            Sim,_ = runSimulation(bestParamSet,Sim,p,u0);
         elseif viz_type != "average" && parse(Int64,viz_type) <= n_file
-            Sim = runSimulation(parse(Int64,viz_type),Sim,p,u0);
+            Sim,_ = runSimulation(parse(Int64,viz_type),Sim,p,u0);
         elseif viz_type != "average" && parse(Int64,viz_type) > n_file
             error(@sprintf("%d is larger than n_fitparam(%d)",parse(Int64,viz_type),n_file));
         end
@@ -84,16 +73,7 @@ function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool
 
     end
 
-    plotFunc_timecourse(Sim,n_file,viz_type,show_all,stdev,
-        PMEK_cyt_all,
-        PERK_cyt_all,
-        PRSK_wcl_all,
-        PCREB_wcl_all,
-        DUSPmRNA_all,
-        cFosmRNA_all,
-        cFosPro_all,
-        PcFos_all
-    )
+    plotFunc_timecourse(Sim,n_file,viz_type,show_all,stdev,simulaitons_all)
 end
 
 
@@ -114,8 +94,11 @@ function runSimulation(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vec
         end
     end
 
-    if Sim.simulate!(p,u0) !== nothing
+    if Sim.simulate!(p,u0) isa Nothing
+        return Sim, true
+    else
         print("Simulation failed.\nparameter_set #$nthParamSet")
+        return Sim, false
     end
 
     return Sim

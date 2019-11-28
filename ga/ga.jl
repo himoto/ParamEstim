@@ -3,6 +3,11 @@ module GA
 export
     C,
     V,
+    observableNames,
+    numObservables,
+    species,
+    conditionNames,
+    diff_sim_and_exp,
     Sim,
     Exp,
     f_params,
@@ -27,6 +32,8 @@ import Seaborn;
 
 include("../model/model.jl");
 using .Model;
+
+include("../observable.jl");
 
 include("../experimentalData.jl");
 using .Exp;
