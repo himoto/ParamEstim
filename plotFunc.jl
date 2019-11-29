@@ -83,12 +83,12 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
             exp_t = Exp.getTimepoint(i);
             if isassigned(Exp.standardError,i)
                 for l in eachindex(conditionNames)
-                    e = errorbar(exp_t./60.,Exp.experiments[i][conditionNames[l]],yerr=Exp.standardError[i][conditionNames[l]],
+                    exp_data = errorbar(exp_t./60.,Exp.experiments[i][conditionNames[l]],yerr=Exp.standardError[i][conditionNames[l]],
                         lw=1,markerfacecolor="None",markeredgecolor=cmap[l],ecolor=cmap[l],
                         fmt=shape[l],capsize=8,clip_on=false
                     );
-                    for b in e[2]
-                        b.set_clip_on(false);
+                    for marker in exp_data[2]
+                        marker.set_clip_on(false);
                     end
                 end
             else
