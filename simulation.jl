@@ -23,20 +23,38 @@ function simulate!(p::Vector{Float64},u0::Vector{Float64})
         prob = ODEProblem(diffeq,u0,tspan,p);
 
         try
-            sol = solve(prob,CVODE_BDF(),saveat=1.0,dtmin=(tspan[end]-tspan[1])/1e9,abstol=1e-9,reltol=1e-9,verbose=false);
+            sol = solve(
+                prob,CVODE_BDF(),saveat=1.0,dtmin=(tspan[end]-tspan[1])/1e9,
+                abstol=1e-9,reltol=1e-9,verbose=false
+            );
 
             @inbounds @simd for j in eachindex(t)
-                simulations[species["Phosphorylated_MEKc"],j,i] = sol.u[j][V.ppMEKc];
-                simulations[species["Phosphorylated_ERKc"],j,i]= sol.u[j][V.pERKc] + sol.u[j][V.ppERKc];
-                simulations[species["Phosphorylated_RSKw"],j,i]= sol.u[j][V.pRSKc] + sol.u[j][V.pRSKn]*(p[C.Vn]/p[C.Vc]);
-                simulations[species["Phosphorylated_CREBw"],j,i] = sol.u[j][V.pCREBn]*(p[C.Vn]/p[C.Vc]);
-                simulations[species["dusp_mRNA"],j,i] = sol.u[j][V.duspmRNAc];
-                simulations[species["cfos_mRNA"],j,i] = sol.u[j][V.cfosmRNAc];
-                simulations[species["cFos_Protein"],j,i] = (sol.u[j][V.pcFOSn] + sol.u[j][V.cFOSn])*(p[C.Vn]/p[C.Vc]) + sol.u[j][V.cFOSc] + sol.u[j][V.pcFOSc];
-                simulations[species["Phosphorylated_cFos"],j,i] = sol.u[j][V.pcFOSn]*(p[C.Vn]/p[C.Vc]) + sol.u[j][V.pcFOSc];
+                simulations[species["Phosphorylated_MEKc"],j,i] = (
+                    sol.u[j][V.ppMEKc]
+                );
+                simulations[species["Phosphorylated_ERKc"],j,i] = (
+                    sol.u[j][V.pERKc] + sol.u[j][V.ppERKc]
+                );
+                simulations[species["Phosphorylated_RSKw"],j,i] = (
+                    sol.u[j][V.pRSKc] + sol.u[j][V.pRSKn]*(p[C.Vn]/p[C.Vc])
+                );
+                simulations[species["Phosphorylated_CREBw"],j,i] = (
+                    sol.u[j][V.pCREBn]*(p[C.Vn]/p[C.Vc])
+                );
+                simulations[species["dusp_mRNA"],j,i] = (
+                    sol.u[j][V.duspmRNAc]
+                );
+                simulations[species["cfos_mRNA"],j,i] = (
+                    sol.u[j][V.cfosmRNAc]
+                );
+                simulations[species["cFos_Protein"],j,i] = (
+                    (sol.u[j][V.pcFOSn] + sol.u[j][V.cFOSn])*(p[C.Vn]/p[C.Vc]) + sol.u[j][V.cFOSc] + sol.u[j][V.pcFOSc]
+                );
+                simulations[species["Phosphorylated_cFos"],j,i] = (
+                    sol.u[j][V.pcFOSn]*(p[C.Vn]/p[C.Vc]) + sol.u[j][V.pcFOSc]
+                );
             end
         catch
-
             return false
         end
     end
