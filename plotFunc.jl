@@ -51,7 +51,7 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
             for l=1:Sim.condition
                 plot(
                     Sim.t,Sim.simulations[i,:,l]/(maximum(Sim.simulations[i,:,:])),
-                    color=cmap[l],alpha=0.05
+                    color=cmap[l]
                 )
             end
         else
