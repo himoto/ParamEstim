@@ -35,7 +35,7 @@ function simulateAll(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
             viz_type = "best";
         end
         for i=1:n_file
-            (Sim,successful) = runSimulation(i,Sim,p,u0);
+            (Sim,successful) = updateSim(i,Sim,p,u0);
             if successful
                 for j=1:numObservables
                     @inbounds simulaitons_all[j,i,:,:] = Sim.simulations[j,:,:]
@@ -55,9 +55,9 @@ function simulateAll(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
         write_bestFitParam(bestParamSet);
 
         if viz_type == "best"
-            Sim,_ = runSimulation(bestParamSet,Sim,p,u0);
+            Sim,_ = updateSim(bestParamSet,Sim,p,u0);
         elseif viz_type != "average" && parse(Int64,viz_type) <= n_file
-            Sim,_ = runSimulation(parse(Int64,viz_type),Sim,p,u0);
+            Sim,_ = updateSim(parse(Int64,viz_type),Sim,p,u0);
         elseif viz_type != "average" && parse(Int64,viz_type) > n_file
             error(@sprintf("%d is larger than n_fitparam(%d)",parse(Int64,viz_type),n_file));
         end
@@ -77,7 +77,7 @@ function simulateAll(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
 end
 
 
-function runSimulation(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vector{Float64})
+function updateSim(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vector{Float64})
 
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
 
