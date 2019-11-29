@@ -1,4 +1,4 @@
-function visualizeResult(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
+function simulateAll(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
     if !isdir("./Fig")
         mkdir("./Fig");
     end

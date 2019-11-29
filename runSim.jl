@@ -7,4 +7,4 @@ using .ParamEstim
     stdev::Bool (Only when viz_type == "average")
 ==============================================================================#
 
-visualizeResult(Sim,viz_type="average",show_all=false,stdev=true);
+simulateAll(Sim,viz_type="average",show_all=false,stdev=true);

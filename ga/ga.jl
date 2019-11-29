@@ -14,7 +14,7 @@ export
     initialValues,
     searchParameterIndex,
     getSearchRegion,
-    visualizeResult,
+    simulateAll,
     gaV1,
     gaV1_continue,
     gaV2,
