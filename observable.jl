@@ -12,9 +12,9 @@ const observableNames = [
 const numObservables = length(observableNames);
 const species = Dict(zip(observableNames,1:numObservables));
 
-const conditionNames = Dict(
-    1 => "EGF",
-    2 => "HRG"
+const cond2num = Dict(
+    "EGF" => 1,
+    "HRG" => 2
 )
 
 function diff_sim_and_exp(
@@ -23,10 +23,12 @@ function diff_sim_and_exp(
     )
     simResult::Vector{Float64} = [];
     expResult::Vector{Float64} = [];
+
+    conditions::Vector{String} = collect(keys(cond2num));
     
     for i in 1:numCondition
-        append!(simResult,simMatrix[Int.(expTimepoint.+1),i]);
-        append!(expResult,expDict[conditionNames[i]])
+        append!(simResult,simMatrix[Int.(expTimepoint.+1),cond2num[conditions[i]]]);
+        append!(expResult,expDict[conditions[i]])
     end
 
     return (simResult./normMax_sim, expResult./normMax_exp)

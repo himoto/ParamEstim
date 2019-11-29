@@ -9,14 +9,14 @@ const t = collect(tspan[1]:1.0:tspan[end])./60.0;
 
 const condition = 2;
 
-simulations  = Array{Float64,3}(undef,numObservables,length(t),condition);
+simulations = Array{Float64,3}(undef,numObservables,length(t),condition);
 
 function simulate!(p::Vector{Float64},u0::Vector{Float64})
 
     for i=1:condition
-        if i==1
+        if i == cond2num["EGF"]
             p[C.Ligand] = p[C.EGF];
-        elseif i==2
+        elseif i == cond2num["HRG"]
             p[C.Ligand] = p[C.HRG];
         end
 

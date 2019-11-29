@@ -6,7 +6,7 @@ export
     observableNames,
     numObservables,
     species,
-    conditionNames,
+    cond2num,
     diff_sim_and_exp,
     Sim,
     Exp,
