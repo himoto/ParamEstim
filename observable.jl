@@ -27,8 +27,12 @@ function diff_sim_and_exp(
     conditions::Vector{String} = collect(keys(cond2num));
     
     for i in 1:numCondition
-        append!(simResult,simMatrix[Int.(expTimepoint.+1),cond2num[conditions[i]]]);
-        append!(expResult,expDict[conditions[i]])
+        for (_,conditionName) in enumerate(conditions)
+            if cond2num[conditionName] == i
+                append!(simResult,simMatrix[Int.(expTimepoint.+1),i]);
+                append!(expResult,expDict[conditionName]);
+            end
+        end
     end
 
     return (simResult./normMax_sim, expResult./normMax_exp)
