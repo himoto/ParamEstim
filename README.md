@@ -11,7 +11,6 @@ Using Genetic Algorithm to Fit ODE Models to Data
 ## Usage
 Parameter Estimation (*n*=1, 2, 3, · · ·)
 ```bash
-$ mkdir out
 $ nohup julia optimize.jl n >> out/n.log 2>&1 &
 ```
 - If you want to continue from where you stopped in the last parameter search,
