@@ -84,21 +84,29 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
             conditions::Vector{String} = collect(keys(cond2num));
             if isassigned(Exp.standardError,i)
                 for l in 1:Sim.condition
-                    exp_data = errorbar(exp_t./60.,Exp.experiments[i][conditions[l]],yerr=Exp.standardError[i][conditions[l]],
-                        lw=1,markerfacecolor="None",markeredgecolor=cmap[cond2num[conditions[l]]],ecolor=cmap[cond2num[conditions[l]]],
-                        fmt=shape[l],capsize=8,clip_on=false
-                    );
-                    for marker in exp_data[2]
-                        marker.set_clip_on(false);
+                    for (_,conditionName) in enumerate(conditions)
+                        if cond2num[conditionName] == l
+                            exp_data = errorbar(exp_t./60.,Exp.experiments[i][conditionName],yerr=Exp.standardError[i][conditionName],
+                                lw=1,markerfacecolor="None",markeredgecolor=cmap[l],ecolor=cmap[l],
+                                fmt=shape[l],capsize=8,clip_on=false
+                            );
+                            for marker in exp_data[2]
+                                marker.set_clip_on(false);
+                            end
+                        end
                     end
                 end
             else
                 for l in 1:Sim.condition
-                    plot(
-                        exp_t./60.,Exp.experiments[i][conditions[l]],shape[cond2num[conditions[l]]],
-                        markerfacecolor="None",markeredgecolor=cmap[cond2num[conditions[l]]],
-                        clip_on=false
-                    )
+                    for (_,conditionName) in enumerate(conditions)
+                        if cond2num[conditionName] == l
+                            plot(
+                                exp_t./60.,Exp.experiments[i][conditionName],shape[l],
+                                markerfacecolor="None",markeredgecolor=cmap[l],
+                                clip_on=false
+                            )
+                        end
+                    end
                 end
             end
         end
