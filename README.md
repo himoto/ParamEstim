@@ -23,22 +23,34 @@ Visualization of Simulation Results
 $ julia runSim.jl
 ```
 
-|viz_type|Description|
-|--------|-----------|
-|'average'|The average of simulation results with parameter sets in ```FitParam/```|
-|'best'|The best simulation result in ```FitParam/```, simulation with ```bestFitParam```|
-|'original'|Simulation with the default parameters and initial values defined in ```biomass/model/```|
-|'n(=1,2,...)'|Use the parameter set in ```FitParam/n/```|
+```viz_type```:
 
-1. ```viz_type="best", show_all=true, stdev=false```
+- "average"
+    : The average of simulation results with parameter sets in ```out/```
+
+- "best"
+    : The best simulation result in ```out/```, simulation with ```best_fit_param```
+
+- "original"
+    : Simulation with the default parameters and initial values defined in ```biomass/model/```
+
+- "n(=1,2,...)"
+    : Use the parameter set in ```out/n/```
+
+```julia
+simulateAll(viz_type="best", show_all=true, stdev=false)
+```
 
 ![simulation_best](images/simulation_best.png)
 
-2. ```viz_type="average", show_all=false, stdev=true```
+```julia
+simulateAll(viz_type="average", show_all=false, stdev=true)
+```
 
 ![simulation_average](images/simulation_average.png)
 
-- Points (blue diamonds, EGF; red squares, HRG) denote experimental data, solid lines denote simulations.
+Points (blue diamonds, EGF; red squares, HRG) denote experimental data, solid lines denote simulations.
+
 ## Installation
     $ git clone https://github.com/himoto/ParamEstim.git
 
