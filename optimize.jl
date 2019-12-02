@@ -3,10 +3,6 @@ using .ParamEstim;
 
 function optimize(nthParamSet::Int64)
 
-    if !isdir("./out")
-        mkdir("./out");
-    end
-
     if !isdir("./FitParam")
         mkdir("./FitParam");
     end
