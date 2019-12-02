@@ -66,7 +66,7 @@ function objective(
                         Sim.simulations[species[target],:,:],
                         Exp.experiments[species[target]],
                         exp_t,
-                        Sim.condition,
+                        Sim.conditions,
                         normMax_sim=normMax,
                         normMax_exp=1.0
                     )...

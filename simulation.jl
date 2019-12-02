@@ -7,16 +7,16 @@ using Sundials;
 const tspan = (0.0,5400.0);
 const t = collect(tspan[1]:1.0:tspan[end])./60.0;
 
-const condition = 2;
+const conditions = ["EGF", "HRG"];
 
-simulations = Array{Float64,3}(undef,numObservables,length(t),condition);
+simulations = Array{Float64,3}(undef,numObservables,length(t),length(conditions));
 
 function simulate!(p::Vector{Float64},u0::Vector{Float64})
 
-    for i=1:condition
-        if i == cond2num["EGF"]
+    for (i,condition) in enumerate(conditions)
+        if condition == "EGF"
             p[C.Ligand] = p[C.EGF];
-        elseif i == cond2num["HRG"]
+        elseif condition == "HRG"
             p[C.Ligand] = p[C.HRG];
         end
 

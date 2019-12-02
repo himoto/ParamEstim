@@ -28,7 +28,7 @@ function simulateAll(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
         end
     end
 
-    simulaitons_all::Array{Float64,4}  = ones((numObservables,n_file,length(Sim.t),Sim.condition)).*NaN;
+    simulaitons_all::Array{Float64,4} = ones((numObservables,n_file,length(Sim.t),length(Sim.conditions))).*NaN;
 
     if n_file > 0
         if n_file == 1 && viz_type == "average"

@@ -39,7 +39,7 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
         subplot(2,4,i);
         if show_all
             for j=1:n_file
-                for l=1:Sim.condition
+                for l in eachindex(Sim.conditions)
                     plot(
                         Sim.t,simulations_all[i,j,:,l]./maximum(simulations_all[i,j,:,:]),
                         color=cmap[l],alpha=0.05
@@ -48,27 +48,27 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
             end
         end
         if viz_type != "average"
-            for l=1:Sim.condition
+            for l in eachindex(Sim.conditions)
                 plot(
                     Sim.t,Sim.simulations[i,:,l]/(maximum(Sim.simulations[i,:,:])),
                     color=cmap[l]
                 )
             end
         else
-            normalized = Array{Float64,4}(undef,numObservables,n_file,length(Sim.t),Sim.condition);
+            normalized = Array{Float64,4}(undef,numObservables,n_file,length(Sim.t),length(Sim.conditions));
             for j=1:n_file
-                for l=1:Sim.condition
+                for l in eachindex(Sim.conditions)
                     normalized[i,j,:,l] = simulations_all[i,j,:,l]./maximum(simulations_all[i,j,:,:]);
                 end
             end
-            for l=1:Sim.condition
+            for l in eachindex(Sim.conditions)
                 plot(
                     Sim.t,[mean(filter(!isnan,normalized[i,:,k,l])) for k in eachindex(Sim.t)],
                     color=cmap[l]
                 )
             end
             if stdev
-                for l=1:Sim.condition
+                for l in eachindex(Sim.conditions)
                     ymean = [mean(filter(!isnan,normalized[i,:,k,l])) for k in eachindex(Sim.t)];
                     yerr = [std(filter(!isnan,normalized[i,:,k,l]),corrected=false) for k in eachindex(Sim.t)];
                     fill_between(
@@ -81,32 +81,23 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
 
         if isassigned(Exp.experiments,i)
             exp_t = Exp.getTimepoint(i);
-            conditions::Vector{String} = collect(keys(cond2num));
             if isassigned(Exp.standardError,i)
-                for l in 1:Sim.condition
-                    for (_,conditionName) in enumerate(conditions)
-                        if cond2num[conditionName] == l
-                            exp_data = errorbar(exp_t./60.,Exp.experiments[i][conditionName],yerr=Exp.standardError[i][conditionName],
-                                lw=1,markerfacecolor="None",markeredgecolor=cmap[l],ecolor=cmap[l],
-                                fmt=shape[l],capsize=8,clip_on=false
-                            );
-                            for marker in exp_data[2]
-                                marker.set_clip_on(false);
-                            end
-                        end
+                for (l,condition) in enumerate(Sim.conditions)
+                    exp_data = errorbar(exp_t./60.,Exp.experiments[i][condition],yerr=Exp.standardError[i][condition],
+                        lw=1,markerfacecolor="None",markeredgecolor=cmap[l],ecolor=cmap[l],
+                        fmt=shape[l],capsize=8,clip_on=false
+                    );
+                    for marker in exp_data[2]
+                        marker.set_clip_on(false);
                     end
                 end
             else
-                for l in 1:Sim.condition
-                    for (_,conditionName) in enumerate(conditions)
-                        if cond2num[conditionName] == l
-                            plot(
-                                exp_t./60.,Exp.experiments[i][conditionName],shape[l],
-                                markerfacecolor="None",markeredgecolor=cmap[l],
-                                clip_on=false
-                            )
-                        end
-                    end
+                for (l,condition) in enumerate(Sim.conditions)
+                    plot(
+                        exp_t./60.,Exp.experiments[i][condition],shape[l],
+                        markerfacecolor="None",markeredgecolor=cmap[l],
+                        clip_on=false
+                    )
                 end
             end
         end
