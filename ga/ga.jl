@@ -43,7 +43,7 @@ using .Sim;
 include("../fitness.jl");
 include("../searchParameter.jl");
 include("../plotFunc.jl");
-include("../viz.jl");
+include("../dynamics.jl");
 
 include("initPop.jl");
 include("converter.jl");
