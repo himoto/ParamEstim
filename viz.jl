@@ -28,14 +28,14 @@ function simulateAll(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
         end
     end
 
-    simulaitons_all::Array{Float64,4} = ones((numObservables,n_file,length(Sim.t),length(Sim.conditions))).*NaN;
+    simulaitons_all::Array{Float64,4} = fill(NaN,(numObservables,n_file,length(Sim.t),length(Sim.conditions)));
 
     if n_file > 0
         if n_file == 1 && viz_type == "average"
             viz_type = "best";
         end
         for i=1:n_file
-            (Sim,successful) = updateSim(i,Sim,p,u0);
+            (Sim,successful) = validate(i,p,u0);
             if successful
                 for j=1:numObservables
                     @inbounds simulaitons_all[j,i,:,:] = Sim.simulations[j,:,:]
@@ -52,12 +52,12 @@ function simulateAll(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
             end
         end
         bestParamSet::Int = argmin(bestFitness_all);
-        write_bestFitParam(bestParamSet);
+        write_bestFitParam(bestParamSet,p,u0);
 
         if viz_type == "best"
-            Sim,_ = updateSim(bestParamSet,Sim,p,u0);
+            Sim,_ = validate(bestParamSet,p,u0);
         elseif viz_type != "average" && parse(Int64,viz_type) <= n_file
-            Sim,_ = updateSim(parse(Int64,viz_type),Sim,p,u0);
+            Sim,_ = validate(parse(Int64,viz_type),p,u0);
         elseif viz_type != "average" && parse(Int64,viz_type) > n_file
             error(@sprintf("%d is larger than n_fitparam(%d)",parse(Int64,viz_type),n_file));
         end
@@ -77,14 +77,13 @@ function simulateAll(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
 end
 
 
-function updateSim(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vector{Float64})
+function updateParam(paramset::Int,p::Vector{Float64},u0::Vector{Float64})
 
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
 
-    # get_best_param
-    if isfile("./FitParam/$nthParamSet/generation.dat")
-        generation::Int64 = readdlm("./FitParam/$nthParamSet/generation.dat")[1,1];
-        bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
+    if isfile("./FitParam/$paramset/generation.dat")
+        generation::Int64 = readdlm("./FitParam/$paramset/generation.dat")[1,1];
+        bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",paramset,generation))[:,1];
 
         for (i,j) in enumerate(searchIdx[1])
             @inbounds p[j] = bestIndiv[i];
@@ -94,6 +93,14 @@ function updateSim(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vector{
         end
     end
 
+    return p, u0
+end
+
+
+function validate(nthParamSet::Int64,p::Vector{Float64},u0::Vector{Float64})
+
+    (p,u0) = updateParam(nthParamSet,p,u0);
+
     if Sim.simulate!(p,u0) isa Nothing
         return Sim, true
     else
@@ -102,6 +109,24 @@ function updateSim(nthParamSet::Int64,Sim::Module,p::Vector{Float64},u0::Vector{
     end
 
     return Sim
+end
+
+
+function write_bestFitParam(bestParamSet::Int,p::Vector{Float64},u0::Vector{Float64})
+    (p,u0) = updateParam(bestParamSet,p,u0);
+    open("bestFitParam.txt","w") do f
+        write(f,@sprintf("# param set: %d\n",bestParamSet));
+        write(f,"\n### Param const\n");
+        for i=1:C.len_f_params
+            write(f,@sprintf("p[C.%s] = %e\n",C.param_names[i],p[i]));
+        end
+        write(f,"\n### Non-zero initial conditions\n");
+        for i=1:V.len_f_vars
+            if u0[i] != 0.0
+                write(f,@sprintf("u0[V.%s] = %e\n",V.var_names[i],u0[i]));
+            end
+        end
+    end
 end
 
 
@@ -126,7 +151,7 @@ function saveParamRange(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
         searchParamMatrix[nthParamSet,:] = bestIndiv[1:length(searchIdx[1])];
     end
 
-    # ==========================================================================
+    # --------------------------------------------------------------------------
     # Seaborn.boxplot
 
     fig = figure(figsize=(8,24));
@@ -152,5 +177,4 @@ function saveParamRange(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
 
     savefig("./Fig/param_range.pdf",bbox_inches="tight");
     close(fig);
-    # ==========================================================================
 end

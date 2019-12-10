@@ -207,40 +207,6 @@ function getSearchRegion()::Matrix{Float64}
 end
 
 
-function write_bestFitParam(bestParamSet::Int)
-    p::Vector{Float64} = f_params();
-    u0::Vector{Float64} = initialValues();
-
-    searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
-
-    if isfile("./FitParam/$bestParamSet/generation.dat")
-        generation::Int64 = readdlm("./FitParam/$bestParamSet/generation.dat")[1,1];
-        bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",bestParamSet,generation))[:,1];
-
-        for (i,j) in enumerate(searchIdx[1])
-            @inbounds p[j] = bestIndiv[i];
-        end
-        for (i,j) in enumerate(searchIdx[2])
-            @inbounds u0[j] = bestIndiv[i+length(searchIdx[1])];
-        end
-    end
-
-    open("bestFitParam.txt","w") do f
-        write(f,@sprintf("# param set: %d\n",bestParamSet));
-        write(f,"\n### Param const\n");
-        for i=1:C.len_f_params
-            write(f,@sprintf("p[C.%s] = %e\n",C.param_names[i],p[i]));
-        end
-        write(f,"\n### Non-zero initial conditions\n");
-        for i=1:V.len_f_vars
-            if u0[i] != 0.0
-                write(f,@sprintf("u0[V.%s] = %e\n",V.var_names[i],u0[i]));
-            end
-        end
-    end
-end
-
-
 function lin2log!(
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
     searchRegion::Matrix{Float64},
