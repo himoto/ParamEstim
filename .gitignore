@@ -8,3 +8,6 @@
 # Temporary result
 out/
 FitParam/
+
+# Figure
+Fig/
