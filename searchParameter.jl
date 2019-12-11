@@ -216,22 +216,25 @@ function lin2log!(
 
     for i=1:size(searchRegion,2)
         if minimum(searchRegion[:,i]) < 0.0
+            message = "searchRegion[lb,ub] must be positive.\n";
             if i <= nParamConst
-                error(@sprintf("`C.%s` searchRegion[lb,ub] must be positive.\n",C.param_names[i]));
+                error(@sprintf("`C.%s` ",C.param_names[i])*message);
             else
-                error(@sprintf("`V.%s` searchRegion[lb,ub] must be positive.\n",V.var_names[i-nParamConst]));
+                error(@sprintf("`V.%s` ",V.var_names[i-nParamConst])*message);
             end
         elseif minimum(searchRegion[:,i]) == 0.0 && maximum(searchRegion[:,i]) != 0.0
+            message = "lower_bound must be larger than 0.\n";
             if i <= nParamConst
-                error(@sprintf("`C.%s` lower_bound must be larger than 0.\n",C.param_names[i]));
+                error(@sprintf("`C.%s` ",C.param_names[i])*message);
             else
-                error(@sprintf("`V.%s` lower_bound must be larger than 0.\n",V.var_names[i-nParamConst]));
+                error(@sprintf("`V.%s` ",V.var_names[i-nParamConst])*message);
             end
         elseif searchRegion[2,i] - searchRegion[1,i] < 0.0
+            message = "lower_bound < upper_bound\n";
             if i <= nParamConst
-                error(@sprintf("`C.%s` lower_bound < upper_bound\n",C.param_names[i]));
+                error(@sprintf("`C.%s` ",C.param_names[i])*message);
             else
-                error(@sprintf("`V.%s` lower_bound < upper_bound\n",V.var_names[i-nParamConst]));
+                error(@sprintf("`V.%s` ",V.var_names[i-nParamConst])*message);
             end
         end
     end
