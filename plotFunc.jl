@@ -25,8 +25,12 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
     rc("font",family = "Arial");
     rc("mathtext",fontset = "custom");
     rc("mathtext",it = "Arial:italic");
-    rc("font",size = 16);
+    rc("font",size = 18);
     rc("axes",linewidth = 2);
+    rc("xtick.major",width = 2);
+    rc("ytick.major",width = 2);
+    rc("xtick",direction = "in");
+    rc("ytick",direction = "in");
     rc("lines",linewidth = 2.5);
     rc("lines",markersize = 12);
 
@@ -109,11 +113,11 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,show_all
 
         xlim(0,90);
         xticks([0,30,60,90]);
-        yticks([0,0.2,0.4,0.6,0.8,1,1.2]);
+        yticks([0,0.3,0.6,0.9,1.2]);
         ylim(0,1.2);
         xlabel("Time (min)");
         ylabel(get_ylabel(name));
     end
 
-    savefig("./Fig/sim_$viz_type.pdf");
+    savefig("./Fig/sim_$viz_type.png",dpi=300,bbox_inches="tight");
 end
