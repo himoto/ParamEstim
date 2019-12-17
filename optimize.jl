@@ -21,7 +21,7 @@ function optimize(nthParamSet::Int64)
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
     searchRegion::Matrix{Float64} = getSearchRegion();
 
-    n_generation::Int64 = 10000;
+    max_generation::Int64 = 10000;
     n_population::Int64 = 5*size(searchRegion,2);
     n_children::Int64 = 50;
     n_gene::Int64 = size(searchRegion,2);
@@ -29,7 +29,7 @@ function optimize(nthParamSet::Int64)
 
     (bestIndiv,bestFitness) = gaV2(
         nthParamSet,
-        n_generation,
+        max_generation,
         n_population,
         n_children,
         n_gene,
