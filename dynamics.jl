@@ -65,14 +65,11 @@ function simulateAll(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
         if n_file > 1
             saveParamRange(n_file,p,u0);
         end
-
     else
         if Sim.simulate!(p,u0) !== nothing
             error("Simulation failed.");
         end
-
     end
-
     plotFunc_timecourse(Sim,n_file,viz_type,show_all,stdev,simulaitons_all)
 end
 
@@ -82,8 +79,14 @@ function updateParam(paramset::Int,p::Vector{Float64},u0::Vector{Float64})
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
 
     if isfile("./FitParam/$paramset/generation.dat")
-        generation::Int64 = readdlm("./FitParam/$paramset/generation.dat")[1,1];
-        bestIndiv::Vector{Float64} = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",paramset,generation))[:,1];
+        bestGeneration::Int64 = readdlm(
+            "./FitParam/$paramset/generation.dat"
+        )[1,1];
+        bestIndiv::Vector{Float64} = readdlm(
+            @sprintf(
+                "./FitParam/%d/fitParam%d.dat",paramset,bestGeneration
+            )
+        )[:,1];
 
         for (i,j) in enumerate(searchIdx[1])
             @inbounds p[j] = bestIndiv[i];
@@ -137,8 +140,14 @@ function saveParamRange(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
     for nthParamSet=1:n_file
         local bestIndiv::Vector{Float64};
         try
-            generation::Int64 = readdlm("./FitParam/$nthParamSet/generation.dat")[1,1];
-            bestIndiv = readdlm(@sprintf("./FitParam/%d/fitParam%d.dat",nthParamSet,generation))[:,1];
+            bestGeneration::Int64 = readdlm(
+                "./FitParam/$nthParamSet/generation.dat
+            ")[1,1];
+            bestIndiv = readdlm(
+                @sprintf(
+                    "./FitParam/%d/fitParam%d.dat",nthParamSet,bestGeneration
+                )
+            )[:,1];
         catch
             bestIndiv = zeros(length(searchIdx[1])+length(searchIdx[2]));
             for (i,j) in enumerate(searchIdx[1])
