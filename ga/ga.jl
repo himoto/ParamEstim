@@ -3,9 +3,8 @@ module GA
 export
     C,
     V,
-    observableNames,
-    numObservables,
-    species,
+    observables,
+    obsIdx,
     diff_sim_and_exp,
     Sim,
     Exp,
