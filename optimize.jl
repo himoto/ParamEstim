@@ -3,19 +3,19 @@ using .ParamEstim;
 
 function optimize(nthParamSet::Int64)
 
-    if !isdir("./FitParam")
-        mkdir("./FitParam");
+    if !isdir("./fitparam")
+        mkdir("./fitparam");
     end
 
     try
-        files = readdir("./FitParam/$nthParamSet");
+        files = readdir("./fitparam/$nthParamSet");
         for file in files
             if occursin(".dat",file)
-                rm("./FitParam/$nthParamSet/$file");
+                rm("./fitparam/$nthParamSet/$file");
             end
         end
     catch
-        mkdir("./FitParam/$nthParamSet")
+        mkdir("./fitparam/$nthParamSet")
     end
 
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();

@@ -17,7 +17,7 @@ function simulateAll(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
     n_file::Int = 0
     if viz_type != "original"
         try
-            fitparamFiles::Vector{String} = readdir("./FitParam")
+            fitparamFiles::Vector{String} = readdir("./fitparam")
             for file in fitparamFiles
                 if occursin(r"\d",file)
                     n_file += 1
@@ -46,8 +46,8 @@ function simulateAll(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
 
         bestFitness_all::Vector{Float64} = Inf.*ones(n_file)
         for i=1:n_file
-            if isfile("./FitParam/$i/BestFitness.dat")
-                bestFitness_all[i] = readdlm("./FitParam/$i/BestFitness.dat")[1,1]
+            if isfile("./fitparam/$i/best_fitness.dat")
+                bestFitness_all[i] = readdlm("./fitparam/$i/best_fitness.dat")[1,1]
             else
                 bestFitness_all[i] = Inf
             end
@@ -79,13 +79,13 @@ function updateParam(paramset::Int,p::Vector{Float64},u0::Vector{Float64})
 
     searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex()
 
-    if isfile("./FitParam/$paramset/generation.dat")
+    if isfile("./fitparam/$paramset/generation.dat")
         bestGeneration::Int64 = readdlm(
-            "./FitParam/$paramset/generation.dat"
+            "./fitparam/$paramset/generation.dat"
         )[1,1]
         bestIndiv::Vector{Float64} = readdlm(
             @sprintf(
-                "./FitParam/%d/fitParam%d.dat",paramset,bestGeneration
+                "./fitparam/%d/fit_param%d.dat",paramset,bestGeneration
             )
         )[:,1]
 
@@ -142,11 +142,11 @@ function saveParamRange(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
         local bestIndiv::Vector{Float64}
         try
             bestGeneration::Int64 = readdlm(
-                "./FitParam/$nthParamSet/generation.dat
+                "./fitparam/$nthParamSet/generation.dat
             ")[1,1]
             bestIndiv = readdlm(
                 @sprintf(
-                    "./FitParam/%d/fitParam%d.dat",nthParamSet,bestGeneration
+                    "./fitparam/%d/fit_param%d.dat",nthParamSet,bestGeneration
                 )
             )[:,1]
         catch

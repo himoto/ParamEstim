@@ -14,8 +14,8 @@ function optimize_continue(nthParamSet::Int64)
 
     p0_bounds = [0.1,10.0];  # [lower_bound,upper_bound]
 
-    if !isdir("./FitParam/$nthParamSet")
-        mkdir("./FitParam/$nthParamSet");
+    if !isdir("./fitparam/$nthParamSet")
+        mkdir("./fitparam/$nthParamSet");
         
         (bestIndiv,bestFitness) = gaV2(
             nthParamSet,
