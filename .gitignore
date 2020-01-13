@@ -7,7 +7,7 @@
 
 # Temporary result
 out/
-FitParam/
+fitparam/
 
 # Figure
 Fig/
