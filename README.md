@@ -1,6 +1,10 @@
 # Parameter estimation of ODE models describing biological processes
 
-currently implimented for modeling early transcriptional regulation pathway ([Nakakuki *et al.*, ***Cell***, 2010](https://doi.org/10.1016/j.cell.2010.03.054)).
+currently implimented for modeling early transcriptional regulation pathway ([Nakakuki *et al.*, ***Cell***, 2010](https://doi.org/10.1016/j.cell.2010.03.054))
+
+![simulation_average](images/simulation_average.png)
+
+Points (blue diamonds, EGF; red squares, HRG) denote experimental data, solid lines denote simulations.
 
 ## Model description
 This mechanistic model describes the activation of immediate early genes such as cFos after epidermal growth factor (EGF) or heregulin (HRG) stimulation of the MAPK pathway. Phosphorylated cFos is a key transcription factor triggering downstream cascades of cell fate determination. The model can explain how the switch-like response of p-cFos emerges from the spatiotemporal dynamics. This mechanistic model comprises the explicit reaction kinetics of the signal transduction pathway, the transcriptional and the posttranslational feedback and feedforward loops. In the article, two different mechanistic models have been studied, the first one based on previously known interactions but failing to account for the experimental data and the second one including additional interactions which were discovered and confirmed by new experiments. The mechanistic model encoded here is the second one, the extended and at the time of creation most complete model of cell fate decision making in response to different doses of EGF or HRG stimulation.
@@ -23,37 +27,22 @@ $ nohup julia optimize_continue.jl n >> out/n.log 2>&1 &
 ```
 ---
 Visualization of Simulation Results
-```bash
-$ julia runSim.jl
-```
+
+    $ julia runSim.jl
 
 ```viz_type```:
 
 - "average"
-    : The average of simulation results with parameter sets in ```out/```
+    : The average of simulation results with parameter sets in ```fitparam/```
 
 - "best"
-    : The best simulation result in ```out/```, simulation with ```best_fit_param```
+    : The best simulation result in ```fitparam/```, simulation with ```bestFitParam```
 
 - "original"
-    : Simulation with the default parameters and initial values defined in ```biomass/model/```
+    : Simulation with the default parameters and initial values defined in ```model/```
 
 - "n(=1,2,...)"
-    : Use the parameter set in ```out/n/```
-
-```julia
-simulateAll(viz_type="best", show_all=true, stdev=false)
-```
-
-![simulation_best](images/simulation_best.png)
-
-```julia
-simulateAll(viz_type="average", show_all=false, stdev=true)
-```
-
-![simulation_average](images/simulation_average.png)
-
-Points (blue diamonds, EGF; red squares, HRG) denote experimental data, solid lines denote simulations.
+    : Use the parameter set in ```fitparam/n/```
 
 ## Installation
     $ git clone https://github.com/himoto/ParamEstim.git
