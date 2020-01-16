@@ -18,12 +18,12 @@ This mechanistic model describes the activation of immediate early genes such as
 ## Usage
 Parameter Estimation (*n*=1, 2, 3, · · ·)
 ```bash
-$ mkdir out
-$ nohup julia optimize.jl n >> out/n.log 2>&1 &
+$ mkdir logs
+$ nohup julia optimize.jl n >> logs/n.log 2>&1 &
 ```
 - If you want to continue from where you stopped in the last parameter search,
 ```bash
-$ nohup julia optimize_continue.jl n >> out/n.log 2>&1 &
+$ nohup julia optimize_continue.jl n >> logs/n.log 2>&1 &
 ```
 ---
 Visualization of Simulation Results

@@ -6,7 +6,7 @@
 .ipynb_checkpoints
 
 # Temporary result
-out/
+logs/
 fitparam/
 
 # Figure
