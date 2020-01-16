@@ -1,4 +1,5 @@
-import os
+import 
+import shutil
 import re
 import numpy as np
 
@@ -42,7 +43,10 @@ def main():
                 './dat2npy/out/%d/' % (i+1) +
                 dat_file.replace('.dat', '.npy'), data
             )
-        
+        if os.path.isfile('./logs/%d.log' % (i+1)):
+            shutil.copyfile(
+                './logs/%d.log' % (i+1), './dat2npy/out/%d/out.log' % (i+1)
+            )
 
 if __name__ == '__main__':
     main()
