@@ -21,6 +21,10 @@ end
 
 function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,
                                 show_all::Bool,stdev::Bool,simulations_all::Array{Float64,4})
+    if !isdir("./figure/simulation")
+        mkdir("./figure/simulation")
+    end
+
     rc("figure",figsize = (20,8))
     rc("font",family = "Arial")
     rc("mathtext",fontset = "custom")
@@ -59,7 +63,9 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,
                 )
             end
         else
-            normalized = Array{Float64,4}(undef,length(observables),n_file,length(Sim.t),length(Sim.conditions))
+            normalized = Array{Float64,4}(
+                undef,length(observables),n_file,length(Sim.t),length(Sim.conditions)
+            )
             for j=1:n_file
                 for l in eachindex(Sim.conditions)
                     normalized[i,j,:,l] = simulations_all[i,j,:,l]./maximum(simulations_all[i,j,:,:])
@@ -121,5 +127,5 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,
         ylabel(get_ylabel(name))
     end
 
-    savefig("./Fig/sim_$viz_type.png",dpi=300,bbox_inches="tight")
+    savefig("./figure/simulation/$viz_type.png",dpi=300,bbox_inches="tight")
 end

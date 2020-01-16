@@ -1,6 +1,6 @@
 function simulateAll(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
-    if !isdir("./Fig")
-        mkdir("./Fig")
+    if !isdir("./figure")
+        mkdir("./figure")
     end
 
     if !(viz_type in ["best","average","original"])
@@ -185,6 +185,6 @@ function saveParamRange(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
     ax.set_yticklabels([C.param_names[i] for i in searchIdx[1]])
     ax.set_xscale("log")
 
-    savefig("./Fig/param_range.pdf",bbox_inches="tight")
+    savefig("./figure/param_range.pdf",bbox_inches="tight")
     close(fig)
 end
