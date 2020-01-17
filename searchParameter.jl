@@ -76,132 +76,149 @@ function searchParameterIndex()::Tuple{Array{Int64,1},Array{Int64,1}}
         C.KF31
         C.nF31
         C.a
-    ];
+    ]
 
     # initial values
     searchIdxInit::Vector{Int} = [
         # V.(variableName)
-    ];
+    ]
 
     return searchIdxConst, searchIdxInit
 end
 
 function getSearchRegion()::Matrix{Float64}
-    p::Vector{Float64} = f_params();
-    u0::Vector{Float64} = initialValues();
+    p::Vector{Float64} = f_params()
+    u0::Vector{Float64} = initialValues()
 
-    searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
+    searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex()
 
-    searchParam = zeros(length(searchIdx[1])+length(searchIdx[2]));
+    searchParam = zeros(length(searchIdx[1])+length(searchIdx[2]))
     for (i,j) in enumerate(searchIdx[1])
-        @inbounds searchParam[i] = p[j];
+        @inbounds searchParam[i] = p[j]
     end
     for (i,j) in enumerate(searchIdx[2])
-        @inbounds searchParam[i+length(searchIdx[1])] = u0[j];
+        @inbounds searchParam[i+length(searchIdx[1])] = u0[j]
     end
 
-    for i in eachindex(searchParam)
-        if searchParam[i] == 0.0
-            error("Error: searchParam must not contain zero.\n");
+    if any(x -> x == 0.0, searchParam)
+        message::String = "searchParam must not contain zero."
+        for (_, idx) in enumerate(searchIdx[1])
+            if p[idx] == 0.0
+                error(
+                    @sprintf(
+                        "`C.%s` in searchIdxConst: ", C.param_names[idx]
+                    ) * message
+                )
+            end
+        end
+        for (_, idx) in enumerate(searchIdx[2])
+            if u0[idx] == 0.0
+                error(
+                    @sprintf(
+                        "`V.%s` in searchIdxInit: ", V.var_names[idx]
+                    ) * message
+                )
+            end
         end
     end
 
-    searchRegion::Matrix{Float64} = zeros(2,length(p)+length(u0));
+    searchRegion::Matrix{Float64} = zeros(2,length(p)+length(u0))
 
     #=
     # Default: 0.1 ~ 10x
     for (i,j) in enumerate(searchIdx[1])
-        searchRegion[1,j] = searchParam[i]*0.1;  # lower bound
-        searchRegion[2,j] = searchParam[i]*10.0;  # upper bound
+        searchRegion[1,j] = searchParam[i]*0.1  # lower bound
+        searchRegion[2,j] = searchParam[i]*10.0  # upper bound
     end
 
     # Default: 0.5 ~ 2x
     for (i,j) in enumerate(searchIdx[2])
-        searchRegion[1,j+length(p)] = searchParam[i+length(searchIdx[1])]*0.5;  # lower bound
-        searchRegion[2,j+length(p)] = searchParam[i+length(searchIdx[1])]*2.0;  # upper bound
+        searchRegion[1,j+length(p)] = searchParam[i+length(searchIdx[1])]*0.5  # lower bound
+        searchRegion[2,j+length(p)] = searchParam[i+length(searchIdx[1])]*2.0  # upper bound
     end
     =#
 
     # searchRegion[:,(C or V).paramName] = [lowerBound,upperBound]
 
-    searchRegion[:,C.V1] = [7.33e-2,6.60e-01];
-    searchRegion[:,C.Km1] = [1.83e+2,8.50e+2];
-    searchRegion[:,C.V5] = [6.48e-3,7.20e+1];
-    searchRegion[:,C.Km5] = [6.00e-1,1.60e+04];
-    searchRegion[:,C.V10] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km10] = [exp(-10),exp(10)];
-    searchRegion[:,C.n10] = [1.00,4.00];
-    searchRegion[:,C.p11] = [8.30e-13,1.44e-2];
-    searchRegion[:,C.p12] = [8.00e-8,5.17e-2];
-    searchRegion[:,C.p13] = [1.38e-7,4.84e-1];
-    searchRegion[:,C.V14] = [4.77e-3,4.77e+1];
-    searchRegion[:,C.Km14] = [2.00e+2,2.00e+6];
-    searchRegion[:,C.V15] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km15] = [exp(-10),exp(10)];
-    searchRegion[:,C.KimDUSP] = [2.20e-4,5.50e-1];
-    searchRegion[:,C.KexDUSP] = [2.60e-4,6.50e-1];
-    searchRegion[:,C.V20] = [4.77e-3,4.77e+1];
-    searchRegion[:,C.Km20] = [2.00e+2,2.00e+6];
-    searchRegion[:,C.V21] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km21] = [exp(-10),exp(10)];
-    searchRegion[:,C.V24] = [4.77e-2,4.77e+0];
-    searchRegion[:,C.Km24] = [2.00e+3,2.00e+5];
-    searchRegion[:,C.V25] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km25] = [exp(-10),exp(10)];
-    searchRegion[:,C.KimRSK] = [2.20e-4,5.50e-1];
-    searchRegion[:,C.KexRSK] = [2.60e-4,6.50e-1];
-    searchRegion[:,C.V27] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km27] = [1.00e+2,1.00e+4];
-    searchRegion[:,C.V28] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km28] = [exp(-10),exp(10)];
-    searchRegion[:,C.V29] = [4.77e-2,4.77e+0];
-    searchRegion[:,C.Km29] = [2.93e+3,2.93e+5];
-    searchRegion[:,C.V30] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km30] = [exp(-10),exp(10)];
-    searchRegion[:,C.V31] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km31] = [exp(-10),exp(10)];
-    searchRegion[:,C.n31] = [1.00,4.00];
-    searchRegion[:,C.p32] = [8.30e-13,1.44e-2];
-    searchRegion[:,C.p33] = [8.00e-8,5.17e-2];
-    searchRegion[:,C.p34] = [1.38e-7,4.84e-1];
-    searchRegion[:,C.V35] = [4.77e-3,4.77e+1];
-    searchRegion[:,C.Km35] = [2.00e+2,2.00e+6];
-    searchRegion[:,C.V36] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km36] = [1.00e+2,1.00e+4];
-    searchRegion[:,C.V37] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km37] = [exp(-10),exp(10)];
-    searchRegion[:,C.KimFOS] = [2.20e-4,5.50e-1];
-    searchRegion[:,C.KexFOS] = [2.60e-4,6.50e-1];
-    searchRegion[:,C.V42] = [4.77e-3,4.77e+1];
-    searchRegion[:,C.Km42] = [2.00e+2,2.00e+6];
-    searchRegion[:,C.V43] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km43] = [1.00e+2,1.00e+4];
-    searchRegion[:,C.V44] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km44] = [exp(-10),exp(10)];
-    searchRegion[:,C.p47] = [1.45e-4,1.45e+0];
-    searchRegion[:,C.m47] = [6.00e-3,6.00e+1];
-    searchRegion[:,C.p48] = [2.70e-3,2.70e+1];
-    searchRegion[:,C.p49] = [5.00e-5,5.00e-1];
-    searchRegion[:,C.m49] = [5.00e-3,5.00e+1];
-    searchRegion[:,C.p50] = [3.00e-3,3.00e+1];
-    searchRegion[:,C.p51] = [exp(-10),exp(10)];
-    searchRegion[:,C.m51] = [exp(-10),exp(10)];
-    searchRegion[:,C.V57] = [exp(-10),exp(10)];
-    searchRegion[:,C.Km57] = [exp(-10),exp(10)];
-    searchRegion[:,C.n57] = [1.00,4.00];
-    searchRegion[:,C.p58] = [8.30e-13,1.44e-2];
-    searchRegion[:,C.p59] = [8.00e-8,5.17e-2];
-    searchRegion[:,C.p60] = [1.38e-7,4.84e-1];
-    searchRegion[:,C.p61] = [exp(-10),exp(10)];
-    searchRegion[:,C.KimF] = [2.20e-4,5.50e-1];
-    searchRegion[:,C.KexF] = [2.60e-4,6.50e-1];
-    searchRegion[:,C.p63] = [exp(-10),exp(10)];
-    searchRegion[:,C.KF31] = [exp(-10),exp(10)];
-    searchRegion[:,C.nF31] = [1.00,4.00];
-    searchRegion[:,C.a] = [1.00e+2,5.00e+2];
+    searchRegion[:,C.V1] = [7.33e-2,6.60e-01]
+    searchRegion[:,C.Km1] = [1.83e+2,8.50e+2]
+    searchRegion[:,C.V5] = [6.48e-3,7.20e+1]
+    searchRegion[:,C.Km5] = [6.00e-1,1.60e+04]
+    searchRegion[:,C.V10] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km10] = [exp(-10),exp(10)]
+    searchRegion[:,C.n10] = [1.00,4.00]
+    searchRegion[:,C.p11] = [8.30e-13,1.44e-2]
+    searchRegion[:,C.p12] = [8.00e-8,5.17e-2]
+    searchRegion[:,C.p13] = [1.38e-7,4.84e-1]
+    searchRegion[:,C.V14] = [4.77e-3,4.77e+1]
+    searchRegion[:,C.Km14] = [2.00e+2,2.00e+6]
+    searchRegion[:,C.V15] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km15] = [exp(-10),exp(10)]
+    searchRegion[:,C.KimDUSP] = [2.20e-4,5.50e-1]
+    searchRegion[:,C.KexDUSP] = [2.60e-4,6.50e-1]
+    searchRegion[:,C.V20] = [4.77e-3,4.77e+1]
+    searchRegion[:,C.Km20] = [2.00e+2,2.00e+6]
+    searchRegion[:,C.V21] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km21] = [exp(-10),exp(10)]
+    searchRegion[:,C.V24] = [4.77e-2,4.77e+0]
+    searchRegion[:,C.Km24] = [2.00e+3,2.00e+5]
+    searchRegion[:,C.V25] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km25] = [exp(-10),exp(10)]
+    searchRegion[:,C.KimRSK] = [2.20e-4,5.50e-1]
+    searchRegion[:,C.KexRSK] = [2.60e-4,6.50e-1]
+    searchRegion[:,C.V27] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km27] = [1.00e+2,1.00e+4]
+    searchRegion[:,C.V28] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km28] = [exp(-10),exp(10)]
+    searchRegion[:,C.V29] = [4.77e-2,4.77e+0]
+    searchRegion[:,C.Km29] = [2.93e+3,2.93e+5]
+    searchRegion[:,C.V30] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km30] = [exp(-10),exp(10)]
+    searchRegion[:,C.V31] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km31] = [exp(-10),exp(10)]
+    searchRegion[:,C.n31] = [1.00,4.00]
+    searchRegion[:,C.p32] = [8.30e-13,1.44e-2]
+    searchRegion[:,C.p33] = [8.00e-8,5.17e-2]
+    searchRegion[:,C.p34] = [1.38e-7,4.84e-1]
+    searchRegion[:,C.V35] = [4.77e-3,4.77e+1]
+    searchRegion[:,C.Km35] = [2.00e+2,2.00e+6]
+    searchRegion[:,C.V36] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km36] = [1.00e+2,1.00e+4]
+    searchRegion[:,C.V37] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km37] = [exp(-10),exp(10)]
+    searchRegion[:,C.KimFOS] = [2.20e-4,5.50e-1]
+    searchRegion[:,C.KexFOS] = [2.60e-4,6.50e-1]
+    searchRegion[:,C.V42] = [4.77e-3,4.77e+1]
+    searchRegion[:,C.Km42] = [2.00e+2,2.00e+6]
+    searchRegion[:,C.V43] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km43] = [1.00e+2,1.00e+4]
+    searchRegion[:,C.V44] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km44] = [exp(-10),exp(10)]
+    searchRegion[:,C.p47] = [1.45e-4,1.45e+0]
+    searchRegion[:,C.m47] = [6.00e-3,6.00e+1]
+    searchRegion[:,C.p48] = [2.70e-3,2.70e+1]
+    searchRegion[:,C.p49] = [5.00e-5,5.00e-1]
+    searchRegion[:,C.m49] = [5.00e-3,5.00e+1]
+    searchRegion[:,C.p50] = [3.00e-3,3.00e+1]
+    searchRegion[:,C.p51] = [exp(-10),exp(10)]
+    searchRegion[:,C.m51] = [exp(-10),exp(10)]
+    searchRegion[:,C.V57] = [exp(-10),exp(10)]
+    searchRegion[:,C.Km57] = [exp(-10),exp(10)]
+    searchRegion[:,C.n57] = [1.00,4.00]
+    searchRegion[:,C.p58] = [8.30e-13,1.44e-2]
+    searchRegion[:,C.p59] = [8.00e-8,5.17e-2]
+    searchRegion[:,C.p60] = [1.38e-7,4.84e-1]
+    searchRegion[:,C.p61] = [exp(-10),exp(10)]
+    searchRegion[:,C.KimF] = [2.20e-4,5.50e-1]
+    searchRegion[:,C.KexF] = [2.60e-4,6.50e-1]
+    searchRegion[:,C.p63] = [exp(-10),exp(10)]
+    searchRegion[:,C.KF31] = [exp(-10),exp(10)]
+    searchRegion[:,C.nF31] = [1.00,4.00]
+    searchRegion[:,C.a] = [1.00e+2,5.00e+2]
 
-    searchRegion = lin2log!(searchIdx,searchRegion,length(p),length(searchParam));
-
+    searchRegion = lin2log!(
+        searchIdx,searchRegion,length(p),length(searchParam)
+    )
     return searchRegion
 
 end
@@ -216,33 +233,57 @@ function lin2log!(
 
     for i=1:size(searchRegion,2)
         if minimum(searchRegion[:,i]) < 0.0
-            message = "searchRegion[lb,ub] must be positive.\n";
+            message = "searchRegion[lb,ub] must be positive.\n"
             if i <= nParamConst
-                error(@sprintf("`C.%s` ",C.param_names[i])*message);
+                error(
+                    @sprintf(
+                        "`C.%s` ", C.param_names[i]
+                    ) * message
+                )
             else
-                error(@sprintf("`V.%s` ",V.var_names[i-nParamConst])*message);
+                error(
+                    @sprintf(
+                        "`V.%s` ", V.var_names[i-nParamConst]
+                    ) * message
+                )
             end
         elseif minimum(searchRegion[:,i]) == 0.0 && maximum(searchRegion[:,i]) != 0.0
-            message = "lower_bound must be larger than 0.\n";
+            message = "lower_bound must be larger than 0.\n"
             if i <= nParamConst
-                error(@sprintf("`C.%s` ",C.param_names[i])*message);
+                error(
+                    @sprintf(
+                        "`C.%s` ", C.param_names[i]
+                    ) * message
+                )
             else
-                error(@sprintf("`V.%s` ",V.var_names[i-nParamConst])*message);
+                error(
+                    @sprintf(
+                        "`V.%s` ", V.var_names[i-nParamConst]
+                    ) * message
+                )
             end
         elseif searchRegion[2,i] - searchRegion[1,i] < 0.0
-            message = "lower_bound < upper_bound\n";
+            message = "lower_bound < upper_bound\n"
             if i <= nParamConst
-                error(@sprintf("`C.%s` ",C.param_names[i])*message);
+                error(
+                    @sprintf(
+                        "`C.%s` ", C.param_names[i]
+                    ) * message
+                )
             else
-                error(@sprintf("`V.%s` ",V.var_names[i-nParamConst])*message);
+                error(
+                    @sprintf(
+                        "`V.%s` ", V.var_names[i-nParamConst]
+                    ) * message
+                )
             end
         end
     end
 
-    nonZeroIdx::Vector{Int} = [];
+    nonZeroIdx::Vector{Int} = []
     for i=1:size(searchRegion,2)
         if searchRegion[:,i] != [0.0,0.0]
-            push!(nonZeroIdx,i);
+            push!(nonZeroIdx,i)
         end
     end
     difference::Vector{Int} = collect(
@@ -250,20 +291,30 @@ function lin2log!(
             Set(nonZeroIdx),
             Set(append!(searchIdx[1],nParamConst .+ searchIdx[2]))
         )
-    );
+    )
 
     if length(difference) > 0
         for (i,j) in enumerate(difference)
             if j <= nParamConst
-                print(@sprintf("`C.%s`\n",C.param_names[Int(j)]));
+                print(
+                    @sprintf(
+                        "`C.%s`\n", C.param_names[Int(j)]
+                    )
+                )
             else
-                print(@sprintf("`V.%s`\n",V.var_names[Int(j)-nParamConst]));
+                print(
+                    @sprintf(
+                        "`V.%s`\n", V.var_names[Int(j)-nParamConst]
+                    )
+                )
             end
         end
-        error("Set these searchParams in both searchIdxInit and searchRegion.");
+        error(
+            "Set these searchParams in both searchIdxInit and searchRegion."
+        )
     end
 
-    searchRegion = searchRegion[:,nonZeroIdx];
+    searchRegion = searchRegion[:,nonZeroIdx]
 
     return log10.(searchRegion)
 end
