@@ -55,7 +55,7 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
             end
         end
         best_param_set::Int = argmin(best_fitness_all)
-        write_bestFitParam(best_param_set,p,u0)
+        write_best_fit_param(best_param_set,p,u0)
 
         if viz_type == "best"
             Sim,_ = validate(best_param_set,p,u0)
@@ -124,9 +124,9 @@ function validate(nth_param_set::Int64,p::Vector{Float64},u0::Vector{Float64})
 end
 
 
-function write_bestFitParam(best_param_set::Int,p::Vector{Float64},u0::Vector{Float64})
+function write_best_fit_param(best_param_set::Int,p::Vector{Float64},u0::Vector{Float64})
     (p,u0) = update_param(best_param_set,p,u0)
-    open("bestFitParam.txt","w") do f
+    open("best_fit_param.txt","w") do f
         write(
             f,@sprintf(
                 "# param set: %d\n",best_param_set

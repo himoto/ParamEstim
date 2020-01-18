@@ -28,7 +28,7 @@ $ nohup julia optimize_continue.jl n >> logs/n.log 2>&1 &
 ---
 Visualization of Simulation Results
 
-    $ julia runSim.jl
+    $ julia run_sim.jl
 
 ```viz_type```:
 
@@ -36,7 +36,7 @@ Visualization of Simulation Results
     : The average of simulation results with parameter sets in ```fitparam/```
 
 - "best"
-    : The best simulation result in ```fitparam/```, simulation with ```bestFitParam```
+    : The best simulation result in ```fitparam/```, simulation with ```best_fit_param```
 
 - "original"
     : Simulation with the default parameters and initial values defined in ```model/```
