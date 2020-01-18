@@ -8,6 +8,7 @@
 # Temporary result
 logs/
 fitparam/
+best_fit_param.txt
 
 # Figure
 figure/
