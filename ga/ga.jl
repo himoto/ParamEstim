@@ -44,7 +44,7 @@ include("../search_parameter.jl");
 include("../plot_func.jl");
 include("../dynamics.jl");
 
-include("initpop.jl");
+include("initial_population.jl");
 include("converter.jl");
 include("undxmgg.jl");
 include("converging.jl");
