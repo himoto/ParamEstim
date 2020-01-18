@@ -3,8 +3,8 @@ using .ParamEstim
 
 function optimize_continue(nth_param_set::Int64)
 
-    search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex()
-    search_region::Matrix{Float64} = getsearch_region()
+    search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
+    search_region::Matrix{Float64} = get_search_region()
 
     max_generation::Int64 = 10000
     n_population::Int64 = 5*size(search_region,2)
