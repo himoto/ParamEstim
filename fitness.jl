@@ -22,11 +22,17 @@ end
 # Define an objective function to be minimized.
 function objective(individual_gene::Vector{Float64}, search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
                     search_region::Matrix{Float64})::Float64
-    p,u0 = update_param(
-        individual_gene::Vector{Float64},
-        search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
-        search_region::Matrix{Float64}
-    )
+    p::Vector{Float64} = f_params()
+    u0::Vector{Float64} = initial_values()
+    
+    indiv::Vector{Float64} = decode_gene2variable(individual_gene,search_region)
+
+    for (i,j) in enumerate(search_idx[1])
+        @inbounds p[j] = indiv[i]
+    end
+    for (i,j) in enumerate(search_idx[2])
+        @inbounds u0[j] = indiv[i+length(search_idx[1])]
+    end
 
     # constraints --------------------------------------------------------------
     p[C.V6] = p[C.V5]
