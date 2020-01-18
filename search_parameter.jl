@@ -92,16 +92,16 @@ function get_search_region()::Matrix{Float64}
 
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
 
-    searchParam = zeros(length(search_idx[1])+length(search_idx[2]))
+    search_param = zeros(length(search_idx[1])+length(search_idx[2]))
     for (i,j) in enumerate(search_idx[1])
-        @inbounds searchParam[i] = p[j]
+        @inbounds search_param[i] = p[j]
     end
     for (i,j) in enumerate(search_idx[2])
-        @inbounds searchParam[i+length(search_idx[1])] = u0[j]
+        @inbounds search_param[i+length(search_idx[1])] = u0[j]
     end
 
-    if any(x -> x == 0.0, searchParam)
-        message::String = "searchParam must not contain zero."
+    if any(x -> x == 0.0, search_param)
+        message::String = "search_param must not contain zero."
         for (_, idx) in enumerate(search_idx[1])
             if p[idx] == 0.0
                 error(
@@ -127,14 +127,14 @@ function get_search_region()::Matrix{Float64}
     #=
     # Default: 0.1 ~ 10x
     for (i,j) in enumerate(search_idx[1])
-        search_region[1,j] = searchParam[i]*0.1  # lower bound
-        search_region[2,j] = searchParam[i]*10.0  # upper bound
+        search_region[1,j] = search_param[i]*0.1  # lower bound
+        search_region[2,j] = search_param[i]*10.0  # upper bound
     end
 
     # Default: 0.5 ~ 2x
     for (i,j) in enumerate(search_idx[2])
-        search_region[1,j+length(p)] = searchParam[i+length(search_idx[1])]*0.5  # lower bound
-        search_region[2,j+length(p)] = searchParam[i+length(search_idx[1])]*2.0  # upper bound
+        search_region[1,j+length(p)] = search_param[i+length(search_idx[1])]*0.5  # lower bound
+        search_region[2,j+length(p)] = search_param[i+length(search_idx[1])]*2.0  # upper bound
     end
     =#
 
@@ -217,7 +217,7 @@ function get_search_region()::Matrix{Float64}
     search_region[:,C.a] = [1.00e+2,5.00e+2]
 
     search_region = lin2log!(
-        search_idx,search_region,length(p),length(searchParam)
+        search_idx,search_region,length(p),length(search_param)
     )
     return search_region
 
@@ -305,7 +305,7 @@ function lin2log!(search_idx::Tuple{Array{Int64,1},Array{Int64,1}}, search_regio
             end
         end
         error(
-            "Set these searchParams in both search_idx_init and search_region."
+            "Set these search_params in both search_idx_init and search_region."
         )
     end
 
