@@ -1,46 +1,46 @@
-include("ParamEstim.jl");
-using .ParamEstim;
+include("ParamEstim.jl")
+using .ParamEstim
 
-function optimize_continue(nthParamSet::Int64)
+function optimize_continue(nth_param_set::Int64)
 
-    searchIdx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex();
-    searchRegion::Matrix{Float64} = getSearchRegion();
+    search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = searchParameterIndex()
+    search_region::Matrix{Float64} = getsearch_region()
 
-    max_generation::Int64 = 10000;
-    n_population::Int64 = 5*size(searchRegion,2);
-    n_children::Int64 = 50;
-    n_gene::Int64 = size(searchRegion,2);
-    allowable_error::Float64 = 0.35;
+    max_generation::Int64 = 10000
+    n_population::Int64 = 5*size(search_region,2)
+    n_children::Int64 = 50
+    n_gene::Int64 = size(search_region,2)
+    allowable_error::Float64 = 0.35
 
-    p0_bounds = [0.1,10.0];  # [lower_bound,upper_bound]
+    p0_bounds = [0.1,10.0]  # [lower_bound,upper_bound]
 
-    if !isdir("./fitparam/$nthParamSet")
-        mkdir("./fitparam/$nthParamSet");
+    if !isdir("./fitparam/$nth_param_set")
+        mkdir("./fitparam/$nth_param_set")
         
-        (bestIndiv,bestFitness) = gaV2(
-            nthParamSet,
+        (bestIndiv,bestFitness) = ga_v2(
+            nth_param_set,
             max_generation,
             n_population,
             n_children,
             n_gene,
             allowable_error,
-            searchIdx,
-            searchRegion
-            );
+            search_idx,
+            search_region
+        )
     else
-        (bestIndiv,bestFitness) = gaV2_continue(
-            nthParamSet,
+        (bestIndiv,bestFitness) = ga_v2_continue(
+            nth_param_set,
             max_generation,
             n_population,
             n_children,
             n_gene,
             allowable_error,
-            searchIdx,
-            searchRegion,
+            search_idx,
+            search_region,
             p0_bounds
-            );
+        )
     end
 end
 
 ###
-optimize_continue(parse(Int64,ARGS[1]));
+optimize_continue(parse(Int64,ARGS[1]))

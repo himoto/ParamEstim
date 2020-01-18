@@ -9,22 +9,21 @@ const observables = [
     "Phosphorylated_cFos"
 ];
 
-function obsIdx(observableName::String)::Int
+function obs_idx(observable_name::String)::Int
 
-    return findfirst(isequal(observableName),observables)
+    return findfirst(isequal(observable_name),observables)
 end
 
-function diff_sim_and_exp(
-    simMatrix::Matrix{Float64},expDict::Dict{String,Array{Float64,1}},expTimepoint::Vector{Float64},conditions::Vector{String};
-    normMax_sim::Float64,normMax_exp::Float64
-    )
-    simResult::Vector{Float64} = []
-    expResult::Vector{Float64} = []
+function diff_sim_and_exp(sim_matrix::Matrix{Float64},exp_dict::Dict{String,Array{Float64,1}},
+                            exp_timepoint::Vector{Float64},conditions::Vector{String};
+                            sim_norm_max::Float64,exp_norm_max::Float64)
+    sim_result::Vector{Float64} = []
+    exp_result::Vector{Float64} = []
     
     for (i,condition) in enumerate(conditions)
-        append!(simResult,simMatrix[Int.(expTimepoint.+1),i])
-        append!(expResult,expDict[condition])
+        append!(sim_result,sim_matrix[Int.(exp_timepoint.+1),i])
+        append!(exp_result,exp_dict[condition])
     end
 
-    return (simResult./normMax_sim, expResult./normMax_exp)
+    return (sim_result./sim_norm_max, exp_result./exp_norm_max)
 end

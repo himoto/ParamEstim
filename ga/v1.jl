@@ -1,8 +1,8 @@
-function gaV1(nthParamSet::Int64, max_generation::Int64, n_population::Int64, n_children::Int64,
-                n_gene::Int64, allowable_error::Float64, searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
-                searchRegion::Matrix{Float64})::Tuple{Array{Float64,1},Float64}
-    population = getInitialPopulation(
-        n_population,n_gene,searchIdx,searchRegion
+function ga_v1(nth_param_set::Int64, max_generation::Int64, n_population::Int64, n_children::Int64,
+                n_gene::Int64, allowable_error::Float64, search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
+                search_region::Matrix{Float64})::Tuple{Array{Float64,1},Float64}
+    population = get_initial_population(
+        n_population,n_gene,search_idx,search_region
     )
     print(
         @sprintf(
@@ -11,36 +11,36 @@ function gaV1(nthParamSet::Int64, max_generation::Int64, n_population::Int64, n_
     )
     flush(stdout)
 
-    bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion)
-    bestFitness = population[1,end]
+    best_indiv = decode_gene2variable(population[1,1:n_gene],search_region)
+    best_fitness = population[1,end]
 
-    f = open("./fitparam/$nthParamSet/fit_param1.dat", "w")
-    for i in eachindex(searchIdx[1])
-        write(f,@sprintf("%.6e\n",bestIndiv[i]))
+    f = open("./fitparam/$nth_param_set/fit_param1.dat", "w")
+    for i in eachindex(search_idx[1])
+        write(f,@sprintf("%.6e\n",best_indiv[i]))
     end
-    for i in eachindex(searchIdx[2])
-        write(f,@sprintf("%.6e\n",bestIndiv[i+length(searchIdx[1])]))
+    for i in eachindex(search_idx[2])
+        write(f,@sprintf("%.6e\n",best_indiv[i+length(search_idx[1])]))
     end
     close(f)
 
-    open("./fitparam/$nthParamSet/generation.dat", "w") do f
+    open("./fitparam/$nth_param_set/generation.dat", "w") do f
         write(f,@sprintf("%d",1))
     end
 
-    open("./fitparam/$nthParamSet/best_fitness.dat", "w") do f
-        write(f,@sprintf("%.6e",bestFitness))
+    open("./fitparam/$nth_param_set/best_fitness.dat", "w") do f
+        write(f,@sprintf("%.6e",best_fitness))
     end
 
     if population[1,end] <= allowable_error
-        bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion)
-        bestFitness = population[1,end]
-        return bestIndiv,bestFitness
+        best_indiv = decode_gene2variable(population[1,1:n_gene],search_region)
+        best_fitness = population[1,end]
+        return best_indiv,best_fitness
     end
 
     generation::Int64 = 2
     while generation < max_generation
-        population = mggVariant(
-            population,n_population,n_children,n_gene,searchIdx,searchRegion
+        population = mgg_alternation(
+            population,n_population,n_children,n_gene,search_idx,search_region
         )
         print(
             @sprintf(
@@ -48,82 +48,82 @@ function gaV1(nthParamSet::Int64, max_generation::Int64, n_population::Int64, n_
             )
         )
         flush(stdout)
-        bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion)
+        best_indiv = decode_gene2variable(population[1,1:n_gene],search_region)
 
-        if population[1,end] < bestFitness
-            f = open("./fitparam/$nthParamSet/fit_param$generation.dat", "w")
-            for i in eachindex(searchIdx[1])
-                write(f,@sprintf("%.6e\n",bestIndiv[i]))
+        if population[1,end] < best_fitness
+            f = open("./fitparam/$nth_param_set/fit_param$generation.dat", "w")
+            for i in eachindex(search_idx[1])
+                write(f,@sprintf("%.6e\n",best_indiv[i]))
             end
-            for i in eachindex(searchIdx[2])
-                write(f,@sprintf("%.6e\n",bestIndiv[i+length(searchIdx[1])]))
+            for i in eachindex(search_idx[2])
+                write(f,@sprintf("%.6e\n",best_indiv[i+length(search_idx[1])]))
             end
             close(f)
 
-            open("./fitparam/$nthParamSet/generation.dat", "w") do f
+            open("./fitparam/$nth_param_set/generation.dat", "w") do f
                 write(f,@sprintf("%d",generation))
             end
         end
-        bestFitness = population[1,end]
-        open("./fitparam/$nthParamSet/best_fitness.dat", "w") do f
-            write(f,@sprintf("%.6e",bestFitness))
+        best_fitness = population[1,end]
+        open("./fitparam/$nth_param_set/best_fitness.dat", "w") do f
+            write(f,@sprintf("%.6e",best_fitness))
         end
 
         if population[1,end] <= allowable_error
-            bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion)
-            bestFitness = population[1,end]
-            return bestIndiv,bestFitness
+            best_indiv = decode_gene2variable(population[1,1:n_gene],search_region)
+            best_fitness = population[1,end]
+            return best_indiv,best_fitness
         end
 
-        open("./fitparam/$nthParamSet/count_num.dat", "w") do f
+        open("./fitparam/$nth_param_set/count_num.dat", "w") do f
             write(f,@sprintf("%d",generation))
         end
         generation += 1
     end
 
-    bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion)
-    bestFitness = population[1,end]
+    best_indiv = decode_gene2variable(population[1,1:n_gene],search_region)
+    best_fitness = population[1,end]
 
-    return bestIndiv,bestFitness
+    return best_indiv,best_fitness
 end
 
 
-function gaV1_continue(nthParamSet::Int64, max_generation::Int64, n_population::Int64,
+function ga_v1_continue(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
                         n_children::Int64, n_gene::Int64, allowable_error::Float64,
-                        searchIdx::Tuple{Array{Int64,1},Array{Int64,1}}, searchRegion::Matrix{Float64},
+                        search_idx::Tuple{Array{Int64,1},Array{Int64,1}}, search_region::Matrix{Float64},
                         p0_bounds::Vector{Float64})::Tuple{Array{Float64,1},Float64}
     count::Int64 = readdlm(
-        "./fitparam/$nthParamSet/count_num.dat"
+        "./fitparam/$nth_param_set/count_num.dat"
     )[1,1]
-    bestGeneration::Int64 = readdlm(
-        "./fitparam/$nthParamSet/generation.dat"
+    best_generation::Int64 = readdlm(
+        "./fitparam/$nth_param_set/generation.dat"
     )[1,1]
-    bestIndiv::Vector{Float64} = readdlm(
+    best_indiv::Vector{Float64} = readdlm(
         @sprintf(
-            "./fitparam/%d/fit_param%d.dat",nthParamSet,bestGeneration
+            "./fitparam/%d/fit_param%d.dat",nth_param_set,best_generation
         )
     )[:,1]
-    bestFitness::Float64 = objective(
-        (log10.(bestIndiv) .- searchRegion[1,:])./(searchRegion[2,:] .- searchRegion[1,:]),
-        searchIdx,searchRegion
+    best_fitness::Float64 = objective(
+        (log10.(best_indiv) .- search_region[1,:])./(search_region[2,:] .- search_region[1,:]),
+        search_idx,search_region
     )
 
-    population = getInitialPopulation_continue(
-        nthParamSet,n_population,n_gene,searchIdx,searchRegion,p0_bounds
+    population = get_initial_population_continue(
+        nth_param_set,n_population,n_gene,search_idx,search_region,p0_bounds
     )
-    if bestFitness < population[1,end]
+    if best_fitness < population[1,end]
         for i=1:n_gene
             population[1,i] = (
-                log10(bestIndiv[i])-searchRegion[1,i])/(searchRegion[2,i]-searchRegion[1,i]
+                log10(best_indiv[i])-search_region[1,i])/(search_region[2,i]-search_region[1,i]
             )
         end
-        population[1,end] = bestFitness
+        population[1,end] = best_fitness
     else
-        bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion)
-        bestFitness = population[1,end]
-        open("./fitparam/$nthParamSet/fit_param$count.dat", "w") do f
+        best_indiv = decode_gene2variable(population[1,1:n_gene],search_region)
+        best_fitness = population[1,end]
+        open("./fitparam/$nth_param_set/fit_param$count.dat", "w") do f
             for i=1:n_gene
-                write(f,@sprintf("%.6e",bestIndiv[i]))
+                write(f,@sprintf("%.6e",best_indiv[i]))
             end
         end
     end
@@ -136,15 +136,15 @@ function gaV1_continue(nthParamSet::Int64, max_generation::Int64, n_population::
     flush(stdout)
 
     if population[1,end] <= allowable_error
-        bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion)
-        bestFitness = population[1,end]
-        return bestIndiv,bestFitness
+        best_indiv = decode_gene2variable(population[1,1:n_gene],search_region)
+        best_fitness = population[1,end]
+        return best_indiv,best_fitness
     end
 
     generation::Int64 = 2
     while generation < max_generation
-        population = mggVariant(
-            population,n_population,n_children,n_gene,searchIdx,searchRegion
+        population = mgg_alternation(
+            population,n_population,n_children,n_gene,search_idx,search_region
         )
         print(
             @sprintf(
@@ -152,44 +152,44 @@ function gaV1_continue(nthParamSet::Int64, max_generation::Int64, n_population::
             )
         )
         flush(stdout)
-        bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion)
+        best_indiv = decode_gene2variable(population[1,1:n_gene],search_region)
 
-        if population[1,end] < bestFitness
+        if population[1,end] < best_fitness
             f = open(
-                @sprintf("./fitparam/%d/fit_param%d.dat",nthParamSet,generation + count), "w"
+                @sprintf("./fitparam/%d/fit_param%d.dat",nth_param_set,generation + count), "w"
             )
-            for i in eachindex(searchIdx[1])
-                write(f,@sprintf("%.6e\n",bestIndiv[i]))
+            for i in eachindex(search_idx[1])
+                write(f,@sprintf("%.6e\n",best_indiv[i]))
             end
-            for i in eachindex(searchIdx[2])
-                write(f,@sprintf("%.6e\n",bestIndiv[i+length(searchIdx[1])]))
+            for i in eachindex(search_idx[2])
+                write(f,@sprintf("%.6e\n",best_indiv[i+length(search_idx[1])]))
             end
             close(f)
 
-            open("./fitparam/$nthParamSet/generation.dat", "w") do f
+            open("./fitparam/$nth_param_set/generation.dat", "w") do f
                 write(f,@sprintf("%d",generation + count))
             end
         end
-        bestFitness = population[1,end]
+        best_fitness = population[1,end]
 
-        open("./fitparam/$nthParamSet/best_fitness.dat", "w") do f
-            write(f,@sprintf("%.6e",bestFitness))
+        open("./fitparam/$nth_param_set/best_fitness.dat", "w") do f
+            write(f,@sprintf("%.6e",best_fitness))
         end
 
         if population[1,end] <= allowable_error
-            bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion)
-            bestFitness = population[1,end]
-            return bestIndiv,bestFitness
+            best_indiv = decode_gene2variable(population[1,1:n_gene],search_region)
+            best_fitness = population[1,end]
+            return best_indiv,best_fitness
         end
 
-        open("./fitparam/$nthParamSet/count_num.dat", "w") do f
+        open("./fitparam/$nth_param_set/count_num.dat", "w") do f
             write(f,@sprintf("%d",generation + count))
         end
         generation += 1
     end
 
-    bestIndiv = decodeGene2Variable(population[1,1:n_gene],searchRegion)
-    bestFitness = population[1,end]
+    best_indiv = decode_gene2variable(population[1,1:n_gene],search_region)
+    best_fitness = population[1,end]
 
-    return bestIndiv,bestFitness
+    return best_indiv,best_fitness
 end

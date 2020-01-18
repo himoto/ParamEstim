@@ -1,21 +1,21 @@
 module ParamEstim
 
-import .Main;
+import .Main
 
-using Printf;
-using DelimitedFiles;
+using Printf
+using DelimitedFiles
 
 export
     Sim,
-    searchParameterIndex,
-    getSearchRegion,
-    simulateAll,
-    gaV1,
-    gaV1_continue,
-    gaV2,
-    gaV2_continue
+    search_parameter_index,
+    get_search_region,
+    simulate_all,
+    ga_v1,
+    ga_v1_continue,
+    ga_v2,
+    ga_v2_continue
 
-include("ga/ga.jl");
-using .GA;
+include("ga/ga.jl")
+using .GA
 
 end  # module

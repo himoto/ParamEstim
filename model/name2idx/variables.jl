@@ -37,12 +37,12 @@ const var_names = [
     "Fn"
     "FmRNAc"
     "PreFmRNAn"
-];
+]
 
 for (idx,name) in enumerate(var_names)
-    eval(Meta.parse("const $name = $idx"));
+    eval(Meta.parse("const $name = $idx"))
 end
 
-const len_f_vars = length(var_names);
+const len_f_vars = length(var_names)
 
 end  # module

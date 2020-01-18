@@ -1,12 +1,9 @@
 # Residual Sum of Squares
-function compute_objval_rss(
-    simData::Vector{Float64},
-    expData::Vector{Float64}
-    )::Float64
+function compute_objval_rss(sim_data::Vector{Float64}, exp_data::Vector{Float64})::Float64
     error::Float64 = 0.0
 
-    for i in eachindex(expData)
-        error += (simData[i]-expData[i])^2
+    for i in eachindex(exp_data)
+        error += (sim_data[i]-exp_data[i])^2
     end
 
     return error
@@ -14,28 +11,21 @@ end
 
 
 # Cosine similarity
-function compute_objval_cos(
-    simData::Vector{Float64},
-    expData::Vector{Float64}
-    )::Float64
+function compute_objval_cos(sim_data::Vector{Float64}, exp_data::Vector{Float64})::Float64
 
-    error::Float64 = 1.0 - dot(simData,expData)/(norm(simData)*norm(expData))
+    error::Float64 = 1.0 - dot(sim_data,exp_data)/(norm(sim_data)*norm(exp_data))
 
     return error
 end
 
 
 # Define an objective function to be minimized.
-function objective(
-    Individual_gene::Vector{Float64},
-    searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
-    SearchRegion::Matrix{Float64}
-    )::Float64
-
-    p,u0 = updateParam(
-        Individual_gene::Vector{Float64},
-        searchIdx::Tuple{Array{Int64,1},Array{Int64,1}},
-        SearchRegion::Matrix{Float64}
+function objective(individual_gene::Vector{Float64}, search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
+                    search_region::Matrix{Float64})::Float64
+    p,u0 = update_param(
+        individual_gene::Vector{Float64},
+        search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
+        search_region::Matrix{Float64}
     )
 
     # constraints --------------------------------------------------------------
@@ -58,17 +48,17 @@ function objective(
     if Sim.simulate!(p,u0) isa Nothing
         error::Vector{Float64} = zeros(length(observables))
         for (i,target) in enumerate(observables)
-            exp_t::Vector{Float64} = Exp.getTimepoint(i)
-            normMax::Float64 = maximum(Sim.simulations[obsIdx(target),:,:])
-            if isassigned(Exp.experiments,obsIdx(target))
+            exp_t::Vector{Float64} = Exp.get_timepoint(i)
+            norm_max::Float64 = maximum(Sim.simulations[obs_idx(target),:,:])
+            if isassigned(Exp.experiments,obs_idx(target))
                 error[i] = compute_objval_rss(
                     diff_sim_and_exp(
-                        Sim.simulations[obsIdx(target),:,:],
-                        Exp.experiments[obsIdx(target)],
+                        Sim.simulations[obs_idx(target),:,:],
+                        Exp.experiments[obs_idx(target)],
                         exp_t,
                         Sim.conditions,
-                        normMax_sim=normMax,
-                        normMax_exp=1.0
+                        sim_norm_max=norm_max,
+                        exp_norm_max=1.0
                     )...
                 )
             end

@@ -90,13 +90,13 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,
         end
 
         if isassigned(Exp.experiments,i)
-            exp_t = Exp.getTimepoint(i)
-            if isassigned(Exp.standardError,i)
+            exp_t = Exp.get_timepoint(i)
+            if isassigned(Exp.standard_error,i)
                 for (l,condition) in enumerate(Sim.conditions)
                     if condition in keys(Exp.experiments[i])
                         exp_data = errorbar(
                             exp_t./60.,Exp.experiments[i][condition],
-                            yerr=Exp.standardError[i][condition],
+                            yerr=Exp.standard_error[i][condition],
                             lw=1,markerfacecolor="None",markeredgecolor=cmap[l],ecolor=cmap[l],
                             fmt=shape[l],capsize=8,clip_on=false
                         )

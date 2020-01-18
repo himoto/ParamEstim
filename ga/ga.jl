@@ -4,19 +4,19 @@ export
     C,
     V,
     observables,
-    obsIdx,
+    obs_idx,
     diff_sim_and_exp,
     Sim,
     Exp,
     f_params,
-    initialValues,
-    searchParameterIndex,
-    getSearchRegion,
-    simulateAll,
-    gaV1,
-    gaV1_continue,
-    gaV2,
-    gaV2_continue
+    initial_values,
+    search_parameter_index,
+    get_search_region,
+    simulate_all,
+    ga_v1,
+    ga_v1_continue,
+    ga_v2,
+    ga_v2_continue
 
 using Printf;
 using LinearAlgebra;
@@ -33,22 +33,22 @@ using .Model;
 
 include("../observable.jl");
 
-include("../experimentalData.jl");
+include("../experimental_data.jl");
 using .Exp;
 
 include("../simulation.jl");
 using .Sim;
 
 include("../fitness.jl");
-include("../searchParameter.jl");
-include("../plotFunc.jl");
+include("../search_parameter.jl");
+include("../plot_func.jl");
 include("../dynamics.jl");
 
-include("initPop.jl");
+include("initpop.jl");
 include("converter.jl");
 include("undxmgg.jl");
 include("converging.jl");
-include("localSearch.jl");
+include("local_search.jl");
 include("v1.jl");
 include("v2.jl");
 
