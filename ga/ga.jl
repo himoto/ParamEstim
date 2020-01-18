@@ -18,38 +18,38 @@ export
     ga_v2,
     ga_v2_continue
 
-using Printf;
-using LinearAlgebra;
-using Random;
-using StatsBase;
-using Statistics;
-using DelimitedFiles;
-using PyPlot;
+using Printf
+using LinearAlgebra
+using Random
+using StatsBase
+using Statistics
+using DelimitedFiles
+using PyPlot
 
-import Seaborn;
+import Seaborn
 
-include("../model/model.jl");
-using .Model;
+include("../model/model.jl")
+using .Model
 
-include("../observable.jl");
+include("../observable.jl")
 
-include("../experimental_data.jl");
-using .Exp;
+include("../experimental_data.jl")
+using .Exp
 
-include("../simulation.jl");
-using .Sim;
+include("../simulation.jl")
+using .Sim
 
-include("../fitness.jl");
-include("../search_parameter.jl");
-include("../plot_func.jl");
-include("../dynamics.jl");
+include("../fitness.jl")
+include("../search_parameter.jl")
+include("../plot_func.jl")
+include("../dynamics.jl")
 
-include("initial_population.jl");
-include("converter.jl");
-include("undxmgg.jl");
-include("converging.jl");
-include("local_search.jl");
-include("v1.jl");
-include("v2.jl");
+include("converter.jl")
+include("initial_population.jl")
+include("undxmgg.jl")
+include("converging.jl")
+include("local_search.jl")
+include("v1.jl")
+include("v2.jl")
 
 end # module

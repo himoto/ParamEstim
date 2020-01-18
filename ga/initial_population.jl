@@ -44,13 +44,9 @@ function get_initial_population_continue(nthParamSet::Int64, n_population::Int64
     for i = 1:n_population
         while isinf(population[i,end]) || isnan(population[i,end])
             for j = 1:n_gene
-                population[i,j] = (
-                    log10(
-                        best_indiv[j]*10^(
-                            rand()*log10(p0_bounds[2]/p0_bounds[1])+log10(p0_bounds[1])
-                        )
-                    ) - search_region[1,j]
-                )/(search_region[2,j] - search_region[1,j])
+                population[i,j] = encode_bestindiv2randgene(
+                    j, best_indiv, search_region, p0_bounds
+                )
             end
             for j=1:n_gene
                 if population[i,j] > 1.0
