@@ -1,6 +1,6 @@
-function converging(ip::Vector{Int64}, population::Matrix{Float64}, n_population::Int64,
-                    n_gene::Int64, search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
-                    search_region::Matrix{Float64})::Tuple{Array{Int64,1},Array{Float64,2}}
+function converging!(ip::Vector{Int64}, population::Matrix{Float64}, n_population::Int64,
+                        n_gene::Int64, search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
+                        search_region::Matrix{Float64})::Tuple{Array{Int64,1},Array{Float64,2}}
     n_children::Int8 = 10
     children::Matrix{Float64} = zeros(n_children,n_gene+1)
     @inbounds for i = 1:n_children
