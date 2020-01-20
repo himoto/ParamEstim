@@ -47,15 +47,15 @@ function get_initial_population_continue(nthParamSet::Int64, n_population::Int64
                 population[i,j] = encode_bestindiv2randgene(
                     j, best_indiv, search_region, p0_bounds
                 )
-            end
-            for j=1:n_gene
                 if population[i,j] > 1.0
                     population[i,j] = 1.0
                 elseif population[i,j] < 0.0
                     population[i,j] = 0.0
                 end
             end
-            population[i,end] = objective(population[i,1:n_gene],search_idx,search_region)
+            population[i,end] = objective(
+                population[i,1:n_gene],search_idx,search_region
+            )
         end
         print(@sprintf("%d / %d\n", i, n_population))
         flush(stdout)
