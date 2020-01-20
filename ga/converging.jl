@@ -4,7 +4,9 @@ function converging!(ip::Vector{Int64}, population::Matrix{Float64}, n_populatio
     n_children::Int8 = 10
     children::Matrix{Float64} = zeros(n_children,n_gene+1)
     @inbounds for i = 1:n_children
-        ip[3:end] = sample([i for i=1:n_population],n_gene,replace=false)
+        ip[3:end] = sample(
+            [i for i=1:n_population], n_gene, replace=false
+        )
         children[i,:] = crossover(population[ip,:],n_gene)
     end
 
@@ -17,7 +19,7 @@ function converging!(ip::Vector{Int64}, population::Matrix{Float64}, n_populatio
         family[n_children+2,i] = population[ip[2],i]
     end
 
-    family = sortslices(family,dims=1,by=x->x[end])
+    family = sortslices(family, dims=1, by=x->x[end])
 
     ic2::Int8 = rand(2:n_children+2)
     @inbounds for i = 1:n_gene+1
@@ -31,7 +33,7 @@ function converging!(ip::Vector{Int64}, population::Matrix{Float64}, n_populatio
         )
     end
 
-    population = sortslices(population,dims=1,by=x->x[end])
+    population = sortslices(population, dims=1, by=x->x[end])
 
     return ip, population
 end
@@ -48,7 +50,6 @@ function crossover(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
             break
         end
     end
-
     if !(in_range)
         for i=1:n_gene
             if child[i] < 0.0
@@ -76,7 +77,9 @@ function ENDX(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     t1::Vector{Float64} = (p2 - p1)./2.0
     t2::Vector{Float64} = randn()*α*(p2-p1)
     t3::Vector{Float64} = zeros(n_gene)
-    centroid::Vector{Float64} = reshape(mean(parents[3:end,1:n_gene],dims=1),n_gene)
+    centroid::Vector{Float64} = reshape(
+        mean(parents[3:end,1:n_gene], dims=1), n_gene
+    )
 
     for i = 1:n_gene
         t3 += randn()*β*(parents[i+2,1:n_gene] - centroid)

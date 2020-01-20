@@ -10,7 +10,9 @@ function mgg_alternation!(population::Matrix{Float64}, n_population::Int64, n_ch
     children::Matrix{Float64} = zeros(n_children,n_gene+1)
     for i = 1:n_children
         ip[3] = rand(idx[3:end])
-        children[i,:] = get_new_child(population[ip,:],n_gene,search_idx,search_region)
+        children[i,:] = get_new_child(
+            population[ip,:], n_gene, search_idx, search_region
+        )
     end
 
     family::Matrix{Float64} = zeros(n_children+2,n_gene+1)
@@ -22,14 +24,14 @@ function mgg_alternation!(population::Matrix{Float64}, n_population::Int64, n_ch
         family[n_children+2,i] = population[ip[2],i]
     end
 
-    family = sortslices(family,dims=1,by=x->x[end])
+    family = sortslices(family, dims=1, by=x->x[end])
     ic2::Int64 = rank_selection(n_children+2)
     @inbounds for i = 1:n_gene+1
         population[ip[1],i] = family[1,i]  # Elite
         population[ip[2],i] = family[ic2,i]  # Rank-based Roulette Selection
     end
 
-    population = sortslices(population,dims=1,by=x->x[end])
+    population = sortslices(population, dims=1, by=x->x[end])
 
     return population
 end
@@ -49,7 +51,6 @@ function get_new_child(parents::Matrix{Float64}, n_gene::Int64,
             break
         end
     end
-
     if !(in_range)
         for i=1:n_gene
             if child[i] < 0.0
@@ -60,7 +61,9 @@ function get_new_child(parents::Matrix{Float64}, n_gene::Int64,
         end
     end
 
-    child[end] = objective(child[1:n_gene],search_idx,search_region)
+    child[end] = objective(
+        child[1:n_gene], search_idx, search_region
+    )
 
     return child
 end
