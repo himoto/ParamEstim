@@ -25,6 +25,11 @@ $ nohup julia optimize.jl n >> logs/n.log 2>&1 &
 ```bash
 $ nohup julia optimize_continue.jl n >> logs/n.log 2>&1 &
 ```
+- If you want to search multiple parameter sets simutaneously,
+```bash
+$ mkdir logs
+$ sh optimize_parallel.sh
+```
 ---
 Visualization of Simulation Results
 
