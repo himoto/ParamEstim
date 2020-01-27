@@ -70,7 +70,7 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
         end
 
         if n_file > 1
-            saveParamRange(n_file,p,u0)
+            save_param_range(n_file,p,u0)
         end
     else
         if Sim.simulate!(p,u0) !== nothing
@@ -154,7 +154,7 @@ function write_best_fit_param(best_param_set::Int,p::Vector{Float64},u0::Vector{
 end
 
 
-function saveParamRange(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
+function save_param_range(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
     search_param_matrix::Matrix{Float64} = zeros(n_file,length(search_idx[1]))
 
