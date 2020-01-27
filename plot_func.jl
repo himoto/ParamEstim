@@ -1,5 +1,5 @@
-function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,
-                                show_all::Bool,stdev::Bool,simulations_all::Array{Float64,4})
+function plotFunc_timecourse(Sim::Module, n_file::Int64, viz_type::String,
+                                show_all::Bool, stdev::Bool, simulations_all::Array{Float64,4})
     if !isdir("./figure/simulation/$viz_type")
         mkdir("./figure/simulation/$viz_type")
     end
@@ -27,14 +27,7 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,
                 end
             end
         end
-        if viz_type != "average"
-            for l in eachindex(Sim.conditions)
-                plot(
-                    Sim.t,Sim.simulations[i,:,l]/(maximum(Sim.simulations[i,:,:])),
-                    color=cmap[l]
-                )
-            end
-        else
+        if viz_type == "average"
             normalized = Array{Float64,4}(
                 undef,length(observables),n_file,length(Sim.t),length(Sim.conditions)
             )
@@ -67,6 +60,13 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,
                     )
                 end
             end
+        else
+            for l in eachindex(Sim.conditions)
+                plot(
+                    Sim.t,Sim.simulations[i,:,l]/(maximum(Sim.simulations[i,:,:])),
+                    color=cmap[l]
+                )
+            end
         end
 
         if isassigned(Exp.experiments,i)
@@ -77,7 +77,8 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,
                         exp_data = errorbar(
                             exp_t./60.,Exp.experiments[i][condition],
                             yerr=Exp.standard_error[i][condition],
-                            lw=1,markerfacecolor="None",markeredgecolor=cmap[l],ecolor=cmap[l],
+                            lw=1,markerfacecolor="None",
+                            markeredgecolor=cmap[l],ecolor=cmap[l],
                             fmt=shape[l],capsize=8,clip_on=false
                         )
                         for marker in exp_data[2]
@@ -97,7 +98,6 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,
                 end
             end
         end
-
 
         xlim(0,90)
         xticks([0,30,60,90])
