@@ -1,6 +1,6 @@
 # Parameter estimation of ODE models describing biological processes
 
-currently implimented for modeling early transcriptional regulation pathway ([Nakakuki *et al.*, ***Cell***, 2010](https://doi.org/10.1016/j.cell.2010.03.054))
+ODE model parameter estimation workflow, currently implimented for modeling immediate-early gene response ([Nakakuki *et al.*, ***Cell***, 2010](https://doi.org/10.1016/j.cell.2010.03.054)).
 
 ![simulation_average](images/simulation_average.png)
 
