@@ -114,8 +114,9 @@ function f_params()::Vector{Float64}
     p[C.Vn] = 0.22
     p[C.Vc] = 0.94
 
-    p[C.EGF]= 0.
-    p[C.HRG]= 1.
+    p[C.EGF] = 0.
+    p[C.HRG] = 1.
+    p[C.no_ligand] = 2.
 
 
     return p

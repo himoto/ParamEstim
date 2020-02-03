@@ -116,6 +116,7 @@ const param_names = [
     "Ligand"
     "EGF"
     "HRG"
+    "no_ligand"
 ]
 
 for (idx,name) in enumerate(param_names)

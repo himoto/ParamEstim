@@ -16,7 +16,7 @@ simulations = Array{Float64,3}(
 function simulate!(p::Vector{Float64}, u0::Vector{Float64})
     try
         # get steady state
-        p[C.Ligand] = 2.
+        p[C.Ligand] = p[C.no_ligand]
         prob = ODEProblem(diffeq,u0,(0.0,Inf),p)
         prob = SteadyStateProblem(prob)
         sol = solve(prob,DynamicSS(CVODE_BDF()),abstol=1e-9,reltol=1e-9,dt=1.0)
