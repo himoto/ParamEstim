@@ -3,31 +3,37 @@ include("./observable.jl")
 using ..Model
 
 using Sundials
+using SteadyStateDiffEq
 
 const tspan = (0.0,5400.0)
 const t = collect(tspan[1]:1.0:tspan[end])./60.0
 
 const conditions = ["EGF", "HRG"]
 
-simulations = Array{Float64,3}(undef,length(observables),length(t),length(conditions))
+simulations = Array{Float64,3}(
+    undef, length(observables), length(t), length(conditions)
+)
+function simulate!(p::Vector{Float64}, u0::Vector{Float64})
+    try
+        # get steady state
+        p[C.Ligand] = 2.
+        prob = ODEProblem(diffeq,u0,(0.0,Inf),p)
+        prob = SteadyStateProblem(prob)
+        sol = solve(prob,DynamicSS(CVODE_BDF()),abstol=1e-9,reltol=1e-9,dt=1.0)
+        u0 = sol.u
+        # add ligand
+        for (i,condition) in enumerate(conditions)
+            if condition == "EGF"
+                p[C.Ligand] = p[C.EGF]
+            elseif condition == "HRG"
+                p[C.Ligand] = p[C.HRG]
+            end
 
-function simulate!(p::Vector{Float64},u0::Vector{Float64})
-
-    for (i,condition) in enumerate(conditions)
-        if condition == "EGF"
-            p[C.Ligand] = p[C.EGF]
-        elseif condition == "HRG"
-            p[C.Ligand] = p[C.HRG]
-        end
-
-        prob = ODEProblem(diffeq,u0,tspan,p)
-
-        try
+            prob = ODEProblem(diffeq,u0,tspan,p)
             sol = solve(
-                prob,CVODE_BDF(),saveat=1.0,dtmin=(tspan[end]-tspan[1])/1e9,
+                prob,CVODE_BDF(),saveat=1.0,dtmin=1e-8,
                 abstol=1e-9,reltol=1e-9,verbose=false
             )
-
             @inbounds @simd for j in eachindex(t)
                 simulations[obs_idx("Phosphorylated_MEKc"),j,i] = (
                     sol.u[j][V.ppMEKc]
@@ -48,15 +54,16 @@ function simulate!(p::Vector{Float64},u0::Vector{Float64})
                     sol.u[j][V.cfosmRNAc]
                 )
                 simulations[obs_idx("cFos_Protein"),j,i] = (
-                    (sol.u[j][V.pcFOSn] + sol.u[j][V.cFOSn])*(p[C.Vn]/p[C.Vc]) + sol.u[j][V.cFOSc] + sol.u[j][V.pcFOSc]
+                    (sol.u[j][V.pcFOSn] + sol.u[j][V.cFOSn])*(p[C.Vn]/p[C.Vc])
+                    + sol.u[j][V.cFOSc] + sol.u[j][V.pcFOSc]
                 )
                 simulations[obs_idx("Phosphorylated_cFos"),j,i] = (
                     sol.u[j][V.pcFOSn]*(p[C.Vn]/p[C.Vc]) + sol.u[j][V.pcFOSc]
                 )
             end
-        catch
-            return false
         end
+    catch
+        return false
     end
 end
 end # module
