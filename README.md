@@ -11,6 +11,7 @@ This mechanistic model describes the activation of immediate early genes such as
 
 ## Dependencies
 > - [Sundials](https://github.com/JuliaDiffEq/Sundials.jl)
+> - [SteadyStateDiffEq](https://github.com/JuliaDiffEq/SteadyStateDiffEq.jl)
 > - [StatsBase](https://github.com/JuliaStats/StatsBase.jl)
 > - [PyPlot](https://github.com/JuliaPy/PyPlot.jl)
 > - [Seaborn](https://github.com/JuliaPy/Seaborn.jl)
