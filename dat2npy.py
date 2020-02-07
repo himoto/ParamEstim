@@ -14,14 +14,14 @@ def main():
     $ mv dat2npy/out/ path_to_biomass/
     
     """
-    n_file = 0
+    n_file = []
     fitparam_files = os.listdir('./fitparam')
     for file in fitparam_files:
         if re.match(r'\d', file):
-            n_file += 1
-    for i in range(n_file):
-        os.makedirs('./dat2npy/out/%d' % (i+1), exist_ok=True)
-        ith_fitparam_files = os.listdir('./fitparam/%d' % (i+1))
+            n_file.append(int(file))
+    for _, nth_paramset in enumerate(n_file):
+        os.makedirs('./dat2npy/out/{}'.format(nth_paramset), exist_ok=True)
+        ith_fitparam_files = os.listdir('./fitparam/{}'.format(nth_paramset))
         for dat_file in ith_fitparam_files:
             if 'fit' in dat_file:
                 """
@@ -29,7 +29,7 @@ def main():
                 - best_fitness.dat -> best_fitness.npy
                 """
                 data = np.loadtxt(
-                    './fitparam/%d/%s' % (i+1, dat_file), dtype='float'
+                    './fitparam/%d/%s' % (nth_paramset, dat_file), dtype='float'
                 )
             else:
                 """
@@ -37,15 +37,16 @@ def main():
                 - generation.dat -> generation.npy
                 """
                 data = np.loadtxt(
-                    'fitparam/%d/%s' % (i+1, dat_file), dtype='int'
+                    'fitparam/%d/%s' % (nth_paramset, dat_file), dtype='int'
                 )
             np.save(
-                './dat2npy/out/%d/' % (i+1) +
+                './dat2npy/out/{}/'.format(nth_paramset) +
                 dat_file.replace('.dat', '.npy'), data
             )
-        if os.path.isfile('./logs/%d.log' % (i+1)):
+        if os.path.isfile('./logs/{}.log'.format(nth_paramset):
             shutil.copyfile(
-                './logs/%d.log' % (i+1), './dat2npy/out/%d/out.log' % (i+1)
+                './logs/{}.log'.format(nth_paramset),
+                './dat2npy/out/{}/out.log'.format(nth_paramset)
             )
 
 if __name__ == '__main__':
