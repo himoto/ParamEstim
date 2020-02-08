@@ -16,13 +16,13 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
     p::Vector{Float64} = f_params()
     u0::Vector{Float64} = initial_values()
 
-    n_file::Int = 0
+    n_file::Vector{Int} = []
     if viz_type != "original"
         try
             fitparam_files::Vector{String} = readdir("./fitparam")
             for file in fitparam_files
                 if occursin(r"\d",file)
-                    n_file += 1
+                    push!(n_file, parse(Int64,file))
                 end
             end
         catch
@@ -31,14 +31,14 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
     end
 
     simulaitons_all::Array{Float64,4} = fill(
-        NaN,(length(observables),n_file,length(Sim.t),length(Sim.conditions))
+        NaN,(length(observables),length(n_file),length(Sim.t),length(Sim.conditions))
     )
-    if n_file > 0
-        if n_file == 1 && viz_type == "average"
+    if length(n_file) > 0
+        if length(n_file) == 1 && viz_type == "average"
             viz_type = "best"
         end
-        for i=1:n_file
-            (Sim,successful) = validate(i,p,u0)
+        for (i,nth_param_set) in enumerate(n_file)
+            (Sim,successful) = validate(nth_param_set,p,u0)
             if successful
                 for j=1:length(observables)
                     @inbounds simulaitons_all[j,i,:,:] = Sim.simulations[j,:,:]
@@ -46,30 +46,31 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
             end
         end
 
-        best_fitness_all::Vector{Float64} = Inf.*ones(n_file)
-        for i=1:n_file
-            if isfile("./fitparam/$i/best_fitness.dat")
-                best_fitness_all[i] = readdlm("./fitparam/$i/best_fitness.dat")[1,1]
-            else
-                best_fitness_all[i] = Inf
+        best_fitness_all::Vector{Float64} = fill(Inf,length(n_file))
+        for (i,nth_param_set) in enumerate(n_file)
+            if isfile("./fitparam/$nth_param_set/best_fitness.dat")
+                best_fitness_all[i] = readdlm(
+                    "./fitparam/$nth_param_set/best_fitness.dat"
+                )[1,1]
             end
         end
-        best_param_set::Int = argmin(best_fitness_all)
+        best_param_set::Int = n_file[argmin(best_fitness_all)]
         write_best_fit_param(best_param_set,p,u0)
 
         if viz_type == "best"
             Sim,_ = validate(best_param_set,p,u0)
-        elseif viz_type != "average" && parse(Int64,viz_type) <= n_file
+        elseif viz_type != "average" && parse(Int64,viz_type) <= length(n_file)
             Sim,_ = validate(parse(Int64,viz_type),p,u0)
-        elseif viz_type != "average" && parse(Int64,viz_type) > n_file
+        elseif viz_type != "average" && parse(Int64,viz_type) > length(n_file)
             error(
                 @sprintf(
-                    "%d is larger than n_fitparam(%d)",parse(Int64,viz_type),n_file
+                    "n (%d) must be smaller than n_fitparam (%d)",
+                    parse(Int64,viz_type), length(n_file)
                 )
             )
         end
 
-        if n_file > 1
+        if length(n_file) > 1
             save_param_range(n_file,p,u0)
         end
     else
@@ -78,7 +79,7 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
         end
     end
     plotFunc_timecourse(
-        Sim,n_file,viz_type,show_all,stdev,simulaitons_all
+        Sim,length(n_file),viz_type,show_all,stdev,simulaitons_all
     )
 end
 
@@ -93,7 +94,8 @@ function update_param(paramset::Int,p::Vector{Float64},u0::Vector{Float64})
         )[1,1]
         best_indiv::Vector{Float64} = readdlm(
             @sprintf(
-                "./fitparam/%d/fit_param%d.dat",paramset,best_generation
+                "./fitparam/%d/fit_param%d.dat",
+                paramset, best_generation
             )
         )[:,1]
 
@@ -136,7 +138,7 @@ function write_best_fit_param(best_param_set::Int,p::Vector{Float64},u0::Vector{
         for i=1:C.len_f_params
             write(
                 f,@sprintf(
-                    "p[C.%s] = %e\n",C.param_names[i],p[i]
+                    "p[C.%s] = %e\n", C.param_names[i],p[i]
                 )
             )
         end
@@ -145,7 +147,7 @@ function write_best_fit_param(best_param_set::Int,p::Vector{Float64},u0::Vector{
             if u0[i] != 0.0
                 write(
                     f,@sprintf(
-                        "u0[V.%s] = %e\n",V.var_names[i],u0[i]
+                        "u0[V.%s] = %e\n", V.var_names[i],u0[i]
                     )
                 )
             end
@@ -156,9 +158,9 @@ end
 
 function save_param_range(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
-    search_param_matrix::Matrix{Float64} = zeros(n_file,length(search_idx[1]))
+    search_param_matrix::Matrix{Float64} = zeros(length(n_file),length(search_idx[1]))
 
-    for nth_param_set=1:n_file
+    for (k,nth_param_set) in enumerate(n_file)
         local best_indiv::Vector{Float64}
         try
             best_generation::Int64 = readdlm(
@@ -166,7 +168,8 @@ function save_param_range(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
             )[1,1]
             best_indiv = readdlm(
                 @sprintf(
-                    "./fitparam/%d/fit_param%d.dat",nth_param_set,best_generation
+                    "./fitparam/%d/fit_param%d.dat",
+                    nth_param_set, best_generation
                 )
             )[:,1]
         catch
@@ -178,7 +181,7 @@ function save_param_range(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
                 @inbounds best_indiv[i+length(search_idx[1])] = u0[j]
             end
         end
-        search_param_matrix[nth_param_set,:] = best_indiv[1:length(search_idx[1])]
+        search_param_matrix[k,:] = best_indiv[1:length(search_idx[1])]
     end
 
     # --------------------------------------------------------------------------
