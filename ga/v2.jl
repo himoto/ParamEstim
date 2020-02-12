@@ -77,7 +77,7 @@ function ga_v2(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
             ip,population,n_population,n_children,n_gene,search_idx,search_region
         )
         if N_iter > 1
-            for j=1:N_iter
+            for _ in 1:N_iter
                 ip = randperm(n_population)[1:n_gene+2]
                 ip, population = converging!(
                     ip,population,n_population,n_gene,search_idx,search_region
@@ -253,7 +253,7 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
             ip,population,n_population,n_children,n_gene,search_idx,search_region
         )
         if N_iter > 1
-            for j=1:N_iter
+            for _ in 1:N_iter
                 ip = randperm(n_population)[1:n_gene+2]
                 ip, population = converging!(
                     ip,population,n_population,n_gene,search_idx,search_region
