@@ -203,7 +203,7 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
         nth_param_set,n_population,n_gene,search_idx,search_region,p0_bounds
     )
     if best_fitness < population[1,end]
-        for i=1:n_gene
+        @inbounds for i=1:n_gene
             population[1,i] = (
                 (log10(best_indiv[i])-search_region[1,i]) / 
                 (search_region[2,i]-search_region[1,i])
