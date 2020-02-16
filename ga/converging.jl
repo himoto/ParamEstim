@@ -3,7 +3,7 @@ function converging!(ip::Vector{Int64}, population::Matrix{Float64}, n_populatio
                         search_region::Matrix{Float64})::Tuple{Array{Int64,1},Array{Float64,2}}
     n_children::Int8 = 10
     children::Matrix{Float64} = zeros(n_children,n_gene+1)
-    @inbounds for i = 1:n_children
+    @inbounds for i in 1:n_children
         ip[3:end] = sample(
             [i for i=1:n_population], n_gene, replace=false
         )
@@ -11,8 +11,8 @@ function converging!(ip::Vector{Int64}, population::Matrix{Float64}, n_populatio
     end
 
     family::Matrix{Float64} = zeros(n_children+2,n_gene+1)
-    @inbounds for i = 1:n_gene+1
-        @simd for j = 1:n_children
+    @inbounds for i in 1:n_gene+1
+        @simd for j in 1:n_children
             family[j,i] = children[j,i]
         end
         family[n_children+1,i] = population[ip[1],i]
@@ -22,7 +22,7 @@ function converging!(ip::Vector{Int64}, population::Matrix{Float64}, n_populatio
     family = sortslices(family, dims=1, by=x->x[end])
 
     ic2::Int8 = rand(2:n_children+2)
-    @inbounds for i = 1:n_gene+1
+    @inbounds for i in 1:n_gene+1
         population[ip[1],i] = family[1,i]  # Best
         population[ip[2],i] = family[ic2,i]  # Random
     end
@@ -44,8 +44,8 @@ function crossover(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     MAXITER::Int8 = typemax(Int8)
     in_range::Bool = false
     for _ in 1:MAXITER
-        child = ENDX(parents,n_gene)
-        if 0.0 <= minimum(child[1:n_gene]) && maximum(child[1:n_gene]) <= 1.0
+        child = ENDX(parents, n_gene)
+        if all(x -> 0.0 <= x <= 1.0, child[1:n_gene])
             in_range = true
             break
         end
@@ -81,11 +81,11 @@ function ENDX(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
         mean(parents[3:end,1:n_gene], dims=1), n_gene
     )
 
-    for i = 1:n_gene
+    for i in 1:n_gene
         t3 += randn()*β*(parents[i+2,1:n_gene] - centroid)
     end
 
-    for i = 1:n_gene
+    for i in 1:n_gene
         @inbounds child[i] = t1[i] + t2[i] + t3[i]
     end
 

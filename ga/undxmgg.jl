@@ -8,7 +8,7 @@ function mgg_alternation!(population::Matrix{Float64}, n_population::Int64, n_ch
     ip[2] = idx[2]
 
     children::Matrix{Float64} = zeros(n_children,n_gene+1)
-    for i = 1:n_children
+    for i in 1:n_children
         ip[3] = rand(idx[3:end])
         children[i,:] = get_new_child(
             population[ip,:], n_gene, search_idx, search_region
@@ -16,8 +16,8 @@ function mgg_alternation!(population::Matrix{Float64}, n_population::Int64, n_ch
     end
 
     family::Matrix{Float64} = zeros(n_children+2,n_gene+1)
-    @inbounds for i = 1:n_gene+1
-        @simd for j = 1:n_children
+    @inbounds for i in 1:n_gene+1
+        @simd for j in 1:n_children
             family[j,i] = children[j,i]
         end
         family[n_children+1,i] = population[ip[1],i]
@@ -26,7 +26,7 @@ function mgg_alternation!(population::Matrix{Float64}, n_population::Int64, n_ch
 
     family = sortslices(family, dims=1, by=x->x[end])
     ic2::Int64 = rank_selection(n_children+2)
-    @inbounds for i = 1:n_gene+1
+    @inbounds for i in 1:n_gene+1
         population[ip[1],i] = family[1,i]  # Elite
         population[ip[2],i] = family[ic2,i]  # Rank-based Roulette Selection
     end
@@ -45,8 +45,8 @@ function get_new_child(parents::Matrix{Float64}, n_gene::Int64,
 
     in_range::Bool = false
     for _ in 1:MAXITER
-        child = UNDX(parents,n_gene)
-        if 0.0 <= minimum(child[1:n_gene]) && maximum(child[1:n_gene]) <= 1.0
+        child = UNDX(parents, n_gene)
+        if all(x -> 0.0 <= x <= 1.0, child[1:n_gene])
             in_range = true
             break
         end
@@ -86,7 +86,7 @@ function UNDX(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     t = t - dot(t,e1)*e1
     t = t + randn()*α*d1*e1
 
-    for i = 1:n_gene
+    for i in 1:n_gene
         @inbounds child[i] = t[i] + (parents[1,i]+parents[2,i])/2.0
     end
 
@@ -97,7 +97,7 @@ end
 function rank_selection(n_family::Int64)::Int64
     ranking::Vector{Int64} = fill(2,n_family)
 
-    for i = 3:n_family
+    for i in 3:n_family
         ranking = append!(ranking,fill(i,n_family-i+2))
     end
 
