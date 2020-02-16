@@ -49,12 +49,8 @@ function mutation(parents::Matrix{Float64}, n_gene::Int64, search_idx::Tuple{Arr
         end
     end
     if !(in_range)
-        for i=1:n_gene
-            if child[i] < 0.0
-                child[i] = 0.0
-            elseif child[i] > 1.0
-                child[i] = 1.0
-            end
+        for i in 1:n_gene
+            child[i] = clamp(child[i], 0.0, 1.0)
         end
     end
 
