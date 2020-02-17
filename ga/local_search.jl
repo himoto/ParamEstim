@@ -4,18 +4,18 @@ function localsearch!(ip::Vector{Int64}, population::Matrix{Float64}, n_populati
     idx::BitArray{1} = trues(n_population)
     idx[ip[1]] = false
 
-    children::Matrix{Float64} = zeros(n_children,n_gene+1)
+    children::Matrix{Float64} = zeros(n_children, n_gene+1)
 
     @inbounds for i in 1:n_children
         ip[2:end] = sample(
-            [i for i=1:n_population][idx], n_gene+1, replace=false
+            collect(1:n_population)[idx], n_gene+1, replace=false
         )
         children[i,:] = mutation(
             population[ip,:], n_gene, search_idx, search_region
         )
     end
 
-    family::Matrix{Float64} = zeros(n_children+1,n_gene+1)
+    family::Matrix{Float64} = zeros(n_children+1, n_gene+1)
     @inbounds for i in 1:n_gene+1
         @simd for j in 1:n_children
             family[j,i] = children[j,i]
