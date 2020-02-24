@@ -5,7 +5,7 @@ for i in $(seq 1 10); do
 done
 
 # To terminate the process,
-# $ pkill -f optimize.jl
+# $ pgrep -f optimize.jl | xargs kill -9
 
 <<COMMENT_OUT
 for i in $(seq 1 10); do
