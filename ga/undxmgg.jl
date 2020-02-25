@@ -46,6 +46,7 @@ function get_new_child(parents::Matrix{Float64}, n_gene::Int64,
     in_range::Bool = false
     for _ in 1:MAXITER
         child = UNDX(parents, n_gene)
+        # Checking whether children are in search region
         if all(x -> 0.0 <= x <= 1.0, child[1:n_gene])
             in_range = true
             break
@@ -53,7 +54,7 @@ function get_new_child(parents::Matrix{Float64}, n_gene::Int64,
     end
     if !(in_range)
         for i in 1:n_gene
-            child[i] = clamp(child[i], 0.0, 1.0)
+            @inbounds child[i] = clamp(child[i], 0.0, 1.0)
         end
     end
 
@@ -75,15 +76,15 @@ function UNDX(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     p2::Vector{Float64} = [parents[2,i] for i=1:n_gene]
     p3::Vector{Float64} = [parents[3,i] for i=1:n_gene]
     d1::Float64 = norm(p2-p1)
-    d2::Float64 = norm((p3-p1) - (dot((p3-p1),(p2-p1))/(d1^2))*(p2-p1))
+    d2::Float64 = norm((p3-p1) - (dot((p3-p1),(p2-p1))/(d1^2)) * (p2-p1))
     e1::Vector{Float64} = p1./d1
 
-    t::Vector{Float64} = randn(n_gene)*β*d2
-    t = t - dot(t,e1)*e1
-    t = t + randn()*α*d1*e1
+    t::Vector{Float64} = randn(n_gene) * β * d2
+    t .= t - dot(t,e1) * e1
+    t .= t + randn() * α * d1 * e1
 
     for i in 1:n_gene
-        @inbounds child[i] = t[i] + (parents[1,i]+parents[2,i])/2.0
+        @inbounds child[i] = t[i] + (parents[1,i] + parents[2,i]) / 2.0
     end
 
     return child
