@@ -41,19 +41,9 @@ end
 
 function crossover(parents::Matrix{Float64}, n_gene::Int64)::Vector{Float64}
     local child::Vector{Float64}
-    MAXITER::Int8 = typemax(Int8)
-    in_range::Bool = false
-    for _ in 1:MAXITER
-        child = ENDX(parents, n_gene)
-        if all(x -> 0.0 <= x <= 1.0, child[1:n_gene])
-            in_range = true
-            break
-        end
-    end
-    if !(in_range)
-        for i in 1:n_gene
-            child[i] = clamp(child[i], 0.0, 1.0)
-        end
+    child = ENDX(parents, n_gene)
+    for i in 1:n_gene
+        @inbounds child[i] = clamp(child[i], 0.0, 1.0)
     end
 
     child[end] = Inf
@@ -71,7 +61,7 @@ function ENDX(parents::Matrix{Float64}, n_gene::Int64)::Vector{Float64}
     p1::Vector{Float64} = parents[1,1:n_gene]
     p2::Vector{Float64} = parents[2,1:n_gene]
     t1::Vector{Float64} = (p2 - p1)./2.0
-    t2::Vector{Float64} = randn()*α*(p2-p1)
+    t2::Vector{Float64} = randn() * α * (p2 - p1)
     t3::Vector{Float64} = zeros(n_gene)
     centroid::Vector{Float64} = reshape(
         mean(parents[3:end,1:n_gene], dims=1), n_gene

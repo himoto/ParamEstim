@@ -38,20 +38,9 @@ end
 function mutation(parents::Matrix{Float64}, n_gene::Int64, search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
                     search_region::Matrix{Float64})::Vector{Float64}
     local child::Vector{Float64}
-    MAXITER::Int8 = typemax(Int8)
-
-    in_range::Bool = false
-    for _ in 1:MAXITER
-        child = NDM(parents, n_gene)
-        if all(x -> 0.0 <= x <= 1.0, child[1:n_gene])
-            in_range = true
-            break
-        end
-    end
-    if !(in_range)
-        for i in 1:n_gene
-            child[i] = clamp(child[i], 0.0, 1.0)
-        end
+    child = NDM(parents, n_gene)
+    for i in 1:n_gene
+        @inbounds child[i] = clamp(child[i], 0.0, 1.0)
     end
 
     child[end] = objective(
