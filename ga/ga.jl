@@ -5,7 +5,6 @@ export
     V,
     observables,
     obs_idx,
-    diff_sim_and_exp,
     Sim,
     Exp,
     f_params,
