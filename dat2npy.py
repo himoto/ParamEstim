@@ -20,8 +20,16 @@ def main():
         if re.match(r'\d', file):
             n_file.append(int(file))
     for _, nth_paramset in enumerate(n_file):
-        os.makedirs('./dat2npy/out/{}'.format(nth_paramset), exist_ok=True)
-        ith_fitparam_files = os.listdir('./fitparam/{}'.format(nth_paramset))
+        os.makedirs(
+            './dat2npy/out/{:d}'.format(
+                nth_paramset
+            ), exist_ok=True
+        )
+        ith_fitparam_files = os.listdir(
+            './fitparam/{:d}'.format(
+                nth_paramset
+            )
+        )
         for dat_file in ith_fitparam_files:
             if 'fit' in dat_file:
                 """
@@ -29,7 +37,9 @@ def main():
                 - best_fitness.dat -> best_fitness.npy
                 """
                 data = np.loadtxt(
-                    './fitparam/%d/%s' % (nth_paramset, dat_file), dtype='float'
+                    './fitparam/{:d}/{}'.format(
+                        nth_paramset, dat_file
+                    ), dtype='float'
                 )
             else:
                 """
@@ -37,16 +47,24 @@ def main():
                 - generation.dat -> generation.npy
                 """
                 data = np.loadtxt(
-                    'fitparam/%d/%s' % (nth_paramset, dat_file), dtype='int'
+                    'fitparam/{:d}/{}'.format(
+                        nth_paramset, dat_file
+                    ), dtype='int'
                 )
             np.save(
-                './dat2npy/out/{}/'.format(nth_paramset) +
-                dat_file.replace('.dat', '.npy'), data
+                './dat2npy/out/{:d}/'.format(
+                    nth_paramset
+                ) + dat_file.replace(
+                    '.dat', '.npy'
+                ), data
             )
-        if os.path.isfile('./logs/{}.log'.format(nth_paramset):
+        if os.path.isfile('./logs/{:d}.log'.format(nth_paramset)):
             shutil.copyfile(
-                './logs/{}.log'.format(nth_paramset),
-                './dat2npy/out/{}/out.log'.format(nth_paramset)
+                './logs/{:d}.log'.format(
+                    nth_paramset
+                ), './dat2npy/out/{:d}/out.log'.format(
+                    nth_paramset
+                )
             )
 
 if __name__ == '__main__':
