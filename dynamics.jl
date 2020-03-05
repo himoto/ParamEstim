@@ -156,7 +156,7 @@ function write_best_fit_param(best_param_set::Int,p::Vector{Float64},u0::Vector{
 end
 
 
-function save_param_range(n_file::Int64,p::Vector{Float64},u0::Vector{Float64})
+function save_param_range(n_file::Vector{Int},p::Vector{Float64},u0::Vector{Float64})
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
     search_param_matrix::Matrix{Float64} = zeros(length(n_file),length(search_idx[1]))
 
