@@ -309,7 +309,7 @@ function lin2log!(search_idx::Tuple{Array{Int64,1},Array{Int64,1}}, search_regio
             end
         end
         error(
-            "Set these search_params in both search_idx_init and search_region."
+            "Set these search_params in both search_idx and search_region."
         )
     end
 
