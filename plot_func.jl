@@ -1,7 +1,7 @@
 function plotFunc_timecourse(Sim::Module, n_file::Int64, viz_type::String,
                                 show_all::Bool, stdev::Bool, simulations_all::Array{Float64,4})
     if !isdir("./figure/simulation/$viz_type")
-        mkdir("./figure/simulation/$viz_type")
+        mkpath("./figure/simulation/$viz_type")
     end
 
     rc("figure",figsize = (4,3))
