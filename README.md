@@ -33,8 +33,16 @@ $ sh optimize_parallel.sh
 ```
 ---
 Visualization of Simulation Results
+```julia
+include("ParamEstim.jl")
+using .ParamEstim
 
-    $ julia run_sim.jl
+simulate_all(Sim,
+    viz_type="average", # This is where you define how you would like each observable to be plotted.
+    show_all=false,     # Whether to show all simulation results.
+    stdev=true          # If True, the standard deviation of simulated values will be shown (only when viz_type == 'average').
+)
+```
 
 ```viz_type```:
 
