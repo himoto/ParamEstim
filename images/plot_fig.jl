@@ -100,8 +100,11 @@ function plotFunc_timecourse(Sim::Module,n_file::Int64,viz_type::String,
                             lw=1,markerfacecolor="None",markeredgecolor=cmap[l],ecolor=cmap[l],
                             fmt=shape[l],capsize=8,clip_on=false
                         )
-                        for marker in exp_data[2]
-                            marker.set_clip_on(false)
+                        for capline in exp_data[2]
+                            capline.set_clip_on(false)
+                        end
+                        for barlinecol in exp_data[3]
+                            barlinecol.set_clip_on(false)
                         end
                     end
                 end
