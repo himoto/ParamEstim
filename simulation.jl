@@ -19,7 +19,10 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
         p[C.Ligand] = p[C.no_ligand]
         prob = ODEProblem(diffeq,u0,(0.0,Inf),p)
         prob = SteadyStateProblem(prob)
-        sol = solve(prob,DynamicSS(CVODE_BDF()),abstol=1e-9,reltol=1e-9,dt=1.0)
+        sol = solve(
+            prob,DynamicSS(CVODE_BDF()),
+            abstol=1e-9,reltol=1e-9,dt=1.0,verbose=false
+        )
         u0 = sol.u
         # add ligand
         for (i,condition) in enumerate(conditions)
