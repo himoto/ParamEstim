@@ -98,7 +98,7 @@ function rank_selection(n_family::Int64)::Int64
         ranking = append!(ranking,fill(i,n_family-i+2))
     end
 
-    shuffle!(ranking)
+    # shuffle!(ranking)
     idx::Int64 = rand(1:length(ranking))
 
     return ranking[idx]
