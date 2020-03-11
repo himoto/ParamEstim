@@ -2,8 +2,8 @@
 function compute_objval_rss(sim_data::Vector{Float64}, exp_data::Vector{Float64})::Float64
     error::Float64 = 0.0
 
-    for i in eachindex(exp_data)
-        error += (sim_data[i]-exp_data[i])^2
+    @simd for i in eachindex(exp_data)
+        @inbounds error += (sim_data[i] - exp_data[i])^2
     end
 
     return error
