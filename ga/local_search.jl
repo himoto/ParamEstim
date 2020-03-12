@@ -6,7 +6,7 @@ function localsearch!(ip::Vector{Int64}, population::Matrix{Float64}, n_populati
 
     children::Matrix{Float64} = zeros(n_children, n_gene+1)
 
-    @inbounds for i in 1:n_children
+    for i in 1:n_children
         ip[2:end] = sample(
             collect(1:n_population)[idx], n_gene+1, replace=false
         )

@@ -3,7 +3,7 @@ function converging!(ip::Vector{Int64}, population::Matrix{Float64}, n_populatio
                         search_region::Matrix{Float64})::Tuple{Array{Int64,1},Array{Float64,2}}
     n_children::Int8 = 10
     children::Matrix{Float64} = zeros(n_children, n_gene+1)
-    @inbounds for i in 1:n_children
+    for i in 1:n_children
         ip[3:end] = sample(
             collect(1:n_population), n_gene, replace=false
         )
