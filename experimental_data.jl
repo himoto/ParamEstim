@@ -84,8 +84,8 @@ standard_error[observables_index("dusp_mRNA")] = Dict(
     "HRG" => [0.027,0.059,0.094,0.124,0.113,0.108] ./ sqrt(3),
 )
 
-function get_timepoint(observalbe::Int)
-    if observalbe in [
+function get_timepoint(obs_idx::Int)
+    if obs_idx in [
         observables_index("Phosphorylated_MEKc")
         observables_index("Phosphorylated_ERKc")
         observables_index("Phosphorylated_RSKw")
@@ -93,13 +93,13 @@ function get_timepoint(observalbe::Int)
         ]
         return t2
 
-    elseif observalbe == observables_index("Phosphorylated_CREBw")
+    elseif obs_idx == observables_index("Phosphorylated_CREBw")
         return t3
     
-    elseif observalbe == observables_index("cfos_mRNA")
+    elseif obs_idx == observables_index("cfos_mRNA")
         return t4
         
-    elseif observalbe in [
+    elseif obs_idx in [
         observables_index("cFos_Protein")
         observables_index("dusp_mRNA")
         ]
