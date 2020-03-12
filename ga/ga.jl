@@ -4,7 +4,7 @@ export
     C,
     V,
     observables,
-    obs_idx,
+    observables_index,
     Sim,
     Exp,
     f_params,

@@ -76,12 +76,12 @@ function objective(individual_gene::Vector{Float64}, search_idx::Tuple{Array{Int
         error::Vector{Float64} = zeros(length(observables))
         for (i,target) in enumerate(observables)
             exp_t::Vector{Float64} = Exp.get_timepoint(i)
-            norm_max::Float64 = maximum(Sim.simulations[obs_idx(target),:,:])
-            if isassigned(Exp.experiments,obs_idx(target))
+            norm_max::Float64 = maximum(Sim.simulations[observables_index(target),:,:])
+            if isassigned(Exp.experiments,observables_index(target))
                 error[i] = compute_objval_rss(
                     diff_sim_and_exp(
-                        Sim.simulations[obs_idx(target),:,:],
-                        Exp.experiments[obs_idx(target)],
+                        Sim.simulations[observables_index(target),:,:],
+                        Exp.experiments[observables_index(target)],
                         exp_t,
                         Sim.conditions,
                         sim_norm_max=norm_max,
@@ -93,92 +93,92 @@ function objective(individual_gene::Vector{Float64}, search_idx::Tuple{Array{Int
         #=
         error::Vector{Float64} = zeros(16)
 
-        sim_norm_max = maximum(Sim.simulations[obs_idx("Phosphorylated_MEKc"),:,:])
-        exp_t = Exp.get_timepoint(obs_idx("Phosphorylated_MEKc"))
+        sim_norm_max = maximum(Sim.simulations[observables_index("Phosphorylated_MEKc"),:,:])
+        exp_t = Exp.get_timepoint(observables_index("Phosphorylated_MEKc"))
         error[1] = compute_objval_rss(
-            Sim.simulations[obs_idx("Phosphorylated_MEKc"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
-            Exp.experiments[obs_idx("Phosphorylated_MEKc")]["EGF"]
+            Sim.simulations[observables_index("Phosphorylated_MEKc"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
+            Exp.experiments[observables_index("Phosphorylated_MEKc")]["EGF"]
         )
         error[2] = compute_objval_rss(
-            Sim.simulations[obs_idx("Phosphorylated_MEKc"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
-            Exp.experiments[obs_idx("Phosphorylated_MEKc")]["HRG"]
+            Sim.simulations[observables_index("Phosphorylated_MEKc"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
+            Exp.experiments[observables_index("Phosphorylated_MEKc")]["HRG"]
         )
 
-        sim_norm_max = maximum(Sim.simulations[obs_idx("Phosphorylated_ERKc"),:,:])
-        exp_t = Exp.get_timepoint(obs_idx("Phosphorylated_ERKc"))
+        sim_norm_max = maximum(Sim.simulations[observables_index("Phosphorylated_ERKc"),:,:])
+        exp_t = Exp.get_timepoint(observables_index("Phosphorylated_ERKc"))
         error[3] = compute_objval_rss(
-            Sim.simulations[obs_idx("Phosphorylated_ERKc"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
-            Exp.experiments[obs_idx("Phosphorylated_ERKc")]["EGF"]
+            Sim.simulations[observables_index("Phosphorylated_ERKc"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
+            Exp.experiments[observables_index("Phosphorylated_ERKc")]["EGF"]
         )
         error[4] = compute_objval_rss(
-            Sim.simulations[obs_idx("Phosphorylated_ERKc"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
-            Exp.experiments[obs_idx("Phosphorylated_ERKc")]["HRG"]
+            Sim.simulations[observables_index("Phosphorylated_ERKc"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
+            Exp.experiments[observables_index("Phosphorylated_ERKc")]["HRG"]
         )
 
-        sim_norm_max = maximum(Sim.simulations[obs_idx("Phosphorylated_RSKw"),:,:])
-        exp_t = Exp.get_timepoint(obs_idx("Phosphorylated_RSKw"))
+        sim_norm_max = maximum(Sim.simulations[observables_index("Phosphorylated_RSKw"),:,:])
+        exp_t = Exp.get_timepoint(observables_index("Phosphorylated_RSKw"))
         error[5] = compute_objval_rss(
-            Sim.simulations[obs_idx("Phosphorylated_RSKw"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
-            Exp.experiments[obs_idx("Phosphorylated_RSKw")]["EGF"]
+            Sim.simulations[observables_index("Phosphorylated_RSKw"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
+            Exp.experiments[observables_index("Phosphorylated_RSKw")]["EGF"]
         )
         error[6] = compute_objval_rss(
-            Sim.simulations[obs_idx("Phosphorylated_RSKw"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
-            Exp.experiments[obs_idx("Phosphorylated_RSKw")]["HRG"]
+            Sim.simulations[observables_index("Phosphorylated_RSKw"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
+            Exp.experiments[observables_index("Phosphorylated_RSKw")]["HRG"]
         )
 
-        sim_norm_max = maximum(Sim.simulations[obs_idx("Phosphorylated_CREBw"),:,:])
-        exp_t = Exp.get_timepoint(obs_idx("Phosphorylated_CREBw"))
+        sim_norm_max = maximum(Sim.simulations[observables_index("Phosphorylated_CREBw"),:,:])
+        exp_t = Exp.get_timepoint(observables_index("Phosphorylated_CREBw"))
         error[7] = compute_objval_rss(
-            Sim.simulations[obs_idx("Phosphorylated_CREBw"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
-            Exp.experiments[obs_idx("Phosphorylated_CREBw")]["EGF"]
+            Sim.simulations[observables_index("Phosphorylated_CREBw"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
+            Exp.experiments[observables_index("Phosphorylated_CREBw")]["EGF"]
         )
         error[8] = compute_objval_rss(
-            Sim.simulations[obs_idx("Phosphorylated_CREBw"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
-            Exp.experiments[obs_idx("Phosphorylated_CREBw")]["HRG"]
+            Sim.simulations[observables_index("Phosphorylated_CREBw"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
+            Exp.experiments[observables_index("Phosphorylated_CREBw")]["HRG"]
         )
 
-        sim_norm_max = maximum(Sim.simulations[obs_idx("dusp_mRNA"),:,:])
-        exp_t = Exp.get_timepoint(obs_idx("dusp_mRNA"))
+        sim_norm_max = maximum(Sim.simulations[observables_index("dusp_mRNA"),:,:])
+        exp_t = Exp.get_timepoint(observables_index("dusp_mRNA"))
         error[9] = compute_objval_rss(
-            Sim.simulations[obs_idx("dusp_mRNA"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
-            Exp.experiments[obs_idx("dusp_mRNA")]["EGF"]
+            Sim.simulations[observables_index("dusp_mRNA"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
+            Exp.experiments[observables_index("dusp_mRNA")]["EGF"]
         )
         error[10] = compute_objval_rss(
-            Sim.simulations[obs_idx("dusp_mRNA"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
-            Exp.experiments[obs_idx("dusp_mRNA")]["HRG"]
+            Sim.simulations[observables_index("dusp_mRNA"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
+            Exp.experiments[observables_index("dusp_mRNA")]["HRG"]
         )
 
-        sim_norm_max = maximum(Sim.simulations[obs_idx("cfos_mRNA"),:,:])
-        exp_t = Exp.get_timepoint(obs_idx("cfos_mRNA"))
+        sim_norm_max = maximum(Sim.simulations[observables_index("cfos_mRNA"),:,:])
+        exp_t = Exp.get_timepoint(observables_index("cfos_mRNA"))
         error[11] = compute_objval_rss(
-            Sim.simulations[obs_idx("cfos_mRNA"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
-            Exp.experiments[obs_idx("cfos_mRNA")]["EGF"]
+            Sim.simulations[observables_index("cfos_mRNA"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
+            Exp.experiments[observables_index("cfos_mRNA")]["EGF"]
         )
         error[12] = compute_objval_rss(
-            Sim.simulations[obs_idx("cfos_mRNA"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
-            Exp.experiments[obs_idx("cfos_mRNA")]["HRG"]
+            Sim.simulations[observables_index("cfos_mRNA"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
+            Exp.experiments[observables_index("cfos_mRNA")]["HRG"]
         )
 
-        sim_norm_max = maximum(Sim.simulations[obs_idx("cFos_Protein"),:,:])
-        exp_t = Exp.get_timepoint(obs_idx("cFos_Protein"))
+        sim_norm_max = maximum(Sim.simulations[observables_index("cFos_Protein"),:,:])
+        exp_t = Exp.get_timepoint(observables_index("cFos_Protein"))
         error[13] = compute_objval_rss(
-            Sim.simulations[obs_idx("cFos_Protein"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
-            Exp.experiments[obs_idx("cFos_Protein")]["EGF"]
+            Sim.simulations[observables_index("cFos_Protein"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
+            Exp.experiments[observables_index("cFos_Protein")]["EGF"]
         )
         error[14] = compute_objval_rss(
-            Sim.simulations[obs_idx("cFos_Protein"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
-            Exp.experiments[obs_idx("cFos_Protein")]["HRG"]
+            Sim.simulations[observables_index("cFos_Protein"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
+            Exp.experiments[observables_index("cFos_Protein")]["HRG"]
         )
 
-        sim_norm_max = maximum(Sim.simulations[obs_idx("Phosphorylated_cFos"),:,:])
-        exp_t = Exp.get_timepoint(obs_idx("Phosphorylated_cFos"))
+        sim_norm_max = maximum(Sim.simulations[observables_index("Phosphorylated_cFos"),:,:])
+        exp_t = Exp.get_timepoint(observables_index("Phosphorylated_cFos"))
         error[15] = compute_objval_rss(
-            Sim.simulations[obs_idx("Phosphorylated_cFos"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
-            Exp.experiments[obs_idx("Phosphorylated_cFos")]["EGF"]
+            Sim.simulations[observables_index("Phosphorylated_cFos"), Int.(exp_t.+1), cond_idx("EGF")]./sim_norm_max,
+            Exp.experiments[observables_index("Phosphorylated_cFos")]["EGF"]
         )
         error[16] = compute_objval_rss(
-            Sim.simulations[obs_idx("Phosphorylated_cFos"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
-            Exp.experiments[obs_idx("Phosphorylated_cFos")]["HRG"]
+            Sim.simulations[observables_index("Phosphorylated_cFos"), Int.(exp_t.+1), cond_idx("HRG")]./sim_norm_max,
+            Exp.experiments[observables_index("Phosphorylated_cFos")]["HRG"]
         )
         =#
         return sum(error)

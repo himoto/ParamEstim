@@ -38,29 +38,29 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
                 abstol=1e-9,reltol=1e-9,verbose=false
             )
             @inbounds @simd for j in eachindex(t)
-                simulations[obs_idx("Phosphorylated_MEKc"),j,i] = (
+                simulations[observables_index("Phosphorylated_MEKc"),j,i] = (
                     sol.u[j][V.ppMEKc]
                 )
-                simulations[obs_idx("Phosphorylated_ERKc"),j,i] = (
+                simulations[observables_index("Phosphorylated_ERKc"),j,i] = (
                     sol.u[j][V.pERKc] + sol.u[j][V.ppERKc]
                 )
-                simulations[obs_idx("Phosphorylated_RSKw"),j,i] = (
+                simulations[observables_index("Phosphorylated_RSKw"),j,i] = (
                     sol.u[j][V.pRSKc] + sol.u[j][V.pRSKn]*(p[C.Vn]/p[C.Vc])
                 )
-                simulations[obs_idx("Phosphorylated_CREBw"),j,i] = (
+                simulations[observables_index("Phosphorylated_CREBw"),j,i] = (
                     sol.u[j][V.pCREBn]*(p[C.Vn]/p[C.Vc])
                 )
-                simulations[obs_idx("dusp_mRNA"),j,i] = (
+                simulations[observables_index("dusp_mRNA"),j,i] = (
                     sol.u[j][V.duspmRNAc]
                 )
-                simulations[obs_idx("cfos_mRNA"),j,i] = (
+                simulations[observables_index("cfos_mRNA"),j,i] = (
                     sol.u[j][V.cfosmRNAc]
                 )
-                simulations[obs_idx("cFos_Protein"),j,i] = (
+                simulations[observables_index("cFos_Protein"),j,i] = (
                     (sol.u[j][V.pcFOSn] + sol.u[j][V.cFOSn])*(p[C.Vn]/p[C.Vc])
                     + sol.u[j][V.cFOSc] + sol.u[j][V.pcFOSc]
                 )
-                simulations[obs_idx("Phosphorylated_cFos"),j,i] = (
+                simulations[observables_index("Phosphorylated_cFos"),j,i] = (
                     sol.u[j][V.pcFOSn]*(p[C.Vn]/p[C.Vc]) + sol.u[j][V.pcFOSc]
                 )
             end
