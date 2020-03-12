@@ -40,8 +40,7 @@ end
 
 
 function crossover(parents::Matrix{Float64}, n_gene::Int64)::Vector{Float64}
-    local child::Vector{Float64}
-    child = ENDX(parents, n_gene)
+    child::Vector{Float64} = ENDX(parents, n_gene)
     for i in 1:n_gene
         @inbounds child[i] = clamp(child[i], 0.0, 1.0)
     end
