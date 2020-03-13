@@ -18,7 +18,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Int64, viz_type::String,
 
     for (i,name) in enumerate(observables)
         if show_all
-            for (j,_) in enumerate(n_file)
+            for j in eachindex(n_file)
                 for l in eachindex(Sim.conditions)
                     plot(
                         Sim.t,simulations_all[i,j,:,l]./maximum(simulations_all[i,j,:,:]),
@@ -31,8 +31,8 @@ function plotFunc_timecourse(Sim::Module, n_file::Int64, viz_type::String,
             normalized = Array{Float64,4}(
                 undef,length(observables),length(n_file),length(Sim.t),length(Sim.conditions)
             )
-            for (j,_) in enumerate(n_file)
-                for l in eachindex(Sim.conditions)
+            @inbounds for j in eachindex(n_file)
+                @simd for l in eachindex(Sim.conditions)
                     normalized[i,j,:,l] = (
                         simulations_all[i,j,:,l]./maximum(simulations_all[i,j,:,:])
                     )
