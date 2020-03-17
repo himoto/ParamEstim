@@ -51,7 +51,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Int64, viz_type::String,
                         for k in eachindex(Sim.t)
                     ]
                     yerr = [
-                        std(filter(!isnan,normalized[i,:,k,l]),corrected=false)
+                        std(filter(!isnan,normalized[i,:,k,l]))
                         for k in eachindex(Sim.t)
                     ]
                     fill_between(

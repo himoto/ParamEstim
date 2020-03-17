@@ -90,7 +90,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Int64, viz_type::String,
                         std(
                             filter(
                                 !isnan, normalized[i, :, k, l]
-                            ), corrected=false
+                            )
                         ) for k in eachindex(Sim.t)
                     ]
                     fill_between(
