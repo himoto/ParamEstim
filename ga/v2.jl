@@ -92,9 +92,6 @@ function ga_v2(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
             else
                 N_iter = 1
             end
-        elseif generation%length(N0) == 1
-            N0 = zeros(2*n_population)
-            N0[1] = population[1,end]
         else
             N0[generation%length(N0)] = population[1,end]
         end
@@ -268,9 +265,6 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
             else
                 N_iter = 1
             end
-        elseif generation%length(N0) == 1
-            N0 = zeros(2*n_population)
-            N0[1] = population[1,end]
         else
             N0[generation%length(N0)] = population[1,end]
         end
