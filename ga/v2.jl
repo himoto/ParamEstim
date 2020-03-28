@@ -8,7 +8,7 @@ function ga_v2(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
     end
 
     N_iter::Int64 = 1
-    N0::Vector{Float64} = zeros(2*n_population)
+    N0::Vector{Float64} = zeros(3*n_population)
 
     population = get_initial_population(
         n_population,n_gene,search_idx,search_region
@@ -178,7 +178,7 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
     end
     
     N_iter::Int64 = 1
-    N0::Vector{Float64} = zeros(2*n_population)
+    N0::Vector{Float64} = zeros(3*n_population)
 
     count::Int64 = readdlm(
         "./fitparam/$nth_param_set/count_num.dat"
