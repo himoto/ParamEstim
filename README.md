@@ -10,8 +10,7 @@ Points (blue diamonds, EGF; red squares, HRG) denote experimental data, solid li
 This mechanistic model describes the activation of immediate early genes such as cFos after epidermal growth factor (EGF) or heregulin (HRG) stimulation of the MAPK pathway. Phosphorylated cFos is a key transcription factor triggering downstream cascades of cell fate determination. The model can explain how the switch-like response of p-cFos emerges from the spatiotemporal dynamics. This mechanistic model comprises the explicit reaction kinetics of the signal transduction pathway, the transcriptional and the posttranslational feedback and feedforward loops. In the article, two different mechanistic models have been studied, the first one based on previously known interactions but failing to account for the experimental data and the second one including additional interactions which were discovered and confirmed by new experiments. The mechanistic model encoded here is the second one, the extended and at the time of creation most complete model of cell fate decision making in response to different doses of EGF or HRG stimulation.
 
 ## Dependencies
-> - [Sundials](https://github.com/JuliaDiffEq/Sundials.jl)
-> - [SteadyStateDiffEq](https://github.com/JuliaDiffEq/SteadyStateDiffEq.jl)
+> - [Sundials](https://github.com/SciML/Sundials.jl)
 > - [StatsBase](https://github.com/JuliaStats/StatsBase.jl)
 > - [PyPlot](https://github.com/JuliaPy/PyPlot.jl)
 > - [Seaborn](https://github.com/JuliaPy/Seaborn.jl)

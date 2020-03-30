@@ -3,7 +3,8 @@ include("./observable.jl")
 using ..Model
 
 using Sundials
-using SteadyStateDiffEq
+# using SteadyStateDiffEq
+const STEADY_STATE_EPS = 1e-6
 
 const tspan = (0.0,5400.0)
 const t = collect(tspan[1]:1.0:tspan[end])./60.0
@@ -17,13 +18,20 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
     try
         # get steady state
         p[C.Ligand] = p[C.no_ligand]
-        prob = ODEProblem(diffeq,u0,(0.0,Inf),p)
-        prob = SteadyStateProblem(prob)
-        sol = solve(
-            prob,DynamicSS(CVODE_BDF()),maxiters=1e7,dt=1.0,dtmin=1e-8,
-            abstol=1e-9,reltol=1e-9,verbose=false
-        )
-        u0 = sol.u
+        iter::Int8 = 0
+        while iter < 100
+            prob = ODEProblem(diffeq,u0,10000.0,p)
+            sol = solve(
+                prob,CVODE_BDF(),dtmin=1e-8,
+                abstol=1e-9,reltol=1e-9,verbose=false
+            )
+            if all(abs.(sol.u[end] - u0) .< STEADY_STATE_EPS)
+                break
+            else
+                u0 .= sol.u[end]
+            end
+            iter += 1
+        end
         # add ligand
         for (i,condition) in enumerate(conditions)
             if condition == "EGF"
@@ -31,7 +39,6 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
             elseif condition == "HRG"
                 p[C.Ligand] = p[C.HRG]
             end
-
             prob = ODEProblem(diffeq,u0,tspan,p)
             sol = solve(
                 prob,CVODE_BDF(),saveat=1.0,dtmin=1e-8,
