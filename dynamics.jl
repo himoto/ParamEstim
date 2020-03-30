@@ -79,7 +79,7 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
         end
     end
     plotFunc_timecourse(
-        Sim,length(n_file),viz_type,show_all,stdev,simulaitons_all
+        Sim,n_file,viz_type,show_all,stdev,simulaitons_all
     )
 end
 

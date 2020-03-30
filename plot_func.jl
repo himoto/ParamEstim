@@ -1,4 +1,4 @@
-function plotFunc_timecourse(Sim::Module, n_file::Int64, viz_type::String,
+function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
                                 show_all::Bool, stdev::Bool, simulations_all::Array{Float64,4})
     if !isdir("./figure/simulation/$viz_type")
         mkpath("./figure/simulation/$viz_type")
@@ -40,19 +40,30 @@ function plotFunc_timecourse(Sim::Module, n_file::Int64, viz_type::String,
             end
             for l in eachindex(Sim.conditions)
                 plot(
-                    Sim.t,[mean(filter(!isnan,normalized[i,:,k,l])) for k in eachindex(Sim.t)],
-                    color=cmap[l]
+                    Sim.t,[
+                        mean(
+                            filter(
+                                !isnan,normalized[i,:,k,l]
+                            )
+                        ) for k in eachindex(Sim.t)
+                    ],color=cmap[l]
                 )
             end
             if stdev
                 for l in eachindex(Sim.conditions)
                     ymean = [
-                        mean(filter(!isnan,normalized[i,:,k,l]))
-                        for k in eachindex(Sim.t)
+                        mean(
+                            filter(
+                                !isnan,normalized[i,:,k,l]
+                            )
+                        ) for k in eachindex(Sim.t)
                     ]
                     yerr = [
-                        std(filter(!isnan,normalized[i,:,k,l]))
-                        for k in eachindex(Sim.t)
+                        std(
+                            filter(
+                                !isnan,normalized[i,:,k,l]
+                            )
+                        ) for k in eachindex(Sim.t)
                     ]
                     fill_between(
                         Sim.t,ymean-yerr,ymean+yerr,
