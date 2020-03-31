@@ -20,17 +20,17 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
         p[C.Ligand] = p[C.no_ligand]
         iter::Int8 = 0
         while iter < 100
-            prob = ODEProblem(diffeq,u0,10000.0,p)
+            prob = ODEProblem(diffeq,u0,tspan,p)
             sol = solve(
-                prob,CVODE_BDF(),dtmin=1e-8,
-                abstol=1e-9,reltol=1e-9,verbose=false
+                prob,CVODE_BDF(),
+                abstol=1e-9,reltol=1e-9,dtmin=1e-8,verbose=false
             )
             if all(abs.(sol.u[end] - u0) .< STEADY_STATE_EPS)
                 break
             else
                 u0 .= sol.u[end]
+                iter += 1
             end
-            iter += 1
         end
         # add ligand
         for (i,condition) in enumerate(conditions)
@@ -41,8 +41,8 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
             end
             prob = ODEProblem(diffeq,u0,tspan,p)
             sol = solve(
-                prob,CVODE_BDF(),saveat=1.0,dtmin=1e-8,
-                abstol=1e-9,reltol=1e-9,verbose=false
+                prob,CVODE_BDF(),saveat=1.0,
+                abstol=1e-9,reltol=1e-9,dtmin=1e-8,verbose=false
             )
             @inbounds @simd for j in eachindex(t)
                 simulations[observables_index("Phosphorylated_MEKc"),j,i] = (
