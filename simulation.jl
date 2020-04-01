@@ -19,7 +19,7 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
         # get steady state
         p[C.Ligand] = p[C.no_ligand]
         iter::Int8 = 0
-        while iter < 100
+        while iter < 10
             prob = ODEProblem(diffeq,u0,tspan,p)
             sol = solve(
                 prob,CVODE_BDF(),
