@@ -8,7 +8,7 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
             parse(Int64,viz_type)
         catch
             error(
-                "Error: viz_type ∈ {'best','average','original',int(1~n_fitparam)}"
+                "Avairable viz_type are: 'best','average','original','experiment','n(=1,2,...)'"
             )
         end
     end
@@ -40,7 +40,7 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
         for (i,nth_param_set) in enumerate(n_file)
             (Sim,successful) = validate(nth_param_set,p,u0)
             if successful
-                for j=1:length(observables)
+                for j in eachindex(observables)
                     @inbounds simulaitons_all[j,i,:,:] = Sim.simulations[j,:,:]
                 end
             end
@@ -75,7 +75,9 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
         end
     else
         if Sim.simulate!(p,u0) !== nothing
-            error("Simulation failed.")
+            error(
+                "Simulation failed."
+            )
         end
     end
     plotFunc_timecourse(
@@ -118,7 +120,9 @@ function validate(nth_param_set::Int64,p::Vector{Float64},u0::Vector{Float64})
     if Sim.simulate!(p,u0) isa Nothing
         return Sim, true
     else
-        print("Simulation failed.\nparameter_set #$nth_param_set")
+        print(
+            "Simulation failed.\nparameter_set #$nth_param_set"
+        )
         return Sim, false
     end
 
@@ -134,7 +138,9 @@ function write_best_fit_param(best_param_set::Int,p::Vector{Float64},u0::Vector{
                 "# param set: %d\n",best_param_set
             )
         )
-        write(f,"\n### Param const\n")
+        write(
+            f,"\n### Param const\n"
+        )
         for i=1:C.len_f_params
             write(
                 f,@sprintf(
@@ -142,7 +148,9 @@ function write_best_fit_param(best_param_set::Int,p::Vector{Float64},u0::Vector{
                 )
             )
         end
-        write(f,"\n### Non-zero initial conditions\n")
+        write(
+            f,"\n### Non-zero initial conditions\n"
+        )
         for i=1:V.len_f_vars
             if u0[i] != 0.0
                 write(
@@ -173,7 +181,9 @@ function save_param_range(n_file::Vector{Int},p::Vector{Float64},u0::Vector{Floa
                 )
             )[:,1]
         catch
-            best_indiv = zeros(length(search_idx[1])+length(search_idx[2]))
+            best_indiv = zeros(
+                length(search_idx[1]) + length(search_idx[2])
+            )
             for (i,j) in enumerate(search_idx[1])
                 @inbounds best_indiv[i] = p[j]
             end
