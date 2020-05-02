@@ -15,8 +15,7 @@ This mechanistic model describes the activation of immediate early genes such as
 > - [PyPlot](https://github.com/JuliaPy/PyPlot.jl)
 > - [Seaborn](https://github.com/JuliaPy/Seaborn.jl)
 
-## Usage
-Parameter Estimation (*n*=1, 2, 3, · · ·)
+## Parameter Estimation (*n*=1, 2, 3, · · ·)
 ```bash
 $ mkdir logs
 $ nohup julia optimize.jl n >> logs/n.log 2>&1 &
@@ -25,37 +24,41 @@ $ nohup julia optimize.jl n >> logs/n.log 2>&1 &
 ```bash
 $ nohup julia optimize_continue.jl n >> logs/n.log 2>&1 &
 ```
-- If you want to search multiple parameter sets simutaneously,
+- If you want to search multiple parameter sets simultaneously,
 ```bash
 $ mkdir logs
 $ sh optimize_parallel.sh
 ```
----
-Visualization of Simulation Results
+
+## Visualization of Simulation Results
 ```julia
 include("ParamEstim.jl")
 using .ParamEstim
 
 simulate_all(Sim,
-    viz_type="average", # This is where you define how you would like each observable to be plotted.
-    show_all=false,     # Whether to show all simulation results.
-    stdev=true          # If True, the standard deviation of simulated values will be shown (only when viz_type == 'average').
+    viz_type="average", show_all=false, stdev=true          
 )
 ```
 
-```viz_type```:
+**viz_type**: String
 
-- "average"
+- ```"average"```
     : The average of simulation results with parameter sets in ```fitparam/```
 
-- "best"
+- ```"best"```
     : The best simulation result in ```fitparam/```, simulation with ```best_fit_param```
 
-- "original"
+- ```"original"```
     : Simulation with the default parameters and initial values defined in ```model/```
 
-- "n(=1,2,...)"
+- ```"n(=1,2,...)"```
     : Use the parameter set in ```fitparam/n/```
+
+**show_all**: Bool
+- Whether to show all simulation results.
+
+**stdev**: Bool
+- If True, the standard deviation of simulated values will be shown (only when ```viz_type == "average"```).
 
 ## Installation
     $ git clone https://github.com/himoto/ParamEstim.git
