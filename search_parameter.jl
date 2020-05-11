@@ -1,6 +1,7 @@
+# Specify model parameters and/or initial values to optimize
 function search_parameter_index()::Tuple{Array{Int64,1},Array{Int64,1}}
-    # constant parameter
-    search_idx_const::Vector{Int} = [
+    # parameters
+    search_idx_params::Vector{Int} = [
         C.V1
         C.Km1
         C.V5
@@ -79,51 +80,22 @@ function search_parameter_index()::Tuple{Array{Int64,1},Array{Int64,1}}
     ]
 
     # initial values
-    search_idx_init::Vector{Int} = [
+    search_idx_initvars::Vector{Int} = [
         # V.(variableName)
     ]
 
-    return search_idx_const, search_idx_init
+    return search_idx_params, search_idx_initvars
 end
+
 
 function get_search_region()::Matrix{Float64}
     p::Vector{Float64} = f_params()
     u0::Vector{Float64} = initial_values()
 
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
+    search_param::Vector{Float64} = init_search_param(search_idx, p, u0)
 
-    search_param = zeros(length(search_idx[1])+length(search_idx[2]))
-    for (i,j) in enumerate(search_idx[1])
-        @inbounds search_param[i] = p[j]
-    end
-    for (i,j) in enumerate(search_idx[2])
-        @inbounds search_param[i+length(search_idx[1])] = u0[j]
-    end
-
-    if any(x -> x == 0.0, search_param)
-        message::String = "search_param must not contain zero."
-        for (_, idx) in enumerate(search_idx[1])
-            if p[idx] == 0.0
-                error(
-                    @sprintf(
-                        "`C.%s` in search_idx_const: ", C.param_names[idx]
-                    ) * message
-                )
-            end
-        end
-        for (_, idx) in enumerate(search_idx[2])
-            if u0[idx] == 0.0
-                error(
-                    @sprintf(
-                        "`V.%s` in search_idx_init: ", V.var_names[idx]
-                    ) * message
-                )
-            end
-        end
-    end
-
-    search_region::Matrix{Float64} = zeros(2,length(p)+length(u0))
-
+    search_region::Matrix{Float64} = zeros(2, length(p)+length(u0))
     #=
     # Default: 0.1 ~ 10x
     for (i,j) in enumerate(search_idx[1])
@@ -217,16 +189,54 @@ function get_search_region()::Matrix{Float64}
     search_region[:, C.nF31] = [1.00, 4.00]
     search_region[:, C.a] = [1.00e+2, 5.00e+2]
 
-    search_region = lin2log!(
-        search_idx,search_region,length(p),length(search_param)
+    search_region = conv_lin2log!(
+        search_region, search_idx, length(p), length(search_param)
     )
-    return search_region
 
+    return search_region
 end
 
 
-function lin2log!(search_idx::Tuple{Array{Int64,1},Array{Int64,1}}, search_region::Matrix{Float64},
-                    n_param_const::Int, n_search_param::Int)::Matrix{Float64}
+function init_search_param(search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
+                            p::Vector{Float64}, u0::Vector{Float64})::Vector{Float64}
+    search_param = zeros(
+        length(search_idx[1]) + length(search_idx[2])
+    )
+    for (i,j) in enumerate(search_idx[1])
+        @inbounds search_param[i] = p[j]
+    end
+    for (i,j) in enumerate(search_idx[2])
+        @inbounds search_param[i+length(search_idx[1])] = u0[j]
+    end
+
+    if any(x -> x == 0.0, search_param)
+        message::String = "search_param must not contain zero."
+        for (_, idx) in enumerate(search_idx[1])
+            if p[idx] == 0.0
+                error(
+                    @sprintf(
+                        "`C.%s` in search_idx_params: ", C.param_names[idx]
+                    ) * message
+                )
+            end
+        end
+        for (_, idx) in enumerate(search_idx[2])
+            if u0[idx] == 0.0
+                error(
+                    @sprintf(
+                        "`V.%s` in search_idx_initvars: ", V.var_names[idx]
+                    ) * message
+                )
+            end
+        end
+    end
+
+    return search_param
+end
+
+
+function conv_lin2log!(search_region::Matrix{Float64}, search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
+                        n_param_const::Int, n_search_param::Int)::Matrix{Float64}
     for i=1:size(search_region,2)
         if minimum(search_region[:,i]) < 0.0
             message = "search_region[lb,ub] must be positive.\n"
