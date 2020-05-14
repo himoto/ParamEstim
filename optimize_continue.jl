@@ -42,5 +42,7 @@ function optimize_continue(nth_param_set::Int64)
     end
 end
 
-###
-optimize_continue(parse(Int64,ARGS[1]))
+
+if abspath(PROGRAM_FILE) == @__FILE__
+    optimize_continue(parse(Int64,ARGS[1]))
+end

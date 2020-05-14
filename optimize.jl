@@ -43,5 +43,7 @@ function optimize(nth_param_set::Int64)
     )
 end
 
-###
-optimize(parse(Int64,ARGS[1]))
+
+if abspath(PROGRAM_FILE) == @__FILE__
+    optimize(parse(Int64,ARGS[1]))
+end
