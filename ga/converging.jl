@@ -57,10 +57,8 @@ function ENDX(parents::Matrix{Float64}, n_gene::Int64)::Vector{Float64}
     α::Float64 = sqrt((1.0-2.0*0.35^2.0))/2.0
     β::Float64 = 0.35/sqrt(n_gene-1)
 
-    p1::Vector{Float64} = parents[1,1:n_gene]
-    p2::Vector{Float64} = parents[2,1:n_gene]
-    t1::Vector{Float64} = (p2 - p1)./2.0
-    t2::Vector{Float64} = randn() * α * (p2 - p1)
+    t1::Vector{Float64} = (parents[2,1:n_gene] - parents[1,1:n_gene])./2.0
+    t2::Vector{Float64} = randn()*α*(parents[2,1:n_gene] - parents[1,1:n_gene])
     t3::Vector{Float64} = zeros(n_gene)
     centroid::Vector{Float64} = reshape(
         mean(parents[3:end,1:n_gene], dims=1), n_gene

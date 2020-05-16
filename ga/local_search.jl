@@ -55,7 +55,6 @@ function NDM(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     child::Vector{Float64} = zeros(n_gene+1)
     γ::Float64 = 0.35/sqrt(n_gene)
 
-    p1::Vector{Float64} = parents[1,1:n_gene]
     t2::Vector{Float64} = zeros(n_gene)
     centroid::Vector{Float64} = reshape(
         mean(parents[2:end,1:n_gene], dims=1), n_gene
@@ -66,7 +65,7 @@ function NDM(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     end
 
     for i in 1:n_gene
-        @inbounds child[i] = p1[i] + t2[i]
+        @inbounds child[i] = parents[1,i] + t2[i]
     end
 
     return child
