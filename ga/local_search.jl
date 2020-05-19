@@ -31,7 +31,7 @@ function localsearch!(ip::Vector{Int64}, population::Matrix{Float64}, n_populati
 
     population = sortslices(population, dims=1, by=x->x[end])
 
-    return ip,population
+    return ip, population
 end
 
 
@@ -53,7 +53,8 @@ end
 # Normal Distribution Mutation
 function NDM(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     child::Vector{Float64} = zeros(n_gene+1)
-    γ::Float64 = 0.35/sqrt(n_gene)
+
+    GAMMA::Float64 = 0.35/sqrt(n_gene)
 
     t2::Vector{Float64} = zeros(n_gene)
     centroid::Vector{Float64} = reshape(
@@ -61,7 +62,7 @@ function NDM(parents::Matrix{Float64},n_gene::Int64)::Vector{Float64}
     )
 
     for i in 1:n_gene+1
-        t2 += randn()*γ*(parents[i+1,1:n_gene] - centroid)
+        t2 += randn()*GAMMA*(parents[i+1,1:n_gene] - centroid)
     end
 
     for i in 1:n_gene
