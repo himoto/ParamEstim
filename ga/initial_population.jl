@@ -9,7 +9,7 @@ function get_initial_population(n_population::Int64, n_gene::Int64,
         Inf, (n_population, n_gene + 1)
     )
     for i = 1:n_population
-        while isinf(population[i,end]) || isnan(population[i,end])
+        while !isfinite(population[i,end])
             for j = 1:n_gene
                 population[i,j] = rand()
             end
@@ -52,7 +52,7 @@ function get_initial_population_continue(nthParamSet::Int64, n_population::Int64
         Inf, (n_population, n_gene + 1)
     )
     for i = 1:n_population
-        while isinf(population[i,end]) || isnan(population[i,end])
+        while !isfinite(population[i,end])
             for j = 1:n_gene
                 population[i,j] = encode_bestindiv2randgene(
                     j, best_indiv, search_region, p0_bounds
