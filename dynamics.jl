@@ -88,8 +88,6 @@ end
 
 function load_best_param!(paramset::Int,p::Vector{Float64},u0::Vector{Float64}
                             )::Tuple{Array{Float64,1},Array{Float64,1}}
-    search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
-
     if isfile("./fitparam/$paramset/generation.dat")
         best_generation::Int64 = readdlm(
             "./fitparam/$paramset/generation.dat"
