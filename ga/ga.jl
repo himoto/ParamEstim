@@ -11,6 +11,7 @@ export
     initial_values,
     search_parameter_index,
     get_search_region,
+    update_param!,
     simulate_all,
     ga_v1,
     ga_v1_continue,

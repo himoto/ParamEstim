@@ -48,29 +48,7 @@ function objective(individual_gene::Vector{Float64}, search_idx::Tuple{Array{Int
     
     indiv::Vector{Float64} = decode_gene2variable(individual_gene,search_region)
 
-    for (i,j) in enumerate(search_idx[1])
-        @inbounds p[j] = indiv[i]
-    end
-    for (i,j) in enumerate(search_idx[2])
-        @inbounds u0[j] = indiv[i+length(search_idx[1])]
-    end
-
-    # constraints --------------------------------------------------------------
-    p[C.V6] = p[C.V5]
-    p[C.Km6] = p[C.Km5]
-    p[C.KimpDUSP] = p[C.KimDUSP]
-    p[C.KexpDUSP] = p[C.KexDUSP]
-    p[C.KimpcFOS] = p[C.KimFOS]
-    p[C.KexpcFOS] = p[C.KexFOS]
-    p[C.p52] = p[C.p47]
-    p[C.m52] = p[C.m47]
-    p[C.p53] = p[C.p48]
-    p[C.p54] = p[C.p49]
-    p[C.m54] = p[C.m49]
-    p[C.p55] = p[C.p50]
-    p[C.p56] = p[C.p51]
-    p[C.m56] = p[C.m51]
-    # --------------------------------------------------------------------------
+    (p,u0) = update_param!(indiv,p,u0)
 
     if Sim.simulate!(p,u0) isa Nothing
         error::Vector{Float64} = zeros(length(observables))

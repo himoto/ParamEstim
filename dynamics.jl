@@ -86,8 +86,8 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
 end
 
 
-function update_param(paramset::Int,p::Vector{Float64},u0::Vector{Float64})
-
+function load_best_param!(paramset::Int,p::Vector{Float64},u0::Vector{Float64}
+                            )::Tuple{Array{Float64,1},Array{Float64,1}}
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
 
     if isfile("./fitparam/$paramset/generation.dat")
@@ -101,12 +101,7 @@ function update_param(paramset::Int,p::Vector{Float64},u0::Vector{Float64})
             )
         )[:,1]
 
-        for (i,j) in enumerate(search_idx[1])
-            @inbounds p[j] = best_indiv[i]
-        end
-        for (i,j) in enumerate(search_idx[2])
-            @inbounds u0[j] = best_indiv[i+length(search_idx[1])]
-        end
+        (p,u0) = update_param!(best_indiv,p,u0)
     end
 
     return p, u0
@@ -115,7 +110,7 @@ end
 
 function validate(nth_param_set::Int64,p::Vector{Float64},u0::Vector{Float64})
 
-    (p,u0) = update_param(nth_param_set,p,u0)
+    (p,u0) = load_best_param!(nth_param_set,p,u0)
 
     if Sim.simulate!(p,u0) isa Nothing
         return Sim, true
@@ -131,7 +126,7 @@ end
 
 
 function write_best_fit_param(best_param_set::Int,p::Vector{Float64},u0::Vector{Float64})
-    (p,u0) = update_param(best_param_set,p,u0)
+    (p,u0) = load_best_param!(best_param_set,p,u0)
     open("best_fit_param.txt","w") do f
         write(
             f,@sprintf(
