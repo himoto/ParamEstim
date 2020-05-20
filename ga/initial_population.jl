@@ -1,5 +1,4 @@
 function get_initial_population(n_population::Int64, n_gene::Int64,
-                                search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
                                 search_region::Matrix{Float64})::Matrix{Float64}
     println(
         "Generating the initial population...\n"
@@ -14,7 +13,7 @@ function get_initial_population(n_population::Int64, n_gene::Int64,
                 population[i,j] = rand()
             end
             population[i,end] = objective(
-                population[i,1:n_gene], search_idx, search_region
+                population[i,1:n_gene], search_region
             )
         end
         print(
@@ -34,8 +33,8 @@ end
 
 
 function get_initial_population_continue(nthParamSet::Int64, n_population::Int64, n_gene::Int64,
-                                            search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
-                                            search_region::Matrix{Float64}, p0_bounds::Vector{Float64})::Matrix{Float64}
+                                            search_region::Matrix{Float64},
+                                            p0_bounds::Vector{Float64})::Matrix{Float64}
     generation::Int64 = readdlm(
         "./fitparam/$nthParamSet/generation.dat"
     )[1,1]
@@ -64,7 +63,7 @@ function get_initial_population_continue(nthParamSet::Int64, n_population::Int64
                 end
             end
             population[i,end] = objective(
-                population[i,1:n_gene], search_idx, search_region
+                population[i,1:n_gene], search_region
             )
         end
         print(

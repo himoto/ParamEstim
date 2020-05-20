@@ -41,7 +41,7 @@ end
 
 
 # Define an objective function to be minimized.
-function objective(individual_gene::Vector{Float64}, search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
+function objective(individual_gene::Vector{Float64},
                     search_region::Matrix{Float64})::Float64
     p::Vector{Float64} = f_params()
     u0::Vector{Float64} = initial_values()
