@@ -125,7 +125,28 @@ end
 
 
 function write_best_fit_param(best_param_set::Int)
-    (p,u0) = load_best_param(best_param_set)
+    p::Vector{Float64} = f_params()
+    u0::Vector{Float64} = initial_values()
+
+    search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
+
+    best_generation::Int64 = readdlm(
+        "./fitparam/$best_param_set/generation.dat"
+    )[1,1]
+    best_indiv = readdlm(
+        @sprintf(
+            "./fitparam/%d/fit_param%d.dat",
+            best_param_set, best_generation
+        )
+    )[:,1]
+
+    for (i,j) in enumerate(search_idx[1])
+        @inbounds p[j] = best_indiv[i]
+    end
+    for (i,j) in enumerate(search_idx[2])
+        @inbounds u0[j] = best_indiv[i+length(search_idx[1])]
+    end
+
     open("best_fit_param.txt","w") do f
         write(
             f,@sprintf(
