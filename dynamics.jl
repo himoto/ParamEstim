@@ -159,7 +159,7 @@ end
 
 function save_param_range(n_file::Vector{Int},p::Vector{Float64},u0::Vector{Float64})
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
-    search_param_matrix::Matrix{Float64} = zeros(length(n_file),length(search_idx[1]))
+    popt::Matrix{Float64} = zeros(length(n_file),length(search_idx[1]))
 
     for (k,nth_param_set) in enumerate(n_file)
         local best_indiv::Vector{Float64}
@@ -184,23 +184,25 @@ function save_param_range(n_file::Vector{Int},p::Vector{Float64},u0::Vector{Floa
                 @inbounds best_indiv[i+length(search_idx[1])] = u0[j]
             end
         end
-        search_param_matrix[k,:] = best_indiv[1:length(search_idx[1])]
+        popt[k,:] = best_indiv[1:length(search_idx[1])]
     end
 
     # --------------------------------------------------------------------------
     # Seaborn.boxplot
 
-    fig = figure(figsize=(8,24))
+    fig = figure(figsize=(8,length(search_idx[1])/2.5))
+    # rcParams
     rc("font",family = "Arial")
     rc("font",size = 12)
     rc("axes",linewidth = 1)
+    # sns.despine
     gca().spines["right"].set_visible(false)
     gca().spines["top"].set_visible(false)
     gca().yaxis.set_ticks_position("left")
     gca().xaxis.set_ticks_position("bottom")
 
     ax = Seaborn.boxplot(
-        data=search_param_matrix,
+        data=popt,
         orient="h",
         linewidth=1,
         palette="Set2"
