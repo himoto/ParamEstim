@@ -197,8 +197,10 @@ function get_search_region()::Matrix{Float64}
 end
 
 
-function update_param!(indiv::Vector{Float64},p::Vector{Float64},u0::Vector{Float64}
-                        )::Tuple{Array{Float64,1},Array{Float64,1}}
+function update_param(indiv::Vector{Float64})::Tuple{Array{Float64,1},Array{Float64,1}}
+    p::Vector{Float64} = f_params()
+    u0::Vector{Float64} = initial_values()
+
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
 
     for (i,j) in enumerate(search_idx[1])

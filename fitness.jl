@@ -42,13 +42,10 @@ end
 
 # Define an objective function to be minimized.
 function objective(individual_gene::Vector{Float64},
-                    search_region::Matrix{Float64})::Float64
-    p::Vector{Float64} = f_params()
-    u0::Vector{Float64} = initial_values()
-    
+                    search_region::Matrix{Float64})::Float64    
     indiv::Vector{Float64} = decode_gene2variable(individual_gene,search_region)
 
-    (p,u0) = update_param!(indiv,p,u0)
+    (p,u0) = update_param(indiv)
 
     if Sim.simulate!(p,u0) isa Nothing
         error::Vector{Float64} = zeros(length(observables))
