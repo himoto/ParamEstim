@@ -182,20 +182,24 @@ end
 function save_param_range(n_file::Vector{Int})
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
     popt::Matrix{Float64} = zeros(length(n_file),length(search_idx[1]))
-
+    empty_folder::Vector{Int} = []
     for (k,nth_param_set) in enumerate(n_file)
-        best_generation::Int64 = readdlm(
-            "./fitparam/$nth_param_set/generation.dat"
-        )[1,1]
-        best_indiv = readdlm(
-            @sprintf(
-                "./fitparam/%d/fit_param%d.dat",
-                nth_param_set, best_generation
-            )
-        )[:,1]
-        popt[k,:] = best_indiv[1:length(search_idx[1])]
+        if !isfile("./fitparam/$nth_param_set/generation.dat")
+            push!(empty_folder,k)
+        else
+            best_generation::Int64 = readdlm(
+                "./fitparam/$nth_param_set/generation.dat"
+            )[1,1]
+            best_indiv = readdlm(
+                @sprintf(
+                    "./fitparam/%d/fit_param%d.dat",
+                    nth_param_set, best_generation
+                )
+            )[:,1]
+            popt[k,:] = best_indiv[1:length(search_idx[1])]
+        end
     end
-
+    popt = popt[setdiff(1:end,empty_folder),:]
     # --------------------------------------------------------------------------
     # Seaborn.boxplot
 
