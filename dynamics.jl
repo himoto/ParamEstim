@@ -14,13 +14,8 @@ end
 
 
 function load_param(paramset::Int)::Tuple{Array{Float64,1},Array{Float64,1}}
-    if isfile("./fitparam/$paramset/generation.dat")
-        best_indiv::Vector{Float64} = get_indiv(paramset)
-        (p,u0) = update_param(best_indiv)
-    else
-        p::Vector{Float64} = f_params()
-        u0::Vector{Float64} = initial_values()
-    end
+    best_indiv::Vector{Float64} = get_indiv(paramset)
+    (p,u0) = update_param(best_indiv)
 
     return p, u0
 end
@@ -171,11 +166,15 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
             viz_type = "best"
         end
         for (i,nth_param_set) in enumerate(n_file)
-            (Sim,successful) = validate(nth_param_set)
-            if successful
-                for j in eachindex(observables)
-                    @inbounds simulaitons_all[j,i,:,:] = Sim.simulations[j,:,:]
+            if isfile("./fitparam/$nth_paramset/generation.dat")
+                (Sim,successful) = validate(nth_param_set)
+                if successful
+                    for j in eachindex(observables)
+                        @inbounds simulaitons_all[j,i,:,:] = Sim.simulations[j,:,:]
+                    end
                 end
+            else
+                continue
             end
         end
 
