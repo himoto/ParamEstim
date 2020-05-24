@@ -166,7 +166,7 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
             viz_type = "best"
         end
         for (i,nth_param_set) in enumerate(n_file)
-            if isfile("./fitparam/$nth_paramset/generation.dat")
+            if isfile("./fitparam/$nth_param_set/generation.dat")
                 (Sim,successful) = validate(nth_param_set)
                 if successful
                     for j in eachindex(observables)
