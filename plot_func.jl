@@ -7,16 +7,20 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
     rc("figure",figsize = (4,3))
     rc("font",family = "Arial")
     rc("font",size = 20)
-    rc("axes",linewidth = 1.2)
-    rc("xtick.major",width = 1.2)
-    rc("ytick.major",width = 1.2)
-    rc("lines",linewidth = 2)
+    rc("axes",linewidth = 1.5)
+    rc("xtick.major",width = 1.5)
+    rc("ytick.major",width = 1.5)
+    rc("lines",linewidth = 1.5)
     rc("lines",markersize = 12)
 
     cmap = ["mediumblue","red"]
     shape = ["D","s"]
 
     for (i,name) in enumerate(observables)
+        gca().spines["right"].set_visible(false)
+        gca().spines["top"].set_visible(false)
+        gca().yaxis.set_ticks_position("left")
+        gca().xaxis.set_ticks_position("bottom")
         if show_all
             for j in eachindex(n_file)
                 for l in eachindex(Sim.conditions)
