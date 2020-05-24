@@ -29,7 +29,7 @@ function validate(nth_param_set::Int64)
         return Sim, true
     else
         print(
-            "Simulation failed.\nparameter_set #$nth_param_set"
+            "Simulation failed. #$nth_param_set\n"
         )
         return Sim, false
     end
