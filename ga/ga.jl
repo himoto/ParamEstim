@@ -9,7 +9,7 @@ export
     Exp,
     f_params,
     initial_values,
-    search_parameter_index,
+    get_search_index,
     get_search_region,
     update_param,
     simulate_all,
@@ -40,7 +40,7 @@ include("../simulation.jl")
 using .Sim
 
 include("../fitness.jl")
-include("../search_parameter.jl")
+include("../set_search_param.jl")
 include("../plot_func.jl")
 include("../dynamics.jl")
 

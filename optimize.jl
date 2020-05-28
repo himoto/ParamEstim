@@ -21,12 +21,12 @@ function optimize(nth_param_set::Int64)
         mkdir("./fitparam/$nth_param_set")
     end
 
-    search_region::Matrix{Float64} = get_search_region()
+    search_rgn::Matrix{Float64} = get_search_region()
 
     max_generation::Int64 = 10000
-    n_population::Int64 = 15*size(search_region, 2)
+    n_population::Int64 = 15*size(search_rgn, 2)
     n_children::Int64 = 50
-    n_gene::Int64 = size(search_region, 2)
+    n_gene::Int64 = size(search_rgn, 2)
     allowable_error::Float64 = 0.0
 
     (best_indiv, best_fitness) = ga_v2(
@@ -36,7 +36,7 @@ function optimize(nth_param_set::Int64)
         n_children,
         n_gene,
         allowable_error,
-        search_region
+        search_rgn
     )
 end
 

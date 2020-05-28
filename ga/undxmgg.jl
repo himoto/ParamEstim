@@ -1,6 +1,6 @@
 # Minimal Generation Gap selection for UNDX
 function mgg_alternation!(population::Matrix{Float64}, n_population::Int64, n_children::Int64,
-                            n_gene::Int64, search_region::Matrix{Float64})::Matrix{Float64}
+                            n_gene::Int64, search_rgn::Matrix{Float64})::Matrix{Float64}
     idx::Vector{Int64} = randperm(n_population)
     ip::Vector{Int64} = zeros(3)
     ip[1] = idx[1]
@@ -10,7 +10,7 @@ function mgg_alternation!(population::Matrix{Float64}, n_population::Int64, n_ch
     for i in 1:n_children
         ip[3] = rand(idx[3:end])
         children[i,:] = get_new_child(
-            population[ip,:], n_gene, search_region
+            population[ip,:], n_gene, search_rgn
         )
     end
 
@@ -37,7 +37,7 @@ end
 
 
 function get_new_child(parents::Matrix{Float64}, n_gene::Int64,
-                        search_region::Matrix{Float64})::Vector{Float64}
+                        search_rgn::Matrix{Float64})::Vector{Float64}
     #=
     local child::Vector{Float64}
     MAXITER::Int8 = typemax(Int8)
@@ -62,7 +62,7 @@ function get_new_child(parents::Matrix{Float64}, n_gene::Int64,
     end
     
     child[end] = objective(
-        child[1:n_gene], search_region
+        child[1:n_gene], search_rgn
     )
 
     return child

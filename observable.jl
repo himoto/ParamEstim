@@ -7,7 +7,7 @@ const observables = [
     "cfos_mRNA"
     "cFos_Protein"
     "Phosphorylated_cFos"
-];
+]
 
 function observables_index(observable_name::String)::Int
 

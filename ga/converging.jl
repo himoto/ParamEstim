@@ -1,5 +1,5 @@
 function converging!(ip::Vector{Int64}, population::Matrix{Float64}, n_population::Int64,
-                        n_gene::Int64, search_region::Matrix{Float64})::Tuple{Array{Int64,1},Array{Float64,2}}
+                        n_gene::Int64, search_rgn::Matrix{Float64})::Tuple{Array{Int64,1},Array{Float64,2}}
     n_children::Int8 = 10
     children::Matrix{Float64} = zeros(n_children, n_gene+1)
     for i in 1:n_children
@@ -28,7 +28,7 @@ function converging!(ip::Vector{Int64}, population::Matrix{Float64}, n_populatio
 
     if !isfinite(population[ip[2],end])
         population[ip[2],end] = objective(
-            population[ip[2],1:n_gene],search_region
+            population[ip[2],1:n_gene],search_rgn
         )
     end
 
