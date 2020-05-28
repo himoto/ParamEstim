@@ -40,6 +40,22 @@ function diff_sim_and_exp(sim_matrix::Matrix{Float64},exp_dict::Dict{String,Arra
 end
 
 
+function decode_gene2variable(individual_gene::Vector{Float64},
+                                search_rgn::Matrix{Float64})::Vector{Float64}
+    indiv_var::Vector{Float64} = zeros(length(individual_gene))
+
+    @simd for i in eachindex(individual_gene)
+        @inbounds indiv_var[i] = 10^(
+            individual_gene[i]*(
+                search_rgn[2,i] - search_rgn[1,i]
+            ) + search_rgn[1,i]
+        )
+    end
+
+    return round.(indiv_var,sigdigits=7)
+end
+
+
 # Define an objective function to be minimized.
 function objective(individual_gene::Vector{Float64},
                     search_region::Matrix{Float64})::Float64    

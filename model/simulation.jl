@@ -1,6 +1,11 @@
 module Sim
+include("./name2idx/parameters.jl")
+include("./name2idx/variables.jl")
+include("./set_model.jl")
 include("./observable.jl")
-using ..Model
+
+using .C
+using .V
 
 using Sundials
 # using SteadyStateDiffEq
