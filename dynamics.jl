@@ -42,7 +42,7 @@ function write_best_fit_param(best_param_set::Int)
     p::Vector{Float64} = f_params()
     u0::Vector{Float64} = initial_values()
 
-    search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
+    search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = get_search_index()
 
     best_indiv::Vector{Float64} = get_indiv(best_param_set)
 
@@ -86,7 +86,7 @@ end
 
 
 function save_param_range(n_file::Vector{Int})
-    search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = search_parameter_index()
+    search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = get_search_index()
     popt::Matrix{Float64} = zeros(length(n_file),length(search_idx[1]))
     empty_folder::Vector{Int} = []
     for (k,nth_param_set) in enumerate(n_file)
