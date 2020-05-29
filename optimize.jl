@@ -35,8 +35,7 @@ function optimize(nth_param_set::Int64)
         n_population,
         n_children,
         n_gene,
-        allowable_error,
-        search_rgn
+        allowable_error
     )
 end
 

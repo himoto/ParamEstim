@@ -1,5 +1,5 @@
 function localsearch!(ip::Vector{Int64}, population::Matrix{Float64}, n_population::Int64, n_children::Int64,
-                        n_gene::Int64,search_rgn::Matrix{Float64})::Tuple{Array{Int64,1},Array{Float64,2}}
+                        n_gene::Int64)::Tuple{Array{Int64,1},Array{Float64,2}}
     idx::BitArray{1} = trues(n_population)
     idx[ip[1]] = false
 
@@ -10,7 +10,7 @@ function localsearch!(ip::Vector{Int64}, population::Matrix{Float64}, n_populati
             collect(1:n_population)[idx], n_gene+1, replace=false
         )
         children[i,:] = mutation(
-            population[ip,:], n_gene, search_rgn
+            population[ip,:], n_gene
         )
     end
 
@@ -34,15 +34,14 @@ function localsearch!(ip::Vector{Int64}, population::Matrix{Float64}, n_populati
 end
 
 
-function mutation(parents::Matrix{Float64}, n_gene::Int64,
-                    search_rgn::Matrix{Float64})::Vector{Float64}
+function mutation(parents::Matrix{Float64}, n_gene::Int64)::Vector{Float64}
     child::Vector{Float64} = NDM(parents, n_gene)
     for i in 1:n_gene
         @inbounds child[i] = clamp(child[i], 0.0, 1.0)
     end
 
     child[end] = objective(
-        child[1:n_gene], search_rgn
+        child[1:n_gene]
     )
 
     return child

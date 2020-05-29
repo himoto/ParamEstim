@@ -1,7 +1,7 @@
 function ga_v1(nth_param_set::Int64, max_generation::Int64, n_population::Int64, n_children::Int64,
-                n_gene::Int64, allowable_error::Float64, search_rgn::Matrix{Float64})::Tuple{Array{Float64,1},Float64}
+                n_gene::Int64, allowable_error::Float64)::Tuple{Array{Float64,1},Float64}
     population = get_initial_population(
-        n_population,n_gene,search_rgn
+        n_population,n_gene
     )
     print(
         @sprintf(
@@ -11,7 +11,7 @@ function ga_v1(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
     flush(stdout)
 
     best_indiv = decode_gene2variable(
-        population[1,1:n_gene], search_rgn
+        population[1,1:n_gene]
     )
     best_fitness = population[1,end]
 
@@ -45,7 +45,7 @@ function ga_v1(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
 
     if population[1,end] <= allowable_error
         best_indiv = decode_gene2variable(
-            population[1,1:n_gene], search_rgn
+            population[1,1:n_gene]
         )
         best_fitness = population[1,end]
         return best_indiv,best_fitness
@@ -54,7 +54,7 @@ function ga_v1(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
     generation::Int64 = 2
     while generation < max_generation
         population = mgg_alternation!(
-            population,n_population,n_children,n_gene,search_rgn
+            population,n_population,n_children,n_gene
         )
         print(
             @sprintf(
@@ -63,7 +63,7 @@ function ga_v1(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
         )
         flush(stdout)
         best_indiv = decode_gene2variable(
-            population[1,1:n_gene], search_rgn
+            population[1,1:n_gene]
         )
         if population[1,end] < best_fitness
             f = open(
@@ -97,7 +97,7 @@ function ga_v1(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
 
         if population[1,end] <= allowable_error
             best_indiv = decode_gene2variable(
-                population[1,1:n_gene], search_rgn
+                population[1,1:n_gene]
             )
             best_fitness = population[1,end]
             return best_indiv,best_fitness
@@ -113,7 +113,7 @@ function ga_v1(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
         generation += 1
     end
     best_indiv = decode_gene2variable(
-        population[1,1:n_gene], search_rgn
+        population[1,1:n_gene]
     )
     best_fitness = population[1,end]
 
@@ -122,7 +122,7 @@ end
 
 
 function ga_v1_continue(nth_param_set::Int64, max_generation::Int64, n_population::Int64, n_children::Int64,
-                        n_gene::Int64, allowable_error::Float64, search_rgn::Matrix{Float64},
+                        n_gene::Int64, allowable_error::Float64,
                         p0_bounds::Vector{Float64})::Tuple{Array{Float64,1},Float64}
     count::Int64 = readdlm(
         "./fitparam/$nth_param_set/count_num.dat"
@@ -136,24 +136,23 @@ function ga_v1_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
         )
     )[:,1]
     best_fitness::Float64 = objective(
-        (log10.(best_indiv) .- search_rgn[1,:])./(search_rgn[2,:] .- search_rgn[1,:]),
-        search_rgn
+        encode_variable2gene(
+            best_indiv
+        )
     )
 
     population = get_initial_population_continue(
-        nth_param_set,n_population,n_gene,search_rgn,p0_bounds
+        nth_param_set,n_population,n_gene,p0_bounds
     )
     if best_fitness < population[1,end]
+        best_indiv_gene::Vector{Float64} = encode_variable2gene(best_indiv)
         for i=1:n_gene
-            population[1,i] = (
-                (log10(best_indiv[i])-search_rgn[1,i]) / 
-                (search_rgn[2,i]-search_rgn[1,i])
-            )
+            @inbounds population[1,i] = best_indiv_gene[i]
         end
         population[1,end] = best_fitness
     else
         best_indiv = decode_gene2variable(
-            population[1,1:n_gene], search_rgn
+            population[1,1:n_gene]
         )
         best_fitness = population[1,end]
         open("./fitparam/$nth_param_set/fit_param$count.dat", "w") do f
@@ -176,7 +175,7 @@ function ga_v1_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
 
     if population[1,end] <= allowable_error
         best_indiv = decode_gene2variable(
-            population[1,1:n_gene], search_rgn
+            population[1,1:n_gene]
         )
         best_fitness = population[1,end]
         return best_indiv,best_fitness
@@ -185,7 +184,7 @@ function ga_v1_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
     generation::Int64 = 2
     while generation < max_generation
         population = mgg_alternation!(
-            population,n_population,n_children,n_gene,search_rgn
+            population,n_population,n_children,n_gene
         )
         print(
             @sprintf(
@@ -194,7 +193,7 @@ function ga_v1_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
         )
         flush(stdout)
         best_indiv = decode_gene2variable(
-            population[1,1:n_gene], search_rgn
+            population[1,1:n_gene]
         )
         if population[1,end] < best_fitness
             f = open(
@@ -231,7 +230,7 @@ function ga_v1_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
 
         if population[1,end] <= allowable_error
             best_indiv = decode_gene2variable(
-                population[1,1:n_gene], search_rgn
+                population[1,1:n_gene]
             )
             best_fitness = population[1,end]
             return best_indiv,best_fitness
@@ -247,7 +246,7 @@ function ga_v1_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
         generation += 1
     end
     best_indiv = decode_gene2variable(
-        population[1,1:n_gene], search_rgn
+        population[1,1:n_gene]
     )
     best_fitness = population[1,end]
 

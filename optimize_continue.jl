@@ -21,8 +21,7 @@ function optimize_continue(nth_param_set::Int64)
             n_population,
             n_children,
             n_gene,
-            allowable_error,
-            search_rgn
+            allowable_error
         )
     else
         (best_indiv, best_fitness) = ga_v2_continue(
@@ -32,7 +31,6 @@ function optimize_continue(nth_param_set::Int64)
             n_children,
             n_gene,
             allowable_error,
-            search_rgn,
             p0_bounds
         )
     end
