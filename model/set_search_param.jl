@@ -230,6 +230,54 @@ function update_param(indiv::Vector{Float64})::Tuple{Array{Float64,1},Array{Floa
     return p, u0
 end
 
+
+function decode_gene2variable(indiv_gene::Vector{Float64})::Vector{Float64}
+    search_rgn::Matrix{Float64} = get_search_region()
+    indiv_var::Vector{Float64} = zeros(length(indiv_gene))
+
+    for i in eachindex(indiv_gene)
+        indiv_var[i] = 10^(
+            indiv_gene[i] * (
+                search_rgn[2,i] - search_rgn[1,i]
+            ) + search_rgn[1,i]
+        )
+    end
+
+    return round.(indiv_var,sigdigits=7)
+end
+
+
+function encode_variable2gene(indiv::Vector{Float64})
+    search_rgn::Matrix{Float64} = get_search_region()
+    indiv_gene::Vector{Float64} = zeros(length(indiv))
+    
+    for i in eachindex(indiv)
+        indiv_gene[i] = (
+            log10(indiv[i]) - search_rgn[1,i]
+        ) / (
+            search_rgn[2,i] - search_rgn[1,i]
+        )
+    end
+
+    return indiv_gene
+end
+    
+function encode_bestindiv2randgene(j::Int64, best_indiv::Vector{Float64}, 
+                                    p0_bounds::Vector{Float64})::Float64
+    search_rgn::Matrix{Float64} = get_search_region()
+    rand_gene::Float64 = (
+        log10(
+            best_indiv[j]*10^(
+                rand() * log10(p0_bounds[2]/p0_bounds[1]) + log10(p0_bounds[1])
+            )
+        ) - search_rgn[1,j]
+    ) / (
+        search_rgn[2,j] - search_rgn[1,j]
+    )
+
+    return rand_gene
+end
+
 function init_search_param(search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
                             p::Vector{Float64}, u0::Vector{Float64})::Vector{Float64}
     search_param = zeros(
