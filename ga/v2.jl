@@ -20,7 +20,7 @@ function ga_v2(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
     )
     flush(stdout)
 
-    best_indiv = decode_gene2variable(
+    best_indiv = decode_gene2val(
         population[1,1:n_gene]
     )
     best_fitness = population[1,end]
@@ -54,7 +54,7 @@ function ga_v2(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
     end
 
     if population[1,end] <= allowable_error
-        best_indiv = decode_gene2variable(
+        best_indiv = decode_gene2val(
             population[1,1:n_gene]
         )
         best_fitness = population[1,end]
@@ -96,7 +96,7 @@ function ga_v2(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
             )
         )
         flush(stdout)
-        best_indiv = decode_gene2variable(
+        best_indiv = decode_gene2val(
             population[1,1:n_gene]
         )
         if population[1,end] < best_fitness
@@ -131,7 +131,7 @@ function ga_v2(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
         end
 
         if population[1,end] <= allowable_error
-            best_indiv = decode_gene2variable(
+            best_indiv = decode_gene2val(
                 population[1,1:n_gene]
             )
             best_fitness = population[1,end]
@@ -147,7 +147,7 @@ function ga_v2(nth_param_set::Int64, max_generation::Int64, n_population::Int64,
         end
         generation += 1
     end
-    best_indiv = decode_gene2variable(
+    best_indiv = decode_gene2val(
         population[1,1:n_gene]
     )
     best_fitness = population[1,end]
@@ -180,7 +180,7 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
         )
     )[:,1]
     best_fitness::Float64 = objective(
-        encode_variable2gene(
+        encode_val2gene(
             best_indiv
         )
     )
@@ -189,13 +189,13 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
         nth_param_set,n_population,n_gene,p0_bounds
     )
     if best_fitness < population[1,end]
-        best_indiv_gene::Vector{Float64} = encode_variable2gene(best_indiv)
+        best_indiv_gene::Vector{Float64} = encode_val2gene(best_indiv)
         for i=1:n_gene
             @inbounds population[1,i] = best_indiv_gene[i]
         end
         population[1,end] = best_fitness
     else
-        best_indiv = decode_gene2variable(
+        best_indiv = decode_gene2val(
             population[1,1:n_gene]
         )
         best_fitness = population[1,end]
@@ -220,7 +220,7 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
     flush(stdout)
 
     if population[1,end] <= allowable_error
-        best_indiv = decode_gene2variable(
+        best_indiv = decode_gene2val(
             population[1,1:n_gene]
         )
         best_fitness = population[1,end]
@@ -262,7 +262,7 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
             )
         )
         flush(stdout)
-        best_indiv = decode_gene2variable(
+        best_indiv = decode_gene2val(
             population[1,1:n_gene]
         )
         if population[1,end] < best_fitness
@@ -299,7 +299,7 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
         end
 
         if population[1,end] <= allowable_error
-            best_indiv = decode_gene2variable(
+            best_indiv = decode_gene2val(
                 population[1,1:n_gene]
             )
             best_fitness = population[1,end]
@@ -315,7 +315,7 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64, n_populatio
         end
         generation += 1
     end
-    best_indiv = decode_gene2variable(
+    best_indiv = decode_gene2val(
         population[1,1:n_gene]
     )
     best_fitness = population[1,end]

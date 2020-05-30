@@ -51,7 +51,7 @@ function get_initial_population_continue(nth_param_set::Int64, n_population::Int
     for i = 1:n_population
         while !isfinite(population[i,end])
             for j = 1:n_gene
-                population[i,j] = encode_bestindiv2randgene(
+                population[i,j] = encode_bestIndivVal2randGene(
                     j, best_indiv, p0_bounds
                 )
                 if population[i,j] > 1.0
