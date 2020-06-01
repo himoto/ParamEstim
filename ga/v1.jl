@@ -2,9 +2,9 @@ function ga_v1(nth_param_set::Int64, max_generation::Int64,
                 n_population::Int64, n_children::Int64, n_gene::Int64,
                 allowable_error::Float64)::Tuple{Array{Float64, 1}, Float64}
     population = get_initial_population(n_population, n_gene)
-    print(
+    println(
         @sprintf(
-            "Generation%d: Best Fitness = %.6e\n", 1, population[1, end]
+            "Generation%d: Best Fitness = %.6e", 1, population[1, end]
         )
     )
     flush(stdout)
@@ -38,9 +38,9 @@ function ga_v1(nth_param_set::Int64, max_generation::Int64,
     generation::Int64 = 2
     while generation < max_generation
         population = mgg_alternation!(population, n_population, n_children, n_gene)
-        print(
+        println(
             @sprintf(
-                "Generation%d: Best Fitness = %.6e\n", generation, population[1, end]
+                "Generation%d: Best Fitness = %.6e", generation, population[1, end]
             )
         )
         flush(stdout)
@@ -120,9 +120,9 @@ function ga_v1_continue(nth_param_set::Int64, max_generation::Int64,
         end
     end
 
-    print(
+    println(
         @sprintf(
-            "Generation%d: Best Fitness = %.6e\n", count+1, population[1, end]
+            "Generation%d: Best Fitness = %.6e", count+1, population[1, end]
         )
     )
     flush(stdout)
@@ -137,9 +137,9 @@ function ga_v1_continue(nth_param_set::Int64, max_generation::Int64,
     generation::Int64 = 2
     while generation < max_generation
         population = mgg_alternation!(population, n_population, n_children, n_gene)
-        print(
+        println(
             @sprintf(
-                "Generation%d: Best Fitness = %.6e\n", generation + count, population[1, end]
+                "Generation%d: Best Fitness = %.6e", generation + count, population[1, end]
             )
         )
         flush(stdout)

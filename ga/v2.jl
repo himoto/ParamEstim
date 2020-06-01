@@ -10,9 +10,9 @@ function ga_v2(nth_param_set::Int64, max_generation::Int64,
 
     population = get_initial_population(n_population, n_gene)
     N0[1] = population[1, end]
-    print(
+    println(
         @sprintf(
-            "Generation%d: Best Fitness = %.6e\n", 1, population[1, end]
+            "Generation%d: Best Fitness = %.6e", 1, population[1, end]
         )
     )
     flush(stdout)
@@ -49,7 +49,7 @@ function ga_v2(nth_param_set::Int64, max_generation::Int64,
         if N_iter > 1
             for _ in 1:N_iter
                 ip = randperm(n_population)[1:n_gene+2]
-                ip, population = converging!(ip, population, n_population, n_gene)
+                _, population = converging!(ip, population, n_population, n_gene)
             end
         end
 
@@ -64,9 +64,9 @@ function ga_v2(nth_param_set::Int64, max_generation::Int64,
             N0[generation%length(N0)] = population[1, end]
         end
 
-        print(
+        println(
             @sprintf(
-                "Generation%d: Best Fitness = %.6e\n", generation, population[1, end]
+                "Generation%d: Best Fitness = %.6e", generation, population[1, end]
             )
         )
         flush(stdout)
@@ -156,9 +156,9 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64,
 
     N0[1] = population[1, end]
 
-    print(
+    println(
         @sprintf(
-            "Generation%d: Best Fitness = %.6e\n", count + 1, population[1, end]
+            "Generation%d: Best Fitness = %.6e", count + 1, population[1, end]
         )
     )
     flush(stdout)
@@ -178,7 +178,7 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64,
         if N_iter > 1
             for _ in 1:N_iter
                 ip = randperm(n_population)[1:n_gene+2]
-                ip, population = converging!(ip, population, n_population, n_gene)
+                _, population = converging!(ip, population, n_population, n_gene)
             end
         end
 
@@ -193,9 +193,9 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64,
             N0[generation%length(N0)] = population[1, end]
         end
 
-        print(
+        println(
             @sprintf(
-                "Generation%d: Best Fitness = %.6e\n", generation + count, population[1, end]
+                "Generation%d: Best Fitness = %.6e", generation + count, population[1, end]
             )
         )
         flush(stdout)

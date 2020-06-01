@@ -15,15 +15,15 @@ function get_initial_population(n_population::Int64, n_gene::Int64)::Matrix{Floa
                 population[i,1:n_gene]
             )
         end
-        print(
+        println(
             @sprintf(
-                "%d / %d\n", i, n_population
+                "%d / %d", i, n_population
             )
         )
         flush(stdout)
     end
-    print(
-        "\n----------------------------------------\n\n"
+    println(
+        "\n----------------------------------------\n"
     )
     population = sortslices(population, dims = 1, by = x->x[end])
 
@@ -64,15 +64,15 @@ function get_initial_population_continue(nth_param_set::Int64, n_population::Int
                 population[i,1:n_gene]
             )
         end
-        print(
+        println(
             @sprintf(
-                "%d / %d\n", i, n_population
+                "%d / %d", i, n_population
             )
         )
         flush(stdout)
     end
-    print(
-        "\n----------------------------------------\n\n"
+    println(
+        "\n----------------------------------------\n"
     )
     population = sortslices(population, dims = 1, by = x->x[end])
 
