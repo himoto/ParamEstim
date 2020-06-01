@@ -44,12 +44,12 @@ function ga_v2(nth_param_set::Int64, max_generation::Int64,
     generation::Int64 = 2
     while generation <= max_generation
         ip = randperm(n_population)[1:n_gene+2]
-        ip, population = converging!(ip, population, n_population, n_gene)
-        ip, population = localsearch!(ip, population, n_population, n_children, n_gene)
+        population = converging!(ip, population, n_population, n_gene)
+        population = local_search!(ip, population, n_population, n_children, n_gene)
         if N_iter > 1
             for _ in 1:N_iter
                 ip = randperm(n_population)[1:n_gene+2]
-                _, population = converging!(ip, population, n_population, n_gene)
+                population = converging!(ip, population, n_population, n_gene)
             end
         end
 
@@ -173,12 +173,12 @@ function ga_v2_continue(nth_param_set::Int64, max_generation::Int64,
     generation::Int64 = 2
     while generation <= max_generation
         ip = randperm(n_population)[1:n_gene+2]
-        ip, population = converging!(ip, population, n_population, n_gene)
-        ip, population = localsearch!(ip, population, n_population, n_children, n_gene)
+        population = converging!(ip, population, n_population, n_gene)
+        population = local_search!(ip, population, n_population, n_children, n_gene)
         if N_iter > 1
             for _ in 1:N_iter
                 ip = randperm(n_population)[1:n_gene+2]
-                _, population = converging!(ip, population, n_population, n_gene)
+                population = converging!(ip, population, n_population, n_gene)
             end
         end
 

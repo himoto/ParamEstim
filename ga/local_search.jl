@@ -1,5 +1,5 @@
-function localsearch!(ip::Vector{Int64}, population::Matrix{Float64}, n_population::Int64, n_children::Int64,
-                        n_gene::Int64)::Tuple{Array{Int64,1},Array{Float64,2}}
+function local_search!(ip::Vector{Int64}, population::Matrix{Float64},
+                        n_population::Int64, n_children::Int64, n_gene::Int64)::Matrix{Float64}
     idx::BitArray{1} = trues(n_population)
     idx[ip[1]] = false
 
@@ -30,7 +30,7 @@ function localsearch!(ip::Vector{Int64}, population::Matrix{Float64}, n_populati
 
     population = sortslices(population, dims=1, by=x->x[end])
 
-    return ip, population
+    return population
 end
 
 
