@@ -10,7 +10,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
     rc("axes",linewidth = 1.5)
     rc("xtick.major",width = 1.5)
     rc("ytick.major",width = 1.5)
-    rc("lines",linewidth = 1.5)
+    rc("lines",linewidth = 1.8)
     rc("lines",markersize = 12)
 
     cmap = ["mediumblue","red"]
@@ -96,8 +96,11 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
                             markeredgecolor=cmap[l],ecolor=cmap[l],
                             fmt=shape[l],capsize=8,clip_on=false
                         )
-                        for marker in exp_data[2]
-                            marker.set_clip_on(false)
+                        for capline in exp_data[2]
+                            capline.set_clip_on(false)
+                        end
+                        for barlinecol in exp_data[3]
+                            barlinecol.set_clip_on(false)
                         end
                     end
                 end
