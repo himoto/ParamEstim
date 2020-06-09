@@ -7,7 +7,7 @@ export
     observables_index,
     Sim,
     Exp,
-    f_params,
+    param_values,
     initial_values,
     objective,
     get_search_index,

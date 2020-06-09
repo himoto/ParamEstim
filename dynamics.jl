@@ -39,7 +39,7 @@ end
 
 
 function write_best_fit_param(best_param_set::Int)
-    p::Vector{Float64} = f_params()
+    p::Vector{Float64} = param_values()
     u0::Vector{Float64} = initial_values()
 
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = get_search_index()
@@ -206,7 +206,7 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
             save_param_range(n_file)
         end
     else
-        p::Vector{Float64} = f_params()
+        p::Vector{Float64} = param_values()
         u0::Vector{Float64} = initial_values()
         if Sim.simulate!(p,u0) !== nothing
             error(

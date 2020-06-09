@@ -89,7 +89,7 @@ end
 
 
 function get_search_region()::Matrix{Float64}
-    p::Vector{Float64} = f_params()
+    p::Vector{Float64} = param_values()
     u0::Vector{Float64} = initial_values()
 
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = get_search_index()
@@ -198,7 +198,7 @@ end
 
 
 function update_param(indiv::Vector{Float64})::Tuple{Array{Float64,1},Array{Float64,1}}
-    p::Vector{Float64} = f_params()
+    p::Vector{Float64} = param_values()
     u0::Vector{Float64} = initial_values()
 
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = get_search_index()

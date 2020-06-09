@@ -147,7 +147,7 @@ function diffeq(du,u,p,t)
 end
 
 
-function f_params()::Vector{Float64}
+function param_values()::Vector{Float64}
     p::Vector{Float64} = zeros(C.len_f_params)
 
     p[C.V1] = 0.34284837
