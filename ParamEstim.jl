@@ -33,7 +33,7 @@ using PyPlot
 import Seaborn
 
 include("model/name2idx/parameters.jl")
-include("model/name2idx/variables.jl")
+include("model/name2idx/species.jl")
 include("model/set_model.jl")
 include("model/observable.jl")
 include("model/experimental_data.jl")

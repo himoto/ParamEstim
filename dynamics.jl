@@ -62,21 +62,21 @@ function write_best_fit_param(best_param_set::Int)
         write(
             f,"\n### Param const\n"
         )
-        for i=1:C.len_f_params
+        for i=1:C.n_parameters
             write(
                 f,@sprintf(
-                    "p[C.%s] = %e\n", C.param_names[i],p[i]
+                    "p[C.%s] = %e\n", C.parameters[i],p[i]
                 )
             )
         end
         write(
             f,"\n### Non-zero initial conditions\n"
         )
-        for i=1:V.len_f_vars
+        for i=1:V.n_species
             if u0[i] != 0.0
                 write(
                     f,@sprintf(
-                        "u0[V.%s] = %e\n", V.var_names[i],u0[i]
+                        "u0[V.%s] = %e\n", V.species[i],u0[i]
                     )
                 )
             end
@@ -121,7 +121,7 @@ function save_param_range(n_file::Vector{Int})
 
     ax.set_xlabel("Parameter value")
     ax.set_ylabel("")
-    ax.set_yticklabels([C.param_names[i] for i in search_idx[1]])
+    ax.set_yticklabels([C.parameters[i] for i in search_idx[1]])
     ax.set_xscale("log")
 
     savefig("./figure/param_range.pdf",bbox_inches="tight")

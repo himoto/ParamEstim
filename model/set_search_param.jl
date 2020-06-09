@@ -80,11 +80,11 @@ function get_search_index()::Tuple{Array{Int64,1},Array{Int64,1}}
     ]
 
     # initial values
-    search_idx_initvars::Vector{Int} = [
+    search_idx_initials::Vector{Int} = [
         # V.(variableName)
     ]
 
-    return search_idx_params, search_idx_initvars
+    return search_idx_params, search_idx_initials
 end
 
 
@@ -189,9 +189,7 @@ function get_search_region()::Matrix{Float64}
     search_rgn[:, C.nF31] = [1.00, 4.00]
     search_rgn[:, C.a] = [1.00e+2, 5.00e+2]
 
-    search_rgn = conv_lin2log!(
-        search_rgn, search_idx, length(p), length(search_param)
-    )
+    search_rgn = conv_lin2log!(search_rgn, search_idx)
 
     return search_rgn
 end
@@ -298,7 +296,7 @@ function init_search_param(search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
             if p[idx] == 0.0
                 error(
                     @sprintf(
-                        "`C.%s` in search_idx_params: ", C.param_names[idx]
+                        "`C.%s` in search_idx_params: ", C.parameters[idx]
                     ) * message
                 )
             end
@@ -307,7 +305,7 @@ function init_search_param(search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
             if u0[idx] == 0.0
                 error(
                     @sprintf(
-                        "`V.%s` in search_idx_initvars: ", V.var_names[idx]
+                        "`V.%s` in search_idx_initials: ", V.species[idx]
                     ) * message
                 )
             end
@@ -318,51 +316,52 @@ function init_search_param(search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
 end
 
 
-function conv_lin2log!(search_rgn::Matrix{Float64}, search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
-                        n_param_const::Int, n_search_param::Int)::Matrix{Float64}
+function conv_lin2log!(search_rgn::Matrix{Float64},
+                        search_idx::Tuple{Array{Int64,1},Array{Int64,1}}
+                        )::Matrix{Float64}
     for i=1:size(search_rgn,2)
         if minimum(search_rgn[:,i]) < 0.0
             message = "search_rgn[lb,ub] must be positive.\n"
-            if i <= n_param_const
+            if i <= C.n_parameters
                 error(
                     @sprintf(
-                        "`C.%s` ", C.param_names[i]
+                        "`C.%s` ", C.parameters[i]
                     ) * message
                 )
             else
                 error(
                     @sprintf(
-                        "`V.%s` ", V.var_names[i-n_param_const]
+                        "`V.%s` ", V.species[i-C.n_parameters]
                     ) * message
                 )
             end
         elseif minimum(search_rgn[:,i]) == 0.0 && maximum(search_rgn[:,i]) != 0.0
             message = "lower_bound must be larger than 0.\n"
-            if i <= n_param_const
+            if i <= C.n_parameters
                 error(
                     @sprintf(
-                        "`C.%s` ", C.param_names[i]
+                        "`C.%s` ", C.parameters[i]
                     ) * message
                 )
             else
                 error(
                     @sprintf(
-                        "`V.%s` ", V.var_names[i-n_param_const]
+                        "`V.%s` ", V.species[i-C.n_parameters]
                     ) * message
                 )
             end
         elseif search_rgn[2,i] - search_rgn[1,i] < 0.0
             message = "lower_bound < upper_bound\n"
-            if i <= n_param_const
+            if i <= C.n_parameters
                 error(
                     @sprintf(
-                        "`C.%s` ", C.param_names[i]
+                        "`C.%s` ", C.parameters[i]
                     ) * message
                 )
             else
                 error(
                     @sprintf(
-                        "`V.%s` ", V.var_names[i-n_param_const]
+                        "`V.%s` ", V.species[i-C.n_parameters]
                     ) * message
                 )
             end
@@ -380,23 +379,23 @@ function conv_lin2log!(search_rgn::Matrix{Float64}, search_idx::Tuple{Array{Int6
             Set(nonzero_idx),
             Set(
                 append!(
-                    search_idx[1], n_param_const .+ search_idx[2]
+                    search_idx[1], C.n_parameters .+ search_idx[2]
                 )
             )
         )
     )
     if length(difference) > 0
         for (i,j) in enumerate(difference)
-            if j <= n_param_const
+            if j <= C.n_parameters
                 print(
                     @sprintf(
-                        "`C.%s`\n", C.param_names[Int(j)]
+                        "`C.%s`\n", C.parameters[Int(j)]
                     )
                 )
             else
                 print(
                     @sprintf(
-                        "`V.%s`\n", V.var_names[Int(j)-n_param_const]
+                        "`V.%s`\n", V.species[Int(j)-C.n_parameters]
                     )
                 )
             end

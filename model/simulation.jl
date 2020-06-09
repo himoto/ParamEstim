@@ -1,6 +1,6 @@
 module Sim
 include("./name2idx/parameters.jl")
-include("./name2idx/variables.jl")
+include("./name2idx/species.jl")
 include("./set_model.jl")
 include("./observable.jl")
 

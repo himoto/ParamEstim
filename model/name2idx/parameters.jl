@@ -1,6 +1,6 @@
 module C
 
-const param_names = [
+const parameters = [
     "V1"
     "Km1"
     "V2"
@@ -119,10 +119,10 @@ const param_names = [
     "no_ligand"
 ]
 
-for (idx,name) in enumerate(param_names)
+for (idx,name) in enumerate(parameters)
     eval(Meta.parse("const $name = $idx"))
 end
 
-const len_f_params = length(param_names)
+const n_parameters = length(parameters)
 
 end  # module
