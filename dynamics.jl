@@ -50,21 +50,21 @@ function write_best_fit_param(best_param_set::Int)
         write(
             f,"\n### Param const\n"
         )
-        for i=1:C.n_parameters
+        for (i,param) in enumerate(C.parameters)
             write(
                 f,@sprintf(
-                    "p[C.%s] = %e\n", C.parameters[i],p[i]
+                    "p[C.%s] = %e\n", param, p[i]
                 )
             )
         end
         write(
             f,"\n### Non-zero initial conditions\n"
         )
-        for i=1:V.n_species
+        for (i,specie) in enumerate(V.species)
             if u0[i] != 0.0
                 write(
                     f,@sprintf(
-                        "u0[V.%s] = %e\n", V.species[i],u0[i]
+                        "u0[V.%s] = %e\n", specie, u0[i]
                     )
                 )
             end
