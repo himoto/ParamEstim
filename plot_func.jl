@@ -42,6 +42,26 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
                     )
                 end
             end
+            norm_max::Float64 = maximum(
+                vcat(
+                    [
+                        [
+                            mean(
+                                filter(
+                                    !isnan,normalized[i,:,k,l]
+                                )
+                            ) for k in eachindex(Sim.t)
+                        ] for l in eachindex(Sim.conditions)
+                    ]...
+                )
+            )
+            for j in eachindex(n_file)
+                for k in eachindex(Sim.t)
+                    for l in eachindex(Sim.conditions)
+                        @inbounds normalized[i,j,k,l] = normalized[i,j,k,l] / norm_max
+                    end
+                end
+            end
             for l in eachindex(Sim.conditions)
                 plot(
                     Sim.t,[
