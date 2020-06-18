@@ -1,6 +1,6 @@
 module V
 
-const species = [
+const NAMES = [
     "ppMEKc"
     "CREBn"
     "pCREBn"
@@ -39,10 +39,10 @@ const species = [
     "PreFmRNAn"
 ]
 
-for (idx,name) in enumerate(species)
+for (idx,name) in enumerate(NAMES)
     eval(Meta.parse("const $name = $idx"))
 end
 
-const n_species = length(species)
+const NUM = length(NAMES)
 
 end  # module

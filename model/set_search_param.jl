@@ -296,7 +296,7 @@ function init_search_param(search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
             if p[idx] == 0.0
                 error(
                     @sprintf(
-                        "`C.%s` in search_idx_params: ", C.parameters[idx]
+                        "`C.%s` in search_idx_params: ", C.NAMES[idx]
                     ) * message
                 )
             end
@@ -305,7 +305,7 @@ function init_search_param(search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
             if u0[idx] == 0.0
                 error(
                     @sprintf(
-                        "`V.%s` in search_idx_initials: ", V.species[idx]
+                        "`V.%s` in search_idx_initials: ", V.NAMES[idx]
                     ) * message
                 )
             end
@@ -322,48 +322,24 @@ function conv_lin2log!(search_rgn::Matrix{Float64},
     for i=1:size(search_rgn,2)
         if minimum(search_rgn[:,i]) < 0.0
             message = "search_rgn[lb,ub] must be positive.\n"
-            if i <= C.n_parameters
-                error(
-                    @sprintf(
-                        "`C.%s` ", C.parameters[i]
-                    ) * message
-                )
+            if i <= C.NUM
+                error(@sprintf("`C.%s` ", C.NAMES[i]) * message)
             else
-                error(
-                    @sprintf(
-                        "`V.%s` ", V.species[i-C.n_parameters]
-                    ) * message
-                )
+                error(@sprintf("`V.%s` ", V.NAMES[i-C.NUM]) * message)
             end
         elseif minimum(search_rgn[:,i]) == 0.0 && maximum(search_rgn[:,i]) != 0.0
             message = "lower_bound must be larger than 0.\n"
-            if i <= C.n_parameters
-                error(
-                    @sprintf(
-                        "`C.%s` ", C.parameters[i]
-                    ) * message
-                )
+            if i <= C.NUM
+                error(@sprintf("`C.%s` ", C.NAMES[i]) * message)
             else
-                error(
-                    @sprintf(
-                        "`V.%s` ", V.species[i-C.n_parameters]
-                    ) * message
-                )
+                error(@sprintf("`V.%s` ", V.NAMES[i-C.NUM]) * message)
             end
         elseif search_rgn[2,i] - search_rgn[1,i] < 0.0
             message = "lower_bound < upper_bound\n"
-            if i <= C.n_parameters
-                error(
-                    @sprintf(
-                        "`C.%s` ", C.parameters[i]
-                    ) * message
-                )
+            if i <= C.NUM
+                error(@sprintf("`C.%s` ", C.NAMES[i]) * message)
             else
-                error(
-                    @sprintf(
-                        "`V.%s` ", V.species[i-C.n_parameters]
-                    ) * message
-                )
+                error(@sprintf("`V.%s` ", V.NAMES[i-C.NUM]) * message)
             end
         end
     end
@@ -377,27 +353,15 @@ function conv_lin2log!(search_rgn::Matrix{Float64},
     difference::Vector{Int} = collect(
         symdiff(
             Set(nonzero_idx),
-            Set(
-                append!(
-                    search_idx[1], C.n_parameters .+ search_idx[2]
-                )
-            )
+            Set(append!(search_idx[1], C.NUM .+ search_idx[2]))
         )
     )
     if length(difference) > 0
         for (i,j) in enumerate(difference)
-            if j <= C.n_parameters
-                print(
-                    @sprintf(
-                        "`C.%s`\n", C.parameters[Int(j)]
-                    )
-                )
+            if j <= C.NUM
+                println(@sprintf("`C.%s`", C.NAMES[Int(j)]))
             else
-                print(
-                    @sprintf(
-                        "`V.%s`\n", V.species[Int(j)-C.n_parameters]
-                    )
-                )
+                println(@sprintf("`V.%s`", V.NAMES[Int(j)-C.NUM]))
             end
         end
         error(

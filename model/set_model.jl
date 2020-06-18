@@ -148,7 +148,7 @@ end
 
 
 function param_values()::Vector{Float64}
-    p::Vector{Float64} = zeros(C.n_parameters)
+    p::Vector{Float64} = zeros(C.NUM)
 
     p[C.V1] = 0.34284837
     p[C.Km1] = 307.0415253
@@ -273,7 +273,7 @@ end
 
 
 function initial_values()::Vector{Float64}
-    u0::Vector{Float64} = zeros(V.n_species)
+    u0::Vector{Float64} = zeros(V.NUM)
 
     u0[V.ERKc] = 9.60e+02
     u0[V.RSKc] = 3.53e+02
