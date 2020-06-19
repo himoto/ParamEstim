@@ -357,11 +357,11 @@ function conv_lin2log!(search_rgn::Matrix{Float64},
         )
     )
     if length(difference) > 0
-        for (i,j) in enumerate(difference)
+        for (_,idx) in enumerate(difference)
             if j <= C.NUM
-                println(@sprintf("`C.%s`", C.NAMES[Int(j)]))
+                println(@sprintf("`C.%s`", C.NAMES[Int(idx)]))
             else
-                println(@sprintf("`V.%s`", V.NAMES[Int(j)-C.NUM]))
+                println(@sprintf("`V.%s`", V.NAMES[Int(idx)-C.NUM]))
             end
         end
         error(
