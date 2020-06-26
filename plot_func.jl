@@ -75,14 +75,14 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
             end
             if stdev
                 for l in eachindex(Sim.conditions)
-                    ymean = [
+                    y_mean = [
                         mean(
                             filter(
                                 !isnan,normalized[i,:,k,l]
                             )
                         ) for k in eachindex(Sim.t)
                     ]
-                    yerr = [
+                    y_std = [
                         std(
                             filter(
                                 !isnan,normalized[i,:,k,l]
@@ -90,7 +90,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
                         ) for k in eachindex(Sim.t)
                     ]
                     fill_between(
-                        Sim.t,ymean-yerr,ymean+yerr,
+                        Sim.t,y_mean-y_std,y_mean+y_std,
                         lw=0,color=cmap[l],alpha=0.1
                     )
                 end
@@ -137,12 +137,12 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
             end
         end
 
-        xlim(0,90)
-        xticks([0,30,60,90])
-        yticks([0,0.3,0.6,0.9,1.2])
-        ylim(0,1.2)
+        xlim(0, 90)
+        xticks([0, 30, 60, 90])
+        yticks([0, 0.3, 0.6, 0.9, 1.2])
+        ylim(0, 1.2)
         xlabel("Time (min)")
-        ylabel(replace(name, "_" => " "))
+        ylabel(replace(replace(name, "__" => "\n"), "_" => " "))
 
         savefig(
             "./figure/simulation/$viz_type/$name.pdf", bbox_inches="tight"
