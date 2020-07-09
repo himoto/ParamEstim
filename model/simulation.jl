@@ -8,9 +8,9 @@ using .C
 using .V
 
 using Sundials
-# using SteadyStateDiffEq
-const STEADY_STATE_EPS = 1e-6
 
+const STEADY_STATE_EPS = 1e-6
+const normalization = true
 const tspan = (0.0,5400.0)
 const t = collect(tspan[1]:1.0:tspan[end])./60.0
 

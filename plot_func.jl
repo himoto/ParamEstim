@@ -25,7 +25,9 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
             for j in eachindex(n_file)
                 for l in eachindex(Sim.conditions)
                     plot(
-                        Sim.t,simulations_all[i,j,:,l]./maximum(simulations_all[i,j,:,:]),
+                        Sim.t,
+                        simulations_all[i,j,:,l] ./ ifelse(
+                            Sim.normalization,maximum(simulations_all[i,j,:,:]),1.0),
                         color=cmap[l],alpha=0.05
                     )
                 end
@@ -38,7 +40,9 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
             @inbounds for j in eachindex(n_file)
                 @simd for l in eachindex(Sim.conditions)
                     normalized[i,j,:,l] = (
-                        simulations_all[i,j,:,l]./maximum(simulations_all[i,j,:,:])
+                        simulations_all[i,j,:,l] ./ ifelse(
+                            Sim.normalization,maximum(simulations_all[i,j,:,:]),1.0
+                        )
                     )
                 end
             end
@@ -58,7 +62,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
             for j in eachindex(n_file)
                 for k in eachindex(Sim.t)
                     for l in eachindex(Sim.conditions)
-                        @inbounds normalized[i,j,k,l] = normalized[i,j,k,l] / norm_max
+                        @inbounds normalized[i,j,k,l] /= ifelse(Sim.normalization,norm_max,1.0)
                     end
                 end
             end
@@ -98,7 +102,9 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
         else
             for l in eachindex(Sim.conditions)
                 plot(
-                    Sim.t,Sim.simulations[i,:,l]/(maximum(Sim.simulations[i,:,:])),
+                    Sim.t,
+                    Sim.simulations[i,:,l] / ifelse(
+                        Sim.normalization,maximum(Sim.simulations[i,:,:]),1.0),
                     color=cmap[l]
                 )
             end
