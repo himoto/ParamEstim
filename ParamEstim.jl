@@ -7,6 +7,7 @@ export
     observables_index,
     Sim,
     Exp,
+    Viz,
     param_values,
     initial_values,
     objective,
@@ -38,6 +39,7 @@ include("model/set_model.jl")
 include("model/observable.jl")
 include("model/experimental_data.jl")
 include("model/simulation.jl")
+include("model/visualization.jl")
 include("model/fitness.jl")
 include("model/set_search_param.jl")
 

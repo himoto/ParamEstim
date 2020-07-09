@@ -13,9 +13,6 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
     rc("lines",linewidth = 1.8)
     rc("lines",markersize = 12)
 
-    cmap = ["mediumblue","red"]
-    shape = ["D","s"]
-
     for (i,name) in enumerate(observables)
         gca().spines["right"].set_visible(false)
         gca().spines["top"].set_visible(false)
@@ -25,10 +22,10 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
             for j in eachindex(n_file)
                 for l in eachindex(Sim.conditions)
                     plot(
-                        Sim.t,
+                        Sim.t ./ Viz.options[i]["divided_by"],
                         simulations_all[i,j,:,l] ./ ifelse(
                             Sim.normalization,maximum(simulations_all[i,j,:,:]),1.0),
-                        color=cmap[l],alpha=0.05
+                        color=Viz.options[i]["cmap"][l],alpha=0.05
                     )
                 end
             end
@@ -68,13 +65,13 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
             end
             for l in eachindex(Sim.conditions)
                 plot(
-                    Sim.t,[
+                    Sim.t ./ Viz.options[i]["divided_by"],[
                         mean(
                             filter(
                                 !isnan,normalized[i,:,k,l]
                             )
                         ) for k in eachindex(Sim.t)
-                    ],color=cmap[l]
+                    ],color=Viz.options[i]["cmap"][l]
                 )
             end
             if stdev
@@ -94,18 +91,19 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
                         ) for k in eachindex(Sim.t)
                     ]
                     fill_between(
-                        Sim.t,y_mean-y_std,y_mean+y_std,
-                        lw=0,color=cmap[l],alpha=0.1
+                        Sim.t ./ Viz.options[i]["divided_by"],
+                        y_mean-y_std,y_mean+y_std,
+                        lw=0,color=Viz.options[i]["cmap"][l],alpha=0.1
                     )
                 end
             end
         else
             for l in eachindex(Sim.conditions)
                 plot(
-                    Sim.t,
+                    Sim.t ./ Viz.options[i]["divided_by"],
                     Sim.simulations[i,:,l] / ifelse(
                         Sim.normalization,maximum(Sim.simulations[i,:,:]),1.0),
-                    color=cmap[l]
+                    color=Viz.options[i]["cmap"][l]
                 )
             end
         end
@@ -116,11 +114,14 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
                 for (l,condition) in enumerate(Sim.conditions)
                     if condition in keys(Exp.experiments[i])
                         exp_data = errorbar(
-                            exp_t./60.,Exp.experiments[i][condition],
+                            exp_t ./ Viz.options[i]["divided_by"],
+                            Exp.experiments[i][condition],
                             yerr=Exp.standard_error[i][condition],
                             lw=1,markerfacecolor="None",
-                            markeredgecolor=cmap[l],ecolor=cmap[l],
-                            fmt=shape[l],capsize=8,clip_on=false
+                            markeredgecolor=Viz.options[i]["cmap"][l],
+                            ecolor=Viz.options[i]["cmap"][l],
+                            fmt=Viz.options[i]["shape"][l],capsize=8,
+                            clip_on=false
                         )
                         for capline in exp_data[2]
                             capline.set_clip_on(false)
@@ -134,8 +135,10 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
                 for (l,condition) in enumerate(Sim.conditions)
                     if condition in keys(Exp.experiments[i])
                         plot(
-                            exp_t./60.,Exp.experiments[i][condition],shape[l],
-                            markerfacecolor="None",markeredgecolor=cmap[l],
+                            exp_t ./ Viz.options[i]["divided_by"],
+                            Exp.experiments[i][condition],
+                            Viz.options[i]["shape"][l],markerfacecolor="None",
+                            markeredgecolor=Viz.options[i]["cmap"][l],
                             clip_on=false
                         )
                     end
@@ -143,12 +146,22 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
             end
         end
 
-        xlim(0, 90)
-        xticks([0, 30, 60, 90])
-        yticks([0, 0.3, 0.6, 0.9, 1.2])
-        ylim(0, 1.2)
-        xlabel("Time (min)")
-        ylabel(replace(replace(name, "__" => "\n"), "_" => " "))
+        if length(Viz.options[i]["xlim"]) > 0
+            xlim(Viz.options[i]["xlim"]...)
+        end
+        if length(Viz.options[i]["xticks"]) > 0
+            xticks(Viz.options[i]["xticks"])
+        end
+        if Viz.options[i]["xlabel"] !== nothing
+            xlabel(Viz.options[i]["xlabel"])
+        end
+        if length(Viz.options[i]["ylim"]) > 0
+            ylim(Viz.options[i]["ylim"]...)
+        end
+        if length(Viz.options[i]["yticks"]) > 0
+            yticks(Viz.options[i]["yticks"])
+        end
+        ylabel(Viz.options[i]["ylabel"])
 
         savefig(
             "./figure/simulation/$viz_type/$name.pdf", bbox_inches="tight"

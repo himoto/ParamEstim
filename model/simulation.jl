@@ -10,9 +10,13 @@ using .V
 using Sundials
 
 const STEADY_STATE_EPS = 1e-6
-const normalization = true
-const tspan = (0.0,5400.0)
-const t = collect(tspan[1]:1.0:tspan[end])./60.0
+const normalization = true 
+#=
+if true, simulation results in each observable 
+are divided by their maximum values
+=#
+
+t = collect(0.0:1.0:5400.0)  # 0, 1, 2, ..., 5400 [sec.]
 
 const conditions = ["EGF", "HRG"]
 
@@ -25,7 +29,7 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
         p[C.Ligand] = p[C.no_ligand]
         iter::Int8 = 0
         while iter < 10
-            prob = ODEProblem(diffeq,u0,tspan,p)
+            prob = ODEProblem(diffeq,u0,(t[1],t[end]),p)
             sol = solve(
                 prob,CVODE_BDF(),
                 abstol=1e-9,reltol=1e-9,dtmin=1e-8,verbose=false
@@ -44,7 +48,7 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
             elseif condition == "HRG"
                 p[C.Ligand] = p[C.HRG]
             end
-            prob = ODEProblem(diffeq,u0,tspan,p)
+            prob = ODEProblem(diffeq,u0,(t[1],t[end]),p)
             sol = solve(
                 prob,CVODE_BDF(),saveat=1.0,
                 abstol=1e-9,reltol=1e-9,dtmin=1e-8,verbose=false
