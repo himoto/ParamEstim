@@ -122,7 +122,7 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
         mkdir("./figure")
     end
 
-    if !(viz_type in ["best","average","original"])
+    if !(viz_type in ["best","average","original","experiment"])
         try
             parse(Int64,viz_type)
         catch
@@ -149,57 +149,59 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
     simulaitons_all::Array{Float64,4} = fill(
         NaN,(length(observables),length(n_file),length(Sim.t),length(Sim.conditions))
     )
-    if length(n_file) > 0
-        if length(n_file) == 1 && viz_type == "average"
-            viz_type = "best"
-        end
-        for (i,nth_param_set) in enumerate(n_file)
-            if isfile("./fitparam/$nth_param_set/generation.dat")
-                (Sim,successful) = validate(nth_param_set)
-                if successful
-                    for j in eachindex(observables)
-                        @inbounds simulaitons_all[j,i,:,:] = Sim.simulations[j,:,:]
+    if viz_type != "experiment"
+        if length(n_file) > 0
+            if length(n_file) == 1 && viz_type == "average"
+                viz_type = "best"
+            end
+            for (i,nth_param_set) in enumerate(n_file)
+                if isfile("./fitparam/$nth_param_set/generation.dat")
+                    (Sim,successful) = validate(nth_param_set)
+                    if successful
+                        for j in eachindex(observables)
+                            @inbounds simulaitons_all[j,i,:,:] = Sim.simulations[j,:,:]
+                        end
                     end
+                else
+                    continue
                 end
-            else
-                continue
             end
-        end
 
-        best_fitness_all::Vector{Float64} = fill(Inf,length(n_file))
-        for (i,nth_param_set) in enumerate(n_file)
-            if isfile("./fitparam/$nth_param_set/best_fitness.dat")
-                best_fitness_all[i] = readdlm(
-                    "./fitparam/$nth_param_set/best_fitness.dat"
-                )[1,1]
+            best_fitness_all::Vector{Float64} = fill(Inf,length(n_file))
+            for (i,nth_param_set) in enumerate(n_file)
+                if isfile("./fitparam/$nth_param_set/best_fitness.dat")
+                    best_fitness_all[i] = readdlm(
+                        "./fitparam/$nth_param_set/best_fitness.dat"
+                    )[1,1]
+                end
             end
-        end
-        best_param_set::Int = n_file[argmin(best_fitness_all)]
-        write_best_fit_param(best_param_set)
+            best_param_set::Int = n_file[argmin(best_fitness_all)]
+            write_best_fit_param(best_param_set)
 
-        if viz_type == "best"
-            Sim,_ = validate(best_param_set)
-        elseif viz_type != "average" && parse(Int64,viz_type) <= length(n_file)
-            Sim,_ = validate(parse(Int64,viz_type))
-        elseif viz_type != "average" && parse(Int64,viz_type) > length(n_file)
-            error(
-                @sprintf(
-                    "n (%d) must be smaller than n_fitparam (%d)",
-                    parse(Int64,viz_type), length(n_file)
+            if viz_type == "best"
+                Sim,_ = validate(best_param_set)
+            elseif viz_type != "average" && parse(Int64,viz_type) <= length(n_file)
+                Sim,_ = validate(parse(Int64,viz_type))
+            elseif viz_type != "average" && parse(Int64,viz_type) > length(n_file)
+                error(
+                    @sprintf(
+                        "n (%d) must be smaller than n_fitparam (%d)",
+                        parse(Int64,viz_type), length(n_file)
+                    )
                 )
-            )
-        end
+            end
 
-        if length(n_file) > 1
-            save_param_range(n_file)
-        end
-    else
-        p::Vector{Float64} = param_values()
-        u0::Vector{Float64} = initial_values()
-        if Sim.simulate!(p,u0) !== nothing
-            error(
-                "Simulation failed."
-            )
+            if length(n_file) > 1
+                save_param_range(n_file)
+            end
+        else
+            p::Vector{Float64} = param_values()
+            u0::Vector{Float64} = initial_values()
+            if Sim.simulate!(p,u0) !== nothing
+                error(
+                    "Simulation failed."
+                )
+            end
         end
     end
     plotFunc_timecourse(
