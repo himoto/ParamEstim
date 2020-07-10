@@ -39,7 +39,7 @@ end
 
 function get_steady_state(
         p::Vector{Float64},u0::Vector{Float64},
-        sstime::Float64,tau::Float64)
+        sstime::Float64,tau::Float64)::Vector{Float64}
     # get steady state (t<0)
     param::Vector{Float64} = copy(p)
     param[C.term] = 1.0
@@ -70,7 +70,7 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
                 # pass
             end
             sol = get_time_course(p,u0,sstime,simtime,p[C.delayrnae])
-            for j in eachindex(t)
+            @simd for j in eachindex(t)
                 simulations[observables_index("Nuclear_NFkB"),j,i] = (
                     sol.u[j][V.NFKBn]
                 )

@@ -53,7 +53,7 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
                 prob,CVODE_BDF(),saveat=1.0,
                 abstol=1e-9,reltol=1e-9,dtmin=1e-8,verbose=false
             )
-            for j in eachindex(t)
+            @simd for j in eachindex(t)
                 simulations[observables_index("Phosphorylated_MEKc"),j,i] = (
                     sol.u[j][V.ppMEKc]
                 )
