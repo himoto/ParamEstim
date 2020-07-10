@@ -1,6 +1,6 @@
 ![paramestim](images/paramestim.png)
 
-# Parameter estimation of ODE models describing biological processes
+# Parameter estimation of ODE/DDE models describing biological processes
 
 ODE model parameter estimation workflow, currently implimented for modeling immediate-early gene response ([Nakakuki *et al.*, ***Cell***, 2010](https://doi.org/10.1016/j.cell.2010.03.054)).
 
@@ -10,6 +10,7 @@ Points (blue diamonds, EGF; red squares, HRG) denote experimental data, solid li
 
 ## Dependencies
 > - [Sundials](https://github.com/SciML/Sundials.jl) (*ODE solver*)
+> - [DelayDiffEq](https://github.com/SciML/DelayDiffEq.jl) (*DDE solver*)
 > - [StatsBase](https://github.com/JuliaStats/StatsBase.jl)
 > - [PyPlot](https://github.com/JuliaPy/PyPlot.jl)
 > - [Seaborn](https://github.com/JuliaPy/Seaborn.jl)
@@ -65,6 +66,8 @@ simulate_all(Sim,
 
 ## References
 - Nakakuki, T. *et al.* Ligand-specific c-Fos expression emerges from the spatiotemporal control of ErbB network dynamics. *Cell* **141**, 884–896 (2010). https://doi.org/10.1016/j.cell.2010.03.054
+
+- Inoue, K. *et al.* Oscillation dynamics underlie functional switching of NF-κB for B-cell activation. *npj Syst. Biol. Appl.* **2**, 16024 (2016). https://doi.org/10.1038/npjsba.2016.24
 
 - Kimura, S., Ono, I., Kita, H. & Kobayashi, S. An extension of UNDX based on guidelines for designing crossover operators: proposition and evaluation of ENDX. *Trans. Soc. Instrum. Control Eng.* **36**, 1162–1171 (2000). https://doi.org/10.9746/sicetr1965.36.1162
 
