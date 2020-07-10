@@ -53,4 +53,16 @@ options[
     observables_index("Phosphorylated_cFos")
 ]["ylabel"] = "Phosphorylated c-Fos\nProtein expression"
 # ---
+
+function set_rcParams()
+    rc("figure",figsize = (4,3))
+    rc("font",family = "Arial")
+    rc("font",size = 20)
+    rc("axes",linewidth = 1.5)
+    rc("xtick.major",width = 1.5)
+    rc("ytick.major",width = 1.5)
+    rc("lines",linewidth = 1.8)
+    rc("lines",markersize = 12)
+end
+
 end # module

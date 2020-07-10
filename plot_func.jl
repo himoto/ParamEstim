@@ -4,14 +4,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
         mkpath("./figure/simulation/$viz_type")
     end
 
-    rc("figure",figsize = (4,3))
-    rc("font",family = "Arial")
-    rc("font",size = 20)
-    rc("axes",linewidth = 1.5)
-    rc("xtick.major",width = 1.5)
-    rc("ytick.major",width = 1.5)
-    rc("lines",linewidth = 1.8)
-    rc("lines",markersize = 12)
+    Vis.set_rcParams()
 
     for (i,name) in enumerate(observables)
         gca().spines["right"].set_visible(false)
