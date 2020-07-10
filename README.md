@@ -9,7 +9,7 @@ ODE model parameter estimation workflow, currently implimented for modeling imme
 Points (blue diamonds, EGF; red squares, HRG) denote experimental data, solid lines denote simulations.
 
 ## Dependencies
-> - [Sundials](https://github.com/SciML/Sundials.jl)
+> - [Sundials](https://github.com/SciML/Sundials.jl) (*ODE solver*)
 > - [StatsBase](https://github.com/JuliaStats/StatsBase.jl)
 > - [PyPlot](https://github.com/JuliaPy/PyPlot.jl)
 > - [Seaborn](https://github.com/JuliaPy/Seaborn.jl)

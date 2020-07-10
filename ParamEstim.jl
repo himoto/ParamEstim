@@ -33,15 +33,15 @@ using PyPlot
 
 import Seaborn
 
-include("model/name2idx/parameters.jl")
-include("model/name2idx/species.jl")
-include("model/set_model.jl")
-include("model/observable.jl")
-include("model/experimental_data.jl")
-include("model/simulation.jl")
-include("model/visualization.jl")
-include("model/fitness.jl")
-include("model/set_search_param.jl")
+include("models/Nakakuki_Cell_2010_ODE/name2idx/parameters.jl")
+include("models/Nakakuki_Cell_2010_ODE/name2idx/species.jl")
+include("models/Nakakuki_Cell_2010_ODE/set_model.jl")
+include("models/Nakakuki_Cell_2010_ODE/observable.jl")
+include("models/Nakakuki_Cell_2010_ODE/experimental_data.jl")
+include("models/Nakakuki_Cell_2010_ODE/simulation.jl")
+include("models/Nakakuki_Cell_2010_ODE/visualization.jl")
+include("models/Nakakuki_Cell_2010_ODE/fitness.jl")
+include("models/Nakakuki_Cell_2010_ODE/set_search_param.jl")
 
 include("ga/initial_population.jl")
 include("ga/undxmgg.jl")
