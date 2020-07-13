@@ -9,7 +9,7 @@ options = [
         "divided_by" => 1.0,
         "xlim" => (),
         "xticks" => [],
-        "xlabel" => nothing,
+        "xlabel" => "",
         "ylim" => (),
         "yticks" => [],
         "ylabel" => replace(replace(observables[i], "__" => "\n"), "_" => " "),

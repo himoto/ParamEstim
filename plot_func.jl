@@ -147,7 +147,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
         if length(Viz.options[i]["xticks"]) > 0
             xticks(Viz.options[i]["xticks"])
         end
-        if Viz.options[i]["xlabel"] !== nothing
+        if length(Viz.options[i]["xlabel"]) > 0
             xlabel(Viz.options[i]["xlabel"])
         end
         if length(Viz.options[i]["ylim"]) > 0
