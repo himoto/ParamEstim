@@ -10,6 +10,7 @@ using .V
 using Sundials
 
 const STEADY_STATE_EPS = 1e-6
+const MAXITER = 10
 const normalization = true 
 #=
 if true, simulation results in each observable 
@@ -28,7 +29,7 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
         # get steady state
         p[C.Ligand] = p[C.no_ligand]
         iter::Int8 = 0
-        while iter < 10
+        while iter < MAXITER
             prob = ODEProblem(diffeq,u0,(t[1],t[end]),p)
             sol = solve(
                 prob,CVODE_BDF(),
