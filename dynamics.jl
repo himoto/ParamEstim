@@ -21,6 +21,28 @@ function load_param(paramset::Int)::Tuple{Array{Float64,1},Array{Float64,1}}
 end
 
 
+function get_executable()
+    n_file::Vector{Int} = []
+    fitparam_files::Vector{String} = readdir("./fitparam")
+    for file in fitparam_files
+        if occursin(r"\d",file)
+            push!(n_file, parse(Int64,file))
+        end
+    end
+    empty_folder::Vector{Int} = []
+    for (i,nth_param_set) in enumerate(n_file)
+        if !isfile("./fitparam/$nth_param_set/generation.dat")
+            push!(empty_folder,i)
+        end
+    end
+    for i in sort(empty_folder,rev=true)
+        deleteat!(n_file,i)
+    end
+
+    return n_file
+end
+
+
 function validate(nth_param_set::Int64)
 
     (p,u0) = load_param(nth_param_set)
@@ -132,19 +154,7 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
         end
     end
 
-    n_file::Vector{Int} = []
-    if viz_type != "original"
-        try
-            fitparam_files::Vector{String} = readdir("./fitparam")
-            for file in fitparam_files
-                if occursin(r"\d",file)
-                    push!(n_file, parse(Int64,file))
-                end
-            end
-        catch
-            viz_type = "original"
-        end
-    end
+    n_file::Vector{Int} = viz_type == "original" ? [] : get_executable()
 
     simulaitons_all::Array{Float64,4} = fill(
         NaN,(length(observables),length(n_file),length(Sim.t),length(Sim.conditions))
