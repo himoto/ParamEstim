@@ -16,6 +16,7 @@ options = [
         "cmap" => [cm.colors[j] for j in 1:20],
         "shape" => ["o", "v", "^", "<", ">", "8", "s",
                     "p", "*", "h", "H", "D", "d", "P", "X"],
+        "dont_show" => [],
     ) for i in 1:length(observables)]
 # ---
 options[observables_index("Nuclear_NFkB")]["xlim"] = (0, 360)

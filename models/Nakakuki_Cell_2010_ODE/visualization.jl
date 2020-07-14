@@ -16,6 +16,7 @@ options = [
         "cmap" => [cm.colors[j] for j in 1:20],
         "shape" => ["o", "v", "^", "<", ">", "8", "s", 
                     "p", "*", "h", "H", "D", "d", "P", "X"],
+        "dont_show" => [],
     ) for i in 1:length(observables)]
 # ---
 for (i,_) in enumerate(observables)
@@ -27,6 +28,7 @@ for (i,_) in enumerate(observables)
     options[i]["yticks"] = [0.0, 0.3, 0.6, 0.9, 1.2]
     options[i]["cmap"] = ["mediumblue", "red"]
     options[i]["shape"] = ["D", "s"]
+    options[i]["dont_show"] = []
 end
 options[
     observables_index("Phosphorylated_MEKc")
