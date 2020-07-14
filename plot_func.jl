@@ -156,20 +156,17 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
         if length(Viz.options[i]["xlim"]) > 0
             xlim(Viz.options[i]["xlim"]...)
         end
-        if length(Viz.options[i]["xticks"]) > 0
+        if Viz.options[i]["xticks"] !== nothing
             xticks(Viz.options[i]["xticks"])
         end
-        if length(Viz.options[i]["xlabel"]) > 0
-            xlabel(Viz.options[i]["xlabel"])
-        end
+        xlabel(Viz.options[i]["xlabel"])
         if length(Viz.options[i]["ylim"]) > 0
             ylim(Viz.options[i]["ylim"]...)
         end
-        if length(Viz.options[i]["yticks"]) > 0
+        Viz.options[i]["yticks"] !== nothing
             yticks(Viz.options[i]["yticks"])
         end
         ylabel(Viz.options[i]["ylabel"])
-
         savefig(
             "./figure/simulation/$viz_type/$name.pdf", bbox_inches="tight"
         )

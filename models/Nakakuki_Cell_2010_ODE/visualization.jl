@@ -8,10 +8,10 @@ options = [
     Dict(
         "divided_by" => 1.0,
         "xlim" => (),
-        "xticks" => [],
-        "xlabel" => "",
+        "xticks" => nothing,
+        "xlabel" => "Time",
         "ylim" => (),
-        "yticks" => [],
+        "yticks" => nothing,
         "ylabel" => replace(replace(observables[i], "__" => "\n"), "_" => " "),
         "cmap" => [cm.colors[j] for j in 1:20],
         "shape" => ["o", "v", "^", "<", ">", "8", "s", 
