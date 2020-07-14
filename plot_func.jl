@@ -4,7 +4,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
         mkpath("./figure/simulation/$viz_type")
     end
 
-    Vis.set_rcParams()
+    Viz.set_rcParams()
 
     for (i,name) in enumerate(observables)
         gca().spines["right"].set_visible(false)
@@ -113,6 +113,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
                             Exp.experiments[i][condition],
                             yerr=Exp.standard_error[i][condition],
                             lw=1,markerfacecolor="None",
+                            color=Viz.options[i]["cmap"][l],
                             markeredgecolor=Viz.options[i]["cmap"][l],
                             ecolor=Viz.options[i]["cmap"][l],
                             fmt=Viz.options[i]["shape"][l],capsize=8,
@@ -132,6 +133,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
                         plot(
                             exp_t ./ Viz.options[i]["divided_by"],
                             Exp.experiments[i][condition],
+                            color=Viz.options[i]["cmap"][l],
                             Viz.options[i]["shape"][l],markerfacecolor="None",
                             markeredgecolor=Viz.options[i]["cmap"][l],
                             clip_on=false
