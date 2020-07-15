@@ -163,7 +163,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
         if length(Viz.options[i]["ylim"]) > 0
             ylim(Viz.options[i]["ylim"]...)
         end
-        Viz.options[i]["yticks"] !== nothing
+        if Viz.options[i]["yticks"] !== nothing
             yticks(Viz.options[i]["yticks"])
         end
         ylabel(Viz.options[i]["ylabel"])
