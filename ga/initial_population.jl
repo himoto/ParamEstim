@@ -1,4 +1,6 @@
-function get_initial_population(n_population::Int64, n_gene::Int64)::Matrix{Float64}
+function get_initial_population(
+        n_population::Int64,
+        n_gene::Int64)::Matrix{Float64}
     println(
         "Generating the initial population...\n"
     )
@@ -31,8 +33,11 @@ function get_initial_population(n_population::Int64, n_gene::Int64)::Matrix{Floa
 end
 
 
-function get_initial_population_continue(nth_param_set::Int64, n_population::Int64, n_gene::Int64,
-                                            p0_bounds::Vector{Float64})::Matrix{Float64}
+function get_initial_population_continue(
+        nth_param_set::Int64,
+        n_population::Int64,
+        n_gene::Int64,
+        p0_bounds::Vector{Float64})::Matrix{Float64}
     generation::Int64 = readdlm(
         "./fitparam/$nth_param_set/generation.dat"
     )[1,1]
@@ -42,6 +47,7 @@ function get_initial_population_continue(nth_param_set::Int64, n_population::Int
         )
     )[:,1]
     println(
+        "\n----------------------------------------\n"*
         "Generating the initial population...\n"
     )
     flush(stdout)
