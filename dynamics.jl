@@ -98,16 +98,10 @@ end
 function save_param_range(n_file::Vector{Int})
     search_idx::Tuple{Array{Int64,1},Array{Int64,1}} = get_search_index()
     popt::Matrix{Float64} = zeros(length(n_file),length(search_idx[1]))
-    empty_folder::Vector{Int} = []
-    for (k,nth_param_set) in enumerate(n_file)
-        if !isfile("./fitparam/$nth_param_set/generation.dat")
-            push!(empty_folder,k)
-        else
-            best_indiv = get_indiv(nth_param_set)
-            popt[k,:] = best_indiv[1:length(search_idx[1])]
-        end
+    for (i,nth_param_set) in enumerate(n_file)
+        best_indiv = get_indiv(nth_param_set)
+        popt[i,:] = best_indiv[1:length(search_idx[1])]
     end
-    popt = popt[setdiff(1:end,empty_folder),:]
     # --------------------------------------------------------------------------
     # Seaborn.boxplot
 
@@ -165,15 +159,11 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
                 viz_type = "best"
             end
             for (i,nth_param_set) in enumerate(n_file)
-                if isfile("./fitparam/$nth_param_set/generation.dat")
-                    (Sim,successful) = validate(nth_param_set)
-                    if successful
-                        for j in eachindex(observables)
-                            @inbounds simulaitons_all[j,i,:,:] = Sim.simulations[j,:,:]
-                        end
+                (Sim,successful) = validate(nth_param_set)
+                if successful
+                    for j in eachindex(observables)
+                        @inbounds simulaitons_all[j,i,:,:] = Sim.simulations[j,:,:]
                     end
-                else
-                    continue
                 end
             end
 
