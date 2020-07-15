@@ -24,17 +24,32 @@ const conditions = ["EGF", "HRG"]
 simulations = Array{Float64,3}(
     undef, length(observables), length(t), length(conditions)
 )
+
+function solveode(f::Function,u0::Vector{Float64},t::Vector{Float64},p::Vector{Float64})
+    prob = ODEProblem(f,u0,(t[1],t[end]),p)
+    try
+        sol = solve(
+            prob,CVODE_BDF(),
+            abstol=1e-9,reltol=1e-9,dtmin=1e-8,
+            saveat=1.0,verbose=false
+        )
+        return sol
+    catch
+        return nothing
+    end
+end
+
+
 function simulate!(p::Vector{Float64}, u0::Vector{Float64})
     try
         # get steady state
         p[C.Ligand] = p[C.no_ligand]
-        iter::Int8 = 0
+        iter::Int = 0
         while iter < MAXITER
-            prob = ODEProblem(diffeq,u0,(t[1],t[end]),p)
-            sol = solve(
-                prob,CVODE_BDF(),
-                abstol=1e-9,reltol=1e-9,dtmin=1e-8,verbose=false
-            )
+            sol = solveode(diffeq,u0,t,p)
+            if sol === nothing
+                return false
+            end
             if all(abs.(sol.u[end] - u0) .< STEADY_STATE_EPS)
                 break
             else
@@ -49,12 +64,11 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
             elseif condition == "HRG"
                 p[C.Ligand] = p[C.HRG]
             end
-            prob = ODEProblem(diffeq,u0,(t[1],t[end]),p)
-            sol = solve(
-                prob,CVODE_BDF(),saveat=1.0,
-                abstol=1e-9,reltol=1e-9,dtmin=1e-8,verbose=false
-            )
-            @simd for j in eachindex(t)
+            sol = solveode(diffeq,u0,t,p)
+            if sol === nothing
+                return false
+            end
+            @inbounds @simd for j in eachindex(t)
                 simulations[observables_index("Phosphorylated_MEKc"),j,i] = (
                     sol.u[j][V.ppMEKc]
                 )
