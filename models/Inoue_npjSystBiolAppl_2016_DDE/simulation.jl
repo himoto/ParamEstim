@@ -14,7 +14,7 @@ const normalization = true
 if true, simulation results in each observable
 are divided by their maximum values
 =#
-
+const dt = 1.0
 t = collect(0.0:1.0:360.0)  # 0, 1, 2, ..., 360 [min.]
 const simtime = t[end]
 const sstime = 1000.0  # time to reach steady state
@@ -33,7 +33,7 @@ function solvedde(
     prob = DDEProblem(diffeq,u0,h,tspan,p;constant_lags=lags)
     alg = MethodOfSteps(BS3())
     sol = solve(
-        prob,alg,saveat=1.0,abstol=1e-9,reltol=1e-9,dtmin=1e-8,verbose=false
+        prob,alg,saveat=dt,abstol=1e-9,reltol=1e-9,dtmin=1e-8,verbose=false
     )
     return sol
 end
@@ -77,11 +77,12 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
         sol = get_time_course(p,u0,sstime,simtime,p[C.delayrnae])
         if sol === nothing
             return false
-        end
-        @inbounds @simd for j in eachindex(t)
-            simulations[observables_index("Nuclear_NFkB"),j,i] = (
-                sol.u[j][V.NFKBn]
-            )
+        else
+            @inbounds @simd for j in eachindex(t)
+                simulations[observables_index("Nuclear_NFkB"),j,i] = (
+                    sol.u[j][V.NFKBn]
+                )
+            end
         end
     end
 end
