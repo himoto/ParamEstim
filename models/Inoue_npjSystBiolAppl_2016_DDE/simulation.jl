@@ -32,7 +32,9 @@ function solvedde(
     lags = [tau]
     prob = DDEProblem(diffeq,u0,h,tspan,p;constant_lags=lags)
     alg = MethodOfSteps(BS3())
-    sol = solve(prob,alg,saveat=1.0,abstol=1e-9,reltol=1e-9,dtmin=1e-8,verbose=false)
+    sol = solve(
+        prob,alg,saveat=1.0,abstol=1e-9,reltol=1e-9,dtmin=1e-8,verbose=false
+    )
     return sol
 end
 
@@ -58,26 +60,29 @@ function get_time_course(
     u1::Vector{Float64} = get_steady_state(p,u0,sstime,tau)
     history::Vector{Float64} = u1
     tspan::Tuple{Float64,Float64} = (0.0,simtime)
-    sol = solvedde(diffeq,u1,history,tspan,param,tau)
-    return sol
+    try
+        sol = solvedde(diffeq,u1,history,tspan,param,tau)
+        return ifelse(length(sol.t) == length(t), sol, nothing)
+    catch
+        return nothing
+    end
 end
 
 
 function simulate!(p::Vector{Float64}, u0::Vector{Float64})
-    try
-        for (i,condition) in enumerate(conditions)
-            if condition == "WT"
-                # pass
-            end
-            sol = get_time_course(p,u0,sstime,simtime,p[C.delayrnae])
-            @simd for j in eachindex(t)
-                simulations[observables_index("Nuclear_NFkB"),j,i] = (
-                    sol.u[j][V.NFKBn]
-                )
-            end
+    for (i,condition) in enumerate(conditions)
+        if condition == "WT"
+            # pass
         end
-    catch
-        return false
+        sol = get_time_course(p,u0,sstime,simtime,p[C.delayrnae])
+        if sol === nothing
+            return false
+        end
+        @inbounds @simd for j in eachindex(t)
+            simulations[observables_index("Nuclear_NFkB"),j,i] = (
+                sol.u[j][V.NFKBn]
+            )
+        end
     end
 end
 end # module
