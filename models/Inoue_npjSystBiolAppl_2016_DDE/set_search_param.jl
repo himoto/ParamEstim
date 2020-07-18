@@ -171,25 +171,28 @@ function encode_val2gene(indiv::Vector{Float64})
 end
 
 
-function encode_bestIndivVal2randGene(j::Int64, best_indiv::Vector{Float64},
-                                        p0_bounds::Vector{Float64})::Float64
+function encode_bestIndivVal2randGene(
+        idx::Int64,
+        best_indiv::Vector{Float64},
+        p0_bounds::Vector{Float64})::Float64
     search_rgn::Matrix{Float64} = get_search_region()
     rand_gene::Float64 = (
         log10(
-            best_indiv[j]*10^(
+            best_indiv[idx]*10^(
                 rand() * log10(p0_bounds[2]/p0_bounds[1]) + log10(p0_bounds[1])
             )
-        ) - search_rgn[1,j]
+        ) - search_rgn[1,idx]
     ) / (
-        search_rgn[2,j] - search_rgn[1,j]
+        search_rgn[2,idx] - search_rgn[1,idx]
     )
-
     return rand_gene
 end
 
 
-function init_search_param(search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
-                            p::Vector{Float64}, u0::Vector{Float64})::Vector{Float64}
+function init_search_param(
+        search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
+        p::Vector{Float64},
+        u0::Vector{Float64})::Vector{Float64}
     search_param = zeros(
         length(search_idx[1]) + length(search_idx[2])
     )
@@ -202,7 +205,7 @@ function init_search_param(search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
 
     if any(x -> x == 0.0, search_param)
         message::String = "search_param must not contain zero."
-        for (_, idx) in enumerate(search_idx[1])
+        for idx in search_idx[1]
             if p[idx] == 0.0
                 error(
                     @sprintf(
@@ -211,7 +214,7 @@ function init_search_param(search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
                 )
             end
         end
-        for (_, idx) in enumerate(search_idx[2])
+        for idx in search_idx[2]
             if u0[idx] == 0.0
                 error(
                     @sprintf(
@@ -226,9 +229,9 @@ function init_search_param(search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
 end
 
 
-function conv_lin2log!(search_rgn::Matrix{Float64},
-                        search_idx::Tuple{Array{Int64,1},Array{Int64,1}}
-                        )::Matrix{Float64}
+function conv_lin2log!(
+        search_rgn::Matrix{Float64},
+        search_idx::Tuple{Array{Int64,1},Array{Int64,1}})::Matrix{Float64}
     for i=1:size(search_rgn,2)
         if minimum(search_rgn[:,i]) < 0.0
             message = "search_rgn[lb,ub] must be positive.\n"
@@ -267,7 +270,7 @@ function conv_lin2log!(search_rgn::Matrix{Float64},
         )
     )
     if length(difference) > 0
-        for (_,idx) in enumerate(difference)
+        for idx in difference
             if j <= C.NUM
                 println(@sprintf("`C.%s`", C.NAMES[Int(idx)]))
             else
