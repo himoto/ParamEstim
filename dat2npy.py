@@ -19,18 +19,12 @@ def main():
     for file in fitparam_files:
         if re.match(r'\d', file):
             n_file.append(int(file))
-    for _, nth_paramset in enumerate(n_file):
+    for nth_paramset in n_file:
         os.makedirs(
-            './dat2npy/out/{:d}'.format(
-                nth_paramset
-            ), exist_ok=True
+            './dat2npy/out/{:d}'.format(nth_paramset), exist_ok=True
         )
-        ith_fitparam_files = os.listdir(
-            './fitparam/{:d}'.format(
-                nth_paramset
-            )
-        )
-        for dat_file in ith_fitparam_files:
+        nth_fitparam_files = os.listdir('./fitparam/{:d}'.format(nth_paramset))
+        for dat_file in nth_fitparam_files:
             if 'fit' in dat_file:
                 """
                 - fit_param%d.dat -> fit_param%d.npy
@@ -52,19 +46,13 @@ def main():
                     ), dtype='int'
                 )
             np.save(
-                './dat2npy/out/{:d}/'.format(
-                    nth_paramset
-                ) + dat_file.replace(
-                    '.dat', '.npy'
-                ), data
+                './dat2npy/out/{:d}/'.format(nth_paramset)
+                + dat_file.replace('.dat', '.npy'), data
             )
         if os.path.isfile('./logs/{:d}.log'.format(nth_paramset)):
             shutil.copyfile(
-                './logs/{:d}.log'.format(
-                    nth_paramset
-                ), './dat2npy/out/{:d}/out.log'.format(
-                    nth_paramset
-                )
+                './logs/{:d}.log'.format(nth_paramset),
+                './dat2npy/out/{:d}/optimization.log'.format(nth_paramset)
             )
 
 if __name__ == '__main__':
