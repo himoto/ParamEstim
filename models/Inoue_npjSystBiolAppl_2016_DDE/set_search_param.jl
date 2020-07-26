@@ -193,6 +193,24 @@ function init_search_param(
         search_idx::Tuple{Array{Int64,1},Array{Int64,1}},
         p::Vector{Float64},
         u0::Vector{Float64})::Vector{Float64}
+    duplicate::Vector{String} = []
+    if length(search_idx[1]) != length(unique(search_idx[1]))
+        for idx in findall([count(x->x==i,search_idx[1]) 
+                            for i in unique(search_idx[1])] .!= 1)
+            push!(duplicate, C.NAMES[search_idx[1][idx]])
+        end
+        error(
+            "Duplicate parameters (C.): $duplicate"
+        )
+    elseif length(search_idx[2]) != length(unique(search_idx[2]))
+        for idx in findall([count(x->x==i,search_idx[2]) 
+                            for i in unique(search_idx[2])] .!= 1)
+            push!(duplicate, V.NAMES[search_idx[2][idx]])
+        end
+        error(
+            "Duplicate species (V.): $duplicate"
+        )   
+    end
     search_param = zeros(
         length(search_idx[1]) + length(search_idx[2])
     )
@@ -204,13 +222,13 @@ function init_search_param(
     end
 
     if any(x -> x == 0.0, search_param)
-        message::String = "search_param must not contain zero."
+        msg::String = "search_param must not contain zero."
         for idx in search_idx[1]
             if p[idx] == 0.0
                 error(
                     @sprintf(
                         "`C.%s` in search_idx_params: ", C.NAMES[idx]
-                    ) * message
+                    ) * msg
                 )
             end
         end
@@ -219,7 +237,7 @@ function init_search_param(
                 error(
                     @sprintf(
                         "`V.%s` in search_idx_initials: ", V.NAMES[idx]
-                    ) * message
+                    ) * msg
                 )
             end
         end
@@ -234,25 +252,25 @@ function conv_lin2log!(
         search_idx::Tuple{Array{Int64,1},Array{Int64,1}})::Matrix{Float64}
     for i=1:size(search_rgn,2)
         if minimum(search_rgn[:,i]) < 0.0
-            message = "search_rgn[lb,ub] must be positive.\n"
+            msg = "search_rgn[lower_bound,upper_bound] must be positive.\n"
             if i <= C.NUM
-                error(@sprintf("`C.%s` ", C.NAMES[i]) * message)
+                error(@sprintf("`C.%s` ", C.NAMES[i]) * msg)
             else
-                error(@sprintf("`V.%s` ", V.NAMES[i-C.NUM]) * message)
+                error(@sprintf("`V.%s` ", V.NAMES[i-C.NUM]) * msg)
             end
         elseif minimum(search_rgn[:,i]) == 0.0 && maximum(search_rgn[:,i]) != 0.0
-            message = "lower_bound must be larger than 0.\n"
+            msg = "lower_bound must be larger than 0.\n"
             if i <= C.NUM
-                error(@sprintf("`C.%s` ", C.NAMES[i]) * message)
+                error(@sprintf("`C.%s` ", C.NAMES[i]) * msg)
             else
-                error(@sprintf("`V.%s` ", V.NAMES[i-C.NUM]) * message)
+                error(@sprintf("`V.%s` ", V.NAMES[i-C.NUM]) * msg)
             end
         elseif search_rgn[2,i] - search_rgn[1,i] < 0.0
-            message = "lower_bound < upper_bound\n"
+            msg = "lower_bound must be smaller than upper_bound.\n"
             if i <= C.NUM
-                error(@sprintf("`C.%s` ", C.NAMES[i]) * message)
+                error(@sprintf("`C.%s` ", C.NAMES[i]) * msg)
             else
-                error(@sprintf("`V.%s` ", V.NAMES[i-C.NUM]) * message)
+                error(@sprintf("`V.%s` ", V.NAMES[i-C.NUM]) * msg)
             end
         end
     end
