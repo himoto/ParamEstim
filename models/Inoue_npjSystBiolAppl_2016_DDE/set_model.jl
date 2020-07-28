@@ -56,7 +56,7 @@ function diffeq(du,u,h,p,t)
     ###################----CBM module----#######################
     signal = libPulseDelay(t,p[C.X],p[C.term])
 
-    v = zeros(161)
+    v = Dict{Int64,Float64}()
 
     v[1] = MA(p[C.kCp0], u[V.C])                                                 # (*basal C phosphorylation*)
     v[2] = signal * MM(p[C.kCpS], p[C.kmCpS], u[V.C])                            # (*signal-dependent C phosphorylation*)

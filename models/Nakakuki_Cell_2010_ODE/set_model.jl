@@ -1,5 +1,5 @@
 function diffeq(du,u,p,t)
-    v::Vector{Float64} = zeros(63)
+    v = Dict{Int64,Float64}()
 
     v[1] = p[C.V1] * p[C.a] * u[V.ppMEKc] * u[V.ERKc] /  ( p[C.Km1] * (1 + u[V.pERKc] / p[C.Km2]) + u[V.ERKc] )
     v[2] = p[C.V2] * p[C.a] * u[V.ppMEKc] * u[V.pERKc] /  ( p[C.Km2] * (1 + u[V.ERKc] / p[C.Km1]) + u[V.pERKc] )
@@ -65,7 +65,6 @@ function diffeq(du,u,p,t)
     v[62] = p[C.KimF] * u[V.Fc] - p[C.KexF] * (p[C.Vn]/p[C.Vc]) * u[V.Fn]
     v[63] = p[C.p63] * u[V.Fn]
 
-
     if p[C.Ligand] == p[C.EGF]  # EGF=10nM
         if t < 300.
             du[V.ppMEKc] = 0.00258
@@ -84,7 +83,6 @@ function diffeq(du,u,p,t)
         elseif t <= 5400.
             du[V.ppMEKc] = -0.00000728
         end
-
     elseif p[C.Ligand] == p[C.HRG]  # HRG=10nM
         if t < 300.
             du[V.ppMEKc] = 0.00288
@@ -103,7 +101,6 @@ function diffeq(du,u,p,t)
         elseif t <= 5400.
             du[V.ppMEKc] = -0.0000478
         end
-
     else
         du[V.ppMEKc] = 0.0
     end
@@ -266,7 +263,6 @@ function param_values()::Vector{Float64}
     p[C.EGF] = 0.
     p[C.HRG] = 1.
     p[C.no_ligand] = 2.
-
 
     return p
 end
