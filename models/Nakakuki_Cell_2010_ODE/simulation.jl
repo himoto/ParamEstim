@@ -9,8 +9,6 @@ using .V
 
 using Sundials
 
-const STEADY_STATE_EPS = 1e-6
-const MAXITER = 10
 const normalization = true 
 #=
 if true, simulation results in each observable 
@@ -25,7 +23,12 @@ simulations = Array{Float64,3}(
     undef, length(observables), length(t), length(conditions)
 )
 
-function solveode(f::Function,u0::Vector{Float64},t::Vector{Float64},p::Vector{Float64})
+
+function solveode(
+        f::Function,
+        u0::Vector{Float64},
+        t::Vector{Float64},
+        p::Vector{Float64})
     prob = ODEProblem(f,u0,(t[1],t[end]),p)
     try
         sol = solve(
@@ -40,22 +43,31 @@ function solveode(f::Function,u0::Vector{Float64},t::Vector{Float64},p::Vector{F
 end
 
 
+function get_steady_state!(
+        f::Function,
+        u0::Vector{Float64},
+        p::Vector{Float64},
+        eps::Float64=1e-6)
+    while true
+        sol = solveode(diffeq,u0,[0.0,1.0],p)
+        if sol === nothing
+            return nothing
+        elseif maximum(abs.((sol.u[end] .- u0) ./ (u0 .+ eps))) < eps
+            break
+        else
+            u0 .= sol.u[end]
+        end
+    end
+    return u0
+end
+
+
 function simulate!(p::Vector{Float64}, u0::Vector{Float64})
     # get steady state
     p[C.Ligand] = p[C.no_ligand]
-    iter::Int = 0
-    while iter < MAXITER
-        sol = solveode(diffeq,u0,t,p)
-        if sol === nothing
-            return false
-        else
-            if all(abs.(sol.u[end] - u0) .< STEADY_STATE_EPS)
-                break
-            else
-                u0 .= sol.u[end]
-                iter += 1
-            end
-        end
+    u0 = get_steady_state!(diffeq,u0,t)
+    if u0 === nothing
+        return false
     end
     # add ligand
     for (i,condition) in enumerate(conditions)
