@@ -2,7 +2,7 @@ module Exp
 include("./observable.jl")
 
 experiments = Array{Dict{String,Array{Float64,1}},1}(undef, length(observables))
-standard_error = Array{Dict{String,Array{Float64,1}},1}(undef, length(observables))
+error_bar = Array{Dict{String,Array{Float64,1}},1}(undef, length(observables))
 
 const t   = [15.0*i for i in 0:24]  # 0, 15, 30, ..., 360 [min.]
 

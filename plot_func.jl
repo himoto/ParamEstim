@@ -115,13 +115,13 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
 
         if isassigned(Exp.experiments,i)
             exp_t = Exp.get_timepoint(i)
-            if isassigned(Exp.standard_error,i)
+            if isassigned(Exp.error_bar,i)
                 for (l,condition) in enumerate(Sim.conditions)
                     if condition in keys(Exp.experiments[i]) && !(condition in Viz.options[i]["dont_show"])
                         exp_data = errorbar(
                             exp_t ./ Viz.options[i]["divided_by"],
                             Exp.experiments[i][condition],
-                            yerr=Exp.standard_error[i][condition],
+                            yerr=Exp.error_bar[i][condition],
                             lw=1,markerfacecolor="None",
                             color=Viz.options[i]["cmap"][l],
                             markeredgecolor=Viz.options[i]["cmap"][l],
