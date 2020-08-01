@@ -13,13 +13,14 @@ options = [
         "ylim" => (),
         "yticks" => nothing,
         "ylabel" => replace(replace(observables[i], "__" => "\n"), "_" => " "),
+        "exp_data" => true,
         "cmap" => [cm.colors[j] for j in 1:20],
         "shape" => ["o", "v", "^", "<", ">", "8", "s", 
                     "p", "*", "h", "H", "D", "d", "P", "X"],
         "dont_show" => [],
     ) for i in 1:length(observables)]
 # ---
-for (i,_) in enumerate(observables)
+for i in eachindex(observables)
     options[i]["divided_by"] = 60  # sec. -> min.
     options[i]["xlim"] = (-5, 95)
     options[i]["xticks"] = [0, 30, 60, 90]
