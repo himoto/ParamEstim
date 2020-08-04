@@ -1,5 +1,10 @@
-function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
-                                show_all::Bool, stdev::Bool, simulations_all::Array{Float64,4})
+function plotFunc_timecourse(
+        Sim::Module,
+        n_file::Vector{Int},
+        viz_type::String,
+        show_all::Bool,
+        stdev::Bool,
+        simulations_all::Array{Float64,4})
     if !isdir("./figure/simulation/$viz_type")
         mkpath("./figure/simulation/$viz_type")
     end
@@ -143,8 +148,9 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
                         plot(
                             exp_t ./ Viz.options[i]["divided_by"],
                             Exp.experiments[i][condition],
+                            Viz.options[i]["shape"][l],
                             color=Viz.options[i]["cmap"][l],
-                            Viz.options[i]["shape"][l],markerfacecolor="None",
+                            markerfacecolor="None",
                             markeredgecolor=Viz.options[i]["cmap"][l],
                             clip_on=false
                         )
