@@ -65,7 +65,7 @@ end
 function simulate!(p::Vector{Float64}, u0::Vector{Float64})
     # get steady state
     p[C.Ligand] = p[C.no_ligand]
-    u0 = get_steady_state!(diffeq,u0,t)
+    u0 = get_steady_state!(diffeq,u0,p)
     if u0 === nothing
         return false
     end
