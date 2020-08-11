@@ -47,11 +47,11 @@ function get_steady_state!(
         f::Function,
         u0::Vector{Float64},
         p::Vector{Float64},
-        eps::Float64=1e-6)
+        eps::Float64=1e-6)::Vector{Float64}
     while true
-        sol = solveode(diffeq,u0,[0.0,1.0],p)
+        sol = solveode(diffeq,u0,[0.0,dt],p)
         if sol === nothing
-            return nothing
+            return []
         elseif maximum(abs.((sol.u[end] .- u0) ./ (u0 .+ eps))) < eps
             break
         else
@@ -66,7 +66,7 @@ function simulate!(p::Vector{Float64}, u0::Vector{Float64})
     # get steady state
     p[C.Ligand] = p[C.no_ligand]
     u0 = get_steady_state!(diffeq,u0,p)
-    if u0 === nothing
+    if isempty(u0)
         return false
     end
     # add ligand
