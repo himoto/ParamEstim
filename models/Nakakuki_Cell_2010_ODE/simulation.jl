@@ -48,6 +48,7 @@ function get_steady_state!(
         u0::Vector{Float64},
         p::Vector{Float64},
         eps::Float64=1e-6)::Vector{Float64}
+    local sol
     while true
         sol = solveode(diffeq,u0,[0.0,dt],p)
         if sol === nothing
@@ -58,7 +59,7 @@ function get_steady_state!(
             u0 .= sol.u[end]
         end
     end
-    return u0
+    return sol.u[end]
 end
 
 
