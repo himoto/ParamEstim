@@ -36,7 +36,7 @@ function solveode(
             abstol=1e-9,reltol=1e-9,dtmin=1e-8,
             saveat=dt,verbose=false
         )
-        return ifelse(length(sol.t) == length(t), sol, nothing)
+        return ifelse(sol.retcode == :Success, sol, nothing)
     catch
         return nothing
     end
@@ -51,15 +51,15 @@ function get_steady_state!(
     local sol
     while true
         sol = solveode(diffeq,u0,[0.0,dt],p)
-        if sol === nothing
-            return []
-        elseif maximum(abs.((sol.u[end] .- u0) ./ (u0 .+ eps))) < eps
+        if sol === nothing || maximum(abs.((sol.u[end] .- u0) ./ (u0 .+ eps))) < eps
             break
         else
-            u0 .= sol.u[end]
+            for (i,val) in enumerate(sol.u[end])
+                @inbounds u0[i] = val
+            end
         end
     end
-    return sol.u[end]
+    return sol !== nothing ? sol.u[end] : []
 end
 
 
