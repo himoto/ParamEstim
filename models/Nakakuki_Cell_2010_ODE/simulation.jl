@@ -48,18 +48,19 @@ function get_steady_state!(
         u0::Vector{Float64},
         p::Vector{Float64},
         eps::Float64=1e-6)::Vector{Float64}
-    local sol
-    while true
-        sol = solveode(diffeq,u0,[0.0,dt],p)
-        if sol === nothing || maximum(abs.((sol.u[end] .- u0) ./ (u0 .+ eps))) < eps
-            break
-        else
-            for (i,val) in enumerate(sol.u[end])
-                @inbounds u0[i] = val
+    let sol
+        while true
+            sol = solveode(diffeq,u0,[0.0,dt],p)
+            if sol === nothing || maximum(abs.((sol.u[end] .- u0) ./ (u0 .+ eps))) < eps
+                break
+            else
+                for (i,val) in enumerate(sol.u[end])
+                    @inbounds u0[i] = val
+                end
             end
         end
+        return sol !== nothing ? sol.u[end] : []
     end
-    return sol !== nothing ? sol.u[end] : []
 end
 
 
