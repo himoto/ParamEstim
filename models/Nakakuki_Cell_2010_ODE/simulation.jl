@@ -37,12 +37,12 @@ function solveode(
                 abstol=1e-9,reltol=1e-9,dtmin=1e-8,
                 saveat=dt,verbose=false
             )
-            if sol.retcode != :Success
-                sol = nothing
-            end
         catch
             sol = nothing
         finally
+            if sol !== nothing && sol.retcode != :Success
+                sol = nothing
+            end
             return sol
         end
     end
@@ -54,20 +54,18 @@ function get_steady_state!(
         u0::Vector{Float64},
         p::Vector{Float64},
         eps::Float64=1e-6)::Vector{Float64}
-    let sol
-        while true
-            sol = solveode(diffeq,u0,[0.0,dt],p)
-            if sol === nothing || maximum(abs.((sol.u[end] .- u0) ./ (u0 .+ eps))) < eps
-                u0 = (sol !== nothing) ? sol.u[end] : []
-                break
-            else
-                for (i,val) in enumerate(sol.u[end])
-                    @inbounds u0[i] = val
-                end
+    while true
+        sol = solveode(diffeq,u0,[0.0,dt],p)
+        if sol === nothing || maximum(abs.((sol.u[end] .- u0) ./ (u0 .+ eps))) < eps
+            u0 = (sol !== nothing) ? sol.u[end] : []
+            break
+        else
+            for (i,val) in enumerate(sol.u[end])
+                @inbounds u0[i] = val
             end
         end
-        return u0
     end
+    return u0
 end
 
 
