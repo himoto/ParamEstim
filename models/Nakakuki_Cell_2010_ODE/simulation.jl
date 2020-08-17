@@ -29,16 +29,22 @@ function solveode(
         u0::Vector{Float64},
         t::Vector{Float64},
         p::Vector{Float64})
-    prob = ODEProblem(f,u0,(t[1],t[end]),p)
-    try
-        sol = solve(
-            prob,CVODE_BDF(),
-            abstol=1e-9,reltol=1e-9,dtmin=1e-8,
-            saveat=dt,verbose=false
-        )
-        return ifelse(sol.retcode == :Success, sol, nothing)
-    catch
-        return nothing
+    let sol
+        try
+            prob = ODEProblem(f,u0,(t[1],t[end]),p)
+            sol = solve(
+                prob,CVODE_BDF(),
+                abstol=1e-9,reltol=1e-9,dtmin=1e-8,
+                saveat=dt,verbose=false
+            )
+            if sol.retcode != :Success
+                sol = nothing
+            end
+        catch
+            sol = nothing
+        finally
+            return sol
+        end
     end
 end
 
@@ -52,6 +58,7 @@ function get_steady_state!(
         while true
             sol = solveode(diffeq,u0,[0.0,dt],p)
             if sol === nothing || maximum(abs.((sol.u[end] .- u0) ./ (u0 .+ eps))) < eps
+                u0 = (sol !== nothing) ? sol.u[end] : []
                 break
             else
                 for (i,val) in enumerate(sol.u[end])
@@ -59,7 +66,7 @@ function get_steady_state!(
                 end
             end
         end
-        return sol !== nothing ? sol.u[end] : []
+        return u0
     end
 end
 
