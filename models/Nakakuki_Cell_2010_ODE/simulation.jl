@@ -13,6 +13,7 @@ using SteadyStateDiffEq
 # Options for ODE solver
 const ABSTOL = 1e-9
 const RELTOL = 1e-9
+const DTMIN = 1e-8
 
 const normalization = true 
 #=
@@ -39,7 +40,7 @@ function solveode(
             prob = ODEProblem(f,u0,(t[1],t[end]),p)
             sol = solve(
                 prob,CVODE_BDF(),
-                abstol=ABSTOL,reltol=RELTOL,dtmin=1e-8,
+                abstol=ABSTOL,reltol=RELTOL,dtmin=DTMIN,
                 saveat=dt,verbose=false
             )
         catch
@@ -65,7 +66,7 @@ function get_steady_state!(
             prob,DynamicSS(
                 CVODE_BDF();abstol=ABSTOL,reltol=RELTOL
             ),
-            dt=dt
+            dt=dt,dtmin=DTMIN,verbose=false
         )
         u0 = ifelse(sol.retcode == :Success, sol.u, [])
     catch
