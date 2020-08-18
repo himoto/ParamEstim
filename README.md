@@ -11,6 +11,7 @@ Points (blue diamonds, EGF; red squares, HRG) denote experimental data, solid li
 ## Dependencies
 > - [Sundials](https://github.com/SciML/Sundials.jl) (*ODE solver*)
 > - [DelayDiffEq](https://github.com/SciML/DelayDiffEq.jl) (*DDE solver*)
+> - [SteadyStateDiffEq](https://github.com/SciML/SteadyStateDiffEq.jl)
 > - [StatsBase](https://github.com/JuliaStats/StatsBase.jl)
 > - [PyPlot](https://github.com/JuliaPy/PyPlot.jl)
 > - [Seaborn](https://github.com/JuliaPy/Seaborn.jl)
