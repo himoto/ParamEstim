@@ -40,22 +40,21 @@ function solveode(
             prob = ODEProblem(f,u0,(t[1],t[end]),p)
             sol = solve(
                 prob,CVODE_BDF(),
-                abstol=ABSTOL,reltol=RELTOL,dtmin=DTMIN,
-                saveat=dt,verbose=false
+                abstol=ABSTOL,reltol=RELTOL,dtmin=DTMIN,saveat=dt,verbose=false
             )
-        catch
-            sol = nothing
-        finally
-            if sol !== nothing && sol.retcode != :Success
-                sol = nothing
+            if sol.retcode == :Success
+                return sol
+            else
+                GC.gc()
             end
-            return sol
+        catch
+            GC.gc()
         end
     end
 end
 
 
-function get_steady_state!(
+function get_steady_state(
         f::Function,
         u0::Vector{Float64},
         p::Vector{Float64})::Vector{Float64}
@@ -68,11 +67,15 @@ function get_steady_state!(
             ),
             dt=dt,dtmin=DTMIN,verbose=false
         )
-        u0 = ifelse(sol.retcode == :Success, sol.u, [])
+        if sol.retcode == :Success
+            return sol.u
+        else
+            GC.gc()
+            return []
+        end
     catch
-        u0 = []
-    finally
-        return u0
+        GC.gc()
+        return []
     end
 end
 
@@ -80,7 +83,7 @@ end
 function simulate!(p::Vector{Float64}, u0::Vector{Float64})
     # get steady state
     p[C.Ligand] = p[C.no_ligand]
-    u0 = get_steady_state!(diffeq,u0,p)
+    u0 = get_steady_state(diffeq,u0,p)
     if isempty(u0)
         return false
     end
