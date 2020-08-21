@@ -35,21 +35,19 @@ function solveode(
         u0::Vector{Float64},
         t::Vector{Float64},
         p::Vector{Float64})
-    let sol
-        try
-            prob = ODEProblem(f,u0,(t[1],t[end]),p)
-            sol = solve(
-                prob,CVODE_BDF(),
-                abstol=ABSTOL,reltol=RELTOL,dtmin=DTMIN,saveat=dt,verbose=false
-            )
-            if sol.retcode == :Success
-                return sol
-            else
-                GC.gc()
-            end
-        catch
+    try
+        prob = ODEProblem(f,u0,(t[1],t[end]),p)
+        sol = solve(
+            prob,CVODE_BDF(),
+            abstol=ABSTOL,reltol=RELTOL,dtmin=DTMIN,saveat=dt,verbose=false
+        )
+        if sol.retcode == :Success
+            return sol
+        else
             GC.gc()
         end
+    catch
+        GC.gc()
     end
 end
 
