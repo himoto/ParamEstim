@@ -74,7 +74,8 @@ function plotFunc_timecourse(
                                         !isnan,normalized[i,:,k,l]
                                     )
                                 ) for k in eachindex(Sim.t)
-                            ],color=Viz.options[i]["cmap"][l]
+                            ],color=Viz.options[i]["cmap"][l],
+                            label=condition
                         )
                     end
                 end
@@ -111,7 +112,8 @@ function plotFunc_timecourse(
                             Sim.simulations[i,:,l] / ifelse(
                                 Sim.normalization,
                                 maximum(Sim.simulations[i,:,:]),1.0),
-                            color=Viz.options[i]["cmap"][l]
+                            color=Viz.options[i]["cmap"][l],
+                            label=condition
                         )
                     end
                 end
@@ -119,14 +121,14 @@ function plotFunc_timecourse(
         end
 
         if Viz.options[i]["exp_data"] && isassigned(Exp.experiments,i)
-            exp_t = Exp.get_timepoint(i)
-            if isassigned(Exp.error_bar,i)
+            exp_t = Exp.get_timepoint(name)
+            if isassigned(Exp.error_bars,i)
                 for (l,condition) in enumerate(Sim.conditions)
                     if condition in keys(Exp.experiments[i]) && !(condition in Viz.options[i]["dont_show"])
                         exp_data = errorbar(
                             exp_t ./ Viz.options[i]["divided_by"],
                             Exp.experiments[i][condition],
-                            yerr=Exp.error_bar[i][condition],
+                            yerr=Exp.error_bars[i][condition],
                             lw=1,markerfacecolor="None",
                             color=Viz.options[i]["cmap"][l],
                             markeredgecolor=Viz.options[i]["cmap"][l],
@@ -173,6 +175,11 @@ function plotFunc_timecourse(
             yticks(Viz.options[i]["yticks"])
         end
         ylabel(Viz.options[i]["ylabel"])
+        if Viz.options[i]["legend_loc"] !== nothing
+            legend(
+                loc=Viz.options[i]["legend_loc"], frameon=false, fontsize=15
+            )
+        end
         savefig(
             "./figure/simulation/$viz_type/$name.pdf", bbox_inches="tight"
         )

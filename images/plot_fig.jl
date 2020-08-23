@@ -102,7 +102,7 @@ function plotFunc_timecourse(Sim::Module, n_file::Vector{Int}, viz_type::String,
         end
 
         if isassigned(Exp.experiments, i)
-            exp_t = Exp.get_timepoint(i)
+            exp_t = Exp.get_timepoint(name)
             if isassigned(Exp.standard_error, i)
                 for (l, condition) in enumerate(Sim.conditions)
                     if condition in keys(Exp.experiments[i])

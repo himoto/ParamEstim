@@ -53,17 +53,17 @@ function objective(indiv_gene::Vector{Float64})::Float64
 
     if Sim.simulate!(p,u0) isa Nothing
         error::Vector{Float64} = zeros(length(observables))
-        for (i,target) in enumerate(observables)
-            if isassigned(Exp.experiments,observables_index(target))
-                error[i] = compute_objval_cos(
+        for (i,obs_name) in enumerate(observables)
+            if isassigned(Exp.experiments,i)
+                error[i] = compute_objval_rss(
                     diff_sim_and_exp(
-                        Sim.simulations[observables_index(target),:,:],
-                        Exp.experiments[observables_index(target)],
-                        Exp.get_timepoint(i),
+                        Sim.simulations[i,:,:],
+                        Exp.experiments[i],
+                        Exp.get_timepoint(obs_name),
                         Sim.conditions,
                         sim_norm_max=ifelse(
                             Sim.normalization,
-                            maximum(Sim.simulations[observables_index(target),:,:]),
+                            maximum(Sim.simulations[i,:,:]),
                             1.0
                         ),
                     )...

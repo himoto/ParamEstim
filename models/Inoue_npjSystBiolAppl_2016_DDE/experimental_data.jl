@@ -2,9 +2,7 @@ module Exp
 include("./observable.jl")
 
 experiments = Array{Dict{String,Array{Float64,1}},1}(undef, length(observables))
-error_bar = Array{Dict{String,Array{Float64,1}},1}(undef, length(observables))
-
-const t   = [15.0*i for i in 0:24]  # 0, 15, 30, ..., 360 [min.]
+error_bars = Array{Dict{String,Array{Float64,1}},1}(undef, length(observables))
 
 experiments[observables_index("Nuclear_NFkB")] = Dict(
     "WT" => [
@@ -36,10 +34,10 @@ experiments[observables_index("Nuclear_NFkB")] = Dict(
     ] ./ 83.68132857
 )
 
-function get_timepoint(obs_idx::Int)
-    if obs_idx in [observables_index("Nuclear_NFkB")]
-        return t
+
+function get_timepoint(obs_name::String)::Vector{Float64}
+    if obs_name == "Nuclear_NFkB"
+        [15.0*i for i in 0:24]  # 0, 15, 30, ..., 360 [min.]
     end
 end
-
 end # module
