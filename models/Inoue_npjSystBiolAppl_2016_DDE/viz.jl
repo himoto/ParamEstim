@@ -14,6 +14,7 @@ options = [
         "yticks" => nothing,
         "ylabel" => replace(replace(observables[i], "__" => "\n"), "_" => " "),
         "exp_data" => true,
+        "legend_loc" => nothing,
         "cmap" => [cm.colors[j] for j in 1:20],
         "shape" => ["o", "v", "^", "<", ">", "8", "s",
                     "p", "*", "h", "H", "D", "d", "P", "X"],

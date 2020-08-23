@@ -39,7 +39,7 @@ include("models/Nakakuki_Cell_2010_ODE/set_model.jl")
 include("models/Nakakuki_Cell_2010_ODE/observable.jl")
 include("models/Nakakuki_Cell_2010_ODE/experimental_data.jl")
 include("models/Nakakuki_Cell_2010_ODE/simulation.jl")
-include("models/Nakakuki_Cell_2010_ODE/visualization.jl")
+include("models/Nakakuki_Cell_2010_ODE/viz.jl")
 include("models/Nakakuki_Cell_2010_ODE/fitness.jl")
 include("models/Nakakuki_Cell_2010_ODE/set_search_param.jl")
 
