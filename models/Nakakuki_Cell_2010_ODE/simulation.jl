@@ -35,19 +35,25 @@ function solveode(
         u0::Vector{Float64},
         t::Vector{Float64},
         p::Vector{Float64})
-    try
-        prob = ODEProblem(f,u0,(t[1],t[end]),p)
-        sol = solve(
-            prob,CVODE_BDF(),
-            abstol=ABSTOL,reltol=RELTOL,dtmin=DTMIN,saveat=dt,verbose=false
-        )
-        if sol.retcode == :Success
-            return sol
-        else
-            GC.gc()
+    let sol
+        local is_successful::Bool
+        try
+            prob = ODEProblem(f,u0,(t[1],t[end]),p)
+            sol = solve(
+                prob,CVODE_BDF(),
+                abstol=ABSTOL,reltol=RELTOL,dtmin=DTMIN,saveat=dt,verbose=false
+            )
+            is_successful = (sol.retcode == :Success) ? true : false
+        catch
+            is_successful = false
+        finally
+            if is_successful
+                return sol
+            else
+                GC.gc()
+                return nothing
+            end
         end
-    catch
-        GC.gc()
     end
 end
 
@@ -56,24 +62,29 @@ function get_steady_state(
         f::Function,
         u0::Vector{Float64},
         p::Vector{Float64})::Vector{Float64}
-    try
-        prob = ODEProblem(diffeq,u0,(0.0,Inf),p)
-        prob = SteadyStateProblem(prob)
-        sol = solve(
-            prob,DynamicSS(
-                CVODE_BDF();abstol=ABSTOL,reltol=RELTOL
-            ),
-            dt=dt,dtmin=DTMIN,verbose=false
-        )
-        if sol.retcode == :Success
-            return sol.u
-        else
-            GC.gc()
-            return []
+    let sol
+        local is_successful::Bool
+        try
+            prob = ODEProblem(diffeq,u0,(0.0,Inf),p)
+            prob = SteadyStateProblem(prob)
+            sol = solve(
+                prob,
+                DynamicSS(
+                    CVODE_BDF();abstol=ABSTOL,reltol=RELTOL
+                ),
+                dt=dt,dtmin=DTMIN,verbose=false
+            )
+            is_successful = (sol.retcode == :Success) ? true : false
+        catch
+            is_successful = false
+        finally
+            if is_successful
+                return sol.u
+            else
+                GC.gc()
+                return []
+            end
         end
-    catch
-        GC.gc()
-        return []
     end
 end
 
