@@ -1,6 +1,10 @@
-function ga_v1(nth_param_set::Int64, max_generation::Int64,
-                n_population::Int64, n_children::Int64, n_gene::Int64,
-                allowable_error::Float64)::Tuple{Array{Float64, 1}, Float64}
+function ga_v1(
+        nth_param_set::Int64,
+        max_generation::Int64,
+        n_population::Int64,
+        n_children::Int64,
+        n_gene::Int64,
+        allowable_error::Float64)::Tuple{Array{Float64, 1}, Float64}
     population = get_initial_population(n_population, n_gene)
     println(
         @sprintf(
@@ -84,10 +88,14 @@ function ga_v1(nth_param_set::Int64, max_generation::Int64,
 end
 
 
-function ga_v1_continue(nth_param_set::Int64, max_generation::Int64,
-                        n_population::Int64, n_children::Int64, n_gene::Int64,
-                        allowable_error::Float64, 
-                        p0_bounds::Vector{Float64})::Tuple{Array{Float64, 1}, Float64}
+function ga_v1_continue(
+        nth_param_set::Int64,
+        max_generation::Int64,
+        n_population::Int64,
+        n_children::Int64,
+        n_gene::Int64,
+        allowable_error::Float64, 
+        p0_bounds::Vector{Float64})::Tuple{Array{Float64, 1}, Float64}
     count::Int64 = readdlm(
         "./fitparam/$nth_param_set/count_num.dat"
     )[1, 1]
@@ -134,12 +142,12 @@ function ga_v1_continue(nth_param_set::Int64, max_generation::Int64,
         return best_indiv, best_fitness
     end
 
-    generation::Int64 = 2
+    generation::Int64 = 2 + count
     while generation < max_generation
         population = mgg_alternation!(population, n_population, n_children, n_gene)
         println(
             @sprintf(
-                "Generation%d: Best Fitness = %.6e", generation + count, population[1, end]
+                "Generation%d: Best Fitness = %.6e", generation, population[1, end]
             )
         )
         flush(stdout)
@@ -147,7 +155,7 @@ function ga_v1_continue(nth_param_set::Int64, max_generation::Int64,
         if population[1, end] < best_fitness
             f = open(
                 @sprintf(
-                    "./fitparam/%d/fit_param%d.dat", nth_param_set, generation + count
+                    "./fitparam/%d/fit_param%d.dat", nth_param_set, generation
                 ), "w"
             )
             for val in best_indiv
@@ -156,7 +164,7 @@ function ga_v1_continue(nth_param_set::Int64, max_generation::Int64,
             close(f)
 
             open("./fitparam/$nth_param_set/generation.dat", "w") do f
-                write(f, @sprintf("%d", generation + count))
+                write(f, @sprintf("%d", generation))
             end
         end
         best_fitness = population[1, end]
@@ -173,7 +181,7 @@ function ga_v1_continue(nth_param_set::Int64, max_generation::Int64,
         end
 
         open("./fitparam/$nth_param_set/count_num.dat", "w") do f
-            write(f, @sprintf("%d", generation + count))
+            write(f, @sprintf("%d", generation))
         end
 
         generation += 1
