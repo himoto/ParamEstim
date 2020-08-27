@@ -35,7 +35,7 @@ function solveode(
         u0::Vector{Float64},
         t::Vector{Float64},
         p::Vector{Float64})
-    let sol
+    let sol::ODESolution{}
         local is_successful::Bool
         try
             prob = ODEProblem(f,u0,(t[1],t[end]),p)
@@ -43,7 +43,7 @@ function solveode(
                 prob,CVODE_BDF(),
                 abstol=ABSTOL,reltol=RELTOL,dtmin=DTMIN,saveat=dt,verbose=false
             )
-            is_successful = (sol.retcode == :Success) ? true : false
+            is_successful = (sol.retcode === :Success) ? true : false
         catch
             is_successful = false
         finally
@@ -62,7 +62,7 @@ function get_steady_state(
         f::Function,
         u0::Vector{Float64},
         p::Vector{Float64})::Vector{Float64}
-    let sol
+    let sol::SteadyStateSolution{}
         local is_successful::Bool
         try
             prob = ODEProblem(diffeq,u0,(0.0,Inf),p)
@@ -74,7 +74,7 @@ function get_steady_state(
                 ),
                 dt=dt,dtmin=DTMIN,verbose=false
             )
-            is_successful = (sol.retcode == :Success) ? true : false
+            is_successful = (sol.retcode === :Success) ? true : false
         catch
             is_successful = false
         finally
