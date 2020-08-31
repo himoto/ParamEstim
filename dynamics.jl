@@ -133,7 +133,11 @@ function save_param_range(n_file::Vector{Int})
 end
 
 
-function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
+function simulate_all(
+        Sim::Module=Sim;
+        viz_type::String,
+        show_all::Bool,
+        stdev::Bool)
     if !isdir("./figure")
         mkdir("./figure")
     end
@@ -156,11 +160,12 @@ function simulate_all(Sim::Module;viz_type::String,show_all::Bool,stdev::Bool)
     if viz_type != "experiment"
         if length(n_file) > 0
             if length(n_file) == 1 && viz_type == "average"
-                viz_type = "best"
+                error("viz_type should be best, not $viz_type")
+                # viz_type = "best"
             end
             for (i,nth_param_set) in enumerate(n_file)
-                (Sim,successful) = validate(nth_param_set)
-                if successful
+                (Sim,is_successful) = validate(nth_param_set)
+                if is_successful
                     for j in eachindex(observables)
                         @inbounds simulaitons_all[j,i,:,:] = Sim.simulations[j,:,:]
                     end

@@ -36,9 +36,7 @@ $ sh optimize_parallel.sh
 include("ParamEstim.jl")
 using .ParamEstim
 
-simulate_all(Sim,
-    viz_type="average", show_all=false, stdev=true          
-)
+simulate_all(viz_type="average", show_all=false, stdev=true)
 ```
 
 **viz_type**: String
