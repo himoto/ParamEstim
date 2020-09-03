@@ -30,11 +30,14 @@ def main():
                 - fit_param%d.dat -> fit_param%d.npy
                 - best_fitness.dat -> best_fitness.npy
                 """
-                data = np.loadtxt(
-                    './fitparam/{:d}/{}'.format(
-                        nth_paramset, dat_file
-                    ), dtype='float'
-                )
+                try:
+                    data = np.loadtxt(
+                        './fitparam/{:d}/{}'.format(
+                            nth_paramset, dat_file
+                        ), dtype='float'
+                    )
+                except ValueError:
+                    pass
             else:
                 """
                 - count_num.dat -> count_num.npy
