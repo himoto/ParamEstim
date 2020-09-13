@@ -12,7 +12,7 @@ function ga_v2(
     N_iter::Int64 = 1
     N0::Vector{Float64} = zeros(3*n_population)
 
-    population = get_initial_population(n_population, n_gene)
+    population::Matrix{Float64} = get_initial_population(n_population, n_gene)
     N0[1] = population[1, end]
     println(
         @sprintf(
@@ -21,19 +21,17 @@ function ga_v2(
     )
     flush(stdout)
 
-    best_indiv = decode_gene2val(population[1, 1:n_gene])
-    best_fitness = population[1, end]
+    best_indiv::Vector{Float64} = decode_gene2val(population[1, 1:n_gene])
+    best_fitness::Float64 = population[1, end]
 
-    f = open("./fitparam/$nth_param_set/fit_param1.dat", "w")
-    for val in best_indiv
-        write(f, @sprintf("%.6e\n", val))
+    open("./fitparam/$nth_param_set/fit_param1.dat", "w") do f
+        for val in best_indiv
+            write(f, @sprintf("%.6e\n", val))
+        end
     end
-    close(f)
-
     open("./fitparam/$nth_param_set/generation.dat", "w") do f
         write(f, @sprintf("%d", 1))
     end
-
     open("./fitparam/$nth_param_set/best_fitness.dat", "w") do f
         write(f, @sprintf("%.6e", best_fitness))
     end
@@ -76,14 +74,13 @@ function ga_v2(
         flush(stdout)
         best_indiv = decode_gene2val(population[1, 1:n_gene])
         if population[1, end] < best_fitness
-            f = open(
+            open(
                 "./fitparam/$nth_param_set/fit_param$generation.dat", "w"
-            )
-            for val in best_indiv
-                write(f, @sprintf("%.6e\n", val))
+            ) do f
+                for val in best_indiv
+                    write(f, @sprintf("%.6e\n", val))
+                end
             end
-            close(f)
-
             open("./fitparam/$nth_param_set/generation.dat", "w") do f
                 write(f, @sprintf("%d", generation))
             end
@@ -144,7 +141,7 @@ function ga_v2_continue(
     best_indiv_gene::Vector{Float64} = encode_val2gene(best_indiv)
     best_fitness::Float64 = objective(best_indiv_gene)
 
-    population = get_initial_population_continue(
+    population::Matrix{Float64} = get_initial_population_continue(
         nth_param_set, n_population, n_gene, p0_bounds
     )
     if best_fitness < population[1, end]
@@ -209,16 +206,15 @@ function ga_v2_continue(
         flush(stdout)
         best_indiv = decode_gene2val(population[1, 1:n_gene])
         if population[1, end] < best_fitness
-            f = open(
+            open(
                 @sprintf(
                     "./fitparam/%d/fit_param%d.dat", nth_param_set, generation
                 ), "w"
-            )
-            for val in best_indiv
-                write(f, @sprintf("%.6e\n", val))
+            ) do f
+                for val in best_indiv
+                    write(f, @sprintf("%.6e\n", val))
+                end
             end
-            close(f)
-
             open("./fitparam/$nth_param_set/generation.dat", "w") do f
                 write(f, @sprintf("%d", generation))
             end
