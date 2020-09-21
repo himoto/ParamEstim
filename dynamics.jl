@@ -152,7 +152,7 @@ function simulate_all(
         end
     end
 
-    n_file::Vector{Int} = viz_type == "original" ? [] : get_executable()
+    n_file::Vector{Int} = viz_type in ["original", "experiment"] ? [] : get_executable()
 
     simulaitons_all::Array{Float64,4} = fill(
         NaN,(length(observables),length(n_file),length(Sim.t),length(Sim.conditions))
