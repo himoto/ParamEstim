@@ -9,7 +9,6 @@ using .V
 
 using Sundials
 using SteadyStateDiffEq
-using ForwardDiff
 
 # Options for ODE solver
 const ABSTOL = 1e-9
