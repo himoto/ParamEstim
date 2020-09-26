@@ -125,6 +125,9 @@ function plotFunc_timecourse(
             if isassigned(Exp.error_bars,i)
                 for (l,condition) in enumerate(Sim.conditions)
                     if condition in keys(Exp.experiments[i]) && !(condition in Viz.options[i]["dont_show"])
+                        if viz_type == "experiment"
+                            Viz.options[i]["shape"][l] *= "-"
+                        end
                         exp_data = errorbar(
                             exp_t ./ Viz.options[i]["divided_by"],
                             Exp.experiments[i][condition],
@@ -147,6 +150,9 @@ function plotFunc_timecourse(
             else
                 for (l,condition) in enumerate(Sim.conditions)
                     if condition in keys(Exp.experiments[i]) && !(condition in Viz.options[i]["dont_show"])
+                        if viz_type == "experiment"
+                            Viz.options[i]["shape"][l] *= "-"
+                        end
                         plot(
                             exp_t ./ Viz.options[i]["divided_by"],
                             Exp.experiments[i][condition],
