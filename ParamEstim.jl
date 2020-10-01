@@ -50,7 +50,7 @@ include("ga/local_search.jl")
 include("ga/v1.jl")
 include("ga/v2.jl")
 
-include("plot_func.jl")
-include("dynamics.jl")
+include("dynamics/signaling_systems.jl")
+include("dynamics/temporal_dynamics.jl")
 
 end  # module
