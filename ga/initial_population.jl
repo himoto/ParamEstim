@@ -39,12 +39,10 @@ function get_initial_population_continue(
         n_gene::Int64,
         p0_bounds::Vector{Float64})::Matrix{Float64}
     generation::Int64 = readdlm(
-        "./fitparam/$nth_param_set/generation.dat"
+        strip(MODEL_PATH, '/') * "/fitparam/$nth_param_set/generation.dat"
     )[1,1]
     best_indiv::Vector{Float64} = readdlm(
-        @sprintf(
-            "./fitparam/%d/fit_param%d.dat", nth_param_set, generation
-        )
+        strip(MODEL_PATH, '/') * "/fitparam/$nth_param_set/fit_param$generation.dat"
     )[:,1]
     println(
         "\n----------------------------------------\n"*

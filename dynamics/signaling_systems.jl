@@ -1,12 +1,9 @@
 function get_indiv(paramset::Int)::Vector{Float64}
     best_generation::Int64 = readdlm(
-        "./fitparam/$paramset/generation.dat"
+        strip(MODEL_PATH, '/') * "/fitparam/$paramset/generation.dat"
     )[1,1]
     best_indiv::Vector{Float64} = readdlm(
-        @sprintf(
-            "./fitparam/%d/fit_param%d.dat",
-            paramset, best_generation
-        )
+        strip(MODEL_PATH, '/') * "/fitparam/$paramset/fit_param$best_generation.dat",
     )[:,1]
 
     return best_indiv
@@ -23,7 +20,7 @@ end
 
 function get_executable()
     n_file::Vector{Int} = []
-    fitparam_files::Vector{String} = readdir("./fitparam")
+    fitparam_files::Vector{String} = readdir(strip(MODEL_PATH, '/') * "/fitparam")
     for file in fitparam_files
         if occursin(r"\d",file)
             push!(n_file, parse(Int64,file))
@@ -31,11 +28,11 @@ function get_executable()
     end
     empty_folder::Vector{Int} = []
     for (i,nth_param_set) in enumerate(n_file)
-        if !isfile("./fitparam/$nth_param_set/generation.dat")
+        if !isfile(strip(MODEL_PATH, '/') * "/fitparam/$nth_param_set/generation.dat")
             push!(empty_folder,i)
         end
     end
-    for i in sort(empty_folder,rev=true)
+    for i in sort(empty_folder, rev=true)
         deleteat!(n_file,i)
     end
 
@@ -128,7 +125,7 @@ function save_param_range(n_file::Vector{Int})
     ax.set_yticklabels([C.NAMES[i] for i in search_idx[1]])
     ax.set_xscale("log")
 
-    savefig("./figure/param_range.pdf",bbox_inches="tight")
+    savefig(strip(MODEL_PATH, '/') * "/figure/param_range.pdf",bbox_inches="tight")
     close(fig)
 end
 
@@ -138,8 +135,8 @@ function simulate_all(
         viz_type::String,
         show_all::Bool,
         stdev::Bool)
-    if !isdir("./figure")
-        mkdir("./figure")
+    if !isdir(strip(MODEL_PATH, '/') * "/figure")
+        mkdir(strip(MODEL_PATH, '/') * "/figure")
     end
 
     if !(viz_type in ["best","average","original","experiment"])
@@ -174,9 +171,9 @@ function simulate_all(
 
             best_fitness_all::Vector{Float64} = fill(Inf,length(n_file))
             for (i,nth_param_set) in enumerate(n_file)
-                if isfile("./fitparam/$nth_param_set/best_fitness.dat")
+                if isfile(strip(MODEL_PATH, '/') * "/fitparam/$nth_param_set/best_fitness.dat")
                     best_fitness_all[i] = readdlm(
-                        "./fitparam/$nth_param_set/best_fitness.dat"
+                        strip(MODEL_PATH, '/') * "/fitparam/$nth_param_set/best_fitness.dat"
                     )[1,1]
                 end
             end

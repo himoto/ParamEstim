@@ -1,5 +1,7 @@
 module ParamEstim
 
+const MODEL_PATH = "models/Nakakuki_Cell_2010_ODE"
+
 export
     C,
     V,
@@ -21,7 +23,8 @@ export
     ga_v1,
     ga_v1_continue,
     ga_v2,
-    ga_v2_continue
+    ga_v2_continue,
+    MODEL_PATH
 
 using Printf
 using LinearAlgebra
@@ -33,15 +36,15 @@ using PyPlot
 
 import Seaborn
 
-include("models/Nakakuki_Cell_2010_ODE/name2idx/parameters.jl")
-include("models/Nakakuki_Cell_2010_ODE/name2idx/species.jl")
-include("models/Nakakuki_Cell_2010_ODE/set_model.jl")
-include("models/Nakakuki_Cell_2010_ODE/observable.jl")
-include("models/Nakakuki_Cell_2010_ODE/experimental_data.jl")
-include("models/Nakakuki_Cell_2010_ODE/simulation.jl")
-include("models/Nakakuki_Cell_2010_ODE/viz.jl")
-include("models/Nakakuki_Cell_2010_ODE/fitness.jl")
-include("models/Nakakuki_Cell_2010_ODE/set_search_param.jl")
+include(MODEL_PATH * "/name2idx/parameters.jl")
+include(MODEL_PATH * "/name2idx/species.jl")
+include(MODEL_PATH * "/set_model.jl")
+include(MODEL_PATH * "/observable.jl")
+include(MODEL_PATH * "/experimental_data.jl")
+include(MODEL_PATH * "/simulation.jl")
+include(MODEL_PATH * "/viz.jl")
+include(MODEL_PATH * "/fitness.jl")
+include(MODEL_PATH * "/set_search_param.jl")
 
 include("ga/initial_population.jl")
 include("ga/undxmgg.jl")

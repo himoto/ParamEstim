@@ -12,8 +12,8 @@ function optimize_continue(nth_param_set::Int64)
 
     p0_bounds::Vector{Float64} = [0.1, 10.0]  # [lower_bound, upper_bound]
 
-    if !isdir("./fitparam/$nth_param_set")
-        mkdir("./fitparam/$nth_param_set")
+    if !isdir(strip(MODEL_PATH, '/') * "/fitparam/$nth_param_set")
+        mkdir(strip(MODEL_PATH, '/') * "/fitparam/$nth_param_set")
         
         (best_indiv, best_fitness) = ga_v2(
             nth_param_set,

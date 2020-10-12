@@ -2,23 +2,23 @@ include("ParamEstim.jl")
 using .ParamEstim
 
 function optimize(nth_param_set::Int64)
-    if !isdir("./fitparam")
-        mkdir("./fitparam")
+    if !isdir(strip(MODEL_PATH, '/') * "/fitparam")
+        mkdir(strip(MODEL_PATH, '/') * "/fitparam")
     end
 
     try
         files = readdir(
-            "./fitparam/$nth_param_set"
+            strip(MODEL_PATH, '/') * "/fitparam/$nth_param_set"
         )
         for file in files
             if occursin(".dat",file)
                 rm(
-                    "./fitparam/$nth_param_set/$file"
+                    strip(MODEL_PATH, '/') * "/fitparam/$nth_param_set/$file"
                 )
             end
         end
     catch
-        mkdir("./fitparam/$nth_param_set")
+        mkdir(strip(MODEL_PATH, '/') * "/fitparam/$nth_param_set")
     end
 
     search_rgn::Matrix{Float64} = get_search_region()

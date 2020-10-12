@@ -5,8 +5,8 @@ function plotFunc_timecourse(
         show_all::Bool,
         stdev::Bool,
         simulations_all::Array{Float64,4})
-    if !isdir("./figure/simulation/$viz_type")
-        mkpath("./figure/simulation/$viz_type")
+    if !isdir(strip(MODEL_PATH, '/') * "/figure/simulation/$viz_type")
+        mkpath(strip(MODEL_PATH, '/') * "/figure/simulation/$viz_type")
     end
 
     Viz.set_rcParams()
@@ -187,7 +187,7 @@ function plotFunc_timecourse(
             )
         end
         savefig(
-            "./figure/simulation/$viz_type/$name.pdf", bbox_inches="tight"
+            strip(MODEL_PATH, '/') * "/figure/simulation/$viz_type/$name.pdf", bbox_inches="tight"
         )
         close()
     end
