@@ -26,7 +26,8 @@ function plotFunc_timecourse(
                                 simulations_all[i,j,:,l] ./ ifelse(
                                     Sim.normalization,
                                     maximum(simulations_all[i,j,:,:]),1.0),
-                                color=Viz.options[i]["cmap"][l],alpha=0.05
+                                color=Viz.options[i]["cmap"][l],
+                                lw=0.5,alpha=0.35
                             )
                         end
                     end
