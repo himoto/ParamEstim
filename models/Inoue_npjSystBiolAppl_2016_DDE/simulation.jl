@@ -69,7 +69,7 @@ function get_time_course(
 end
 
 
-function simulate!(p::Vector{Float64}, u0::Vector{Float64})
+function simulate!(p::Vector{Float64}, u0::Vector{Float64})::Union{Bool, Nothing}
     for (i,condition) in enumerate(conditions)
         if condition == "WT"
             # pass

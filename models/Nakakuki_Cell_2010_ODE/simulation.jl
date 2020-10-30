@@ -34,7 +34,7 @@ function solveode(
         f::Function,
         u0::Vector{Float64},
         t::Vector{Float64},
-        p::Vector{Float64})
+        p::Vector{Float64})::Union{ODESolution{}, Nothing}
     local sol::ODESolution{}, is_successful::Bool
     try
         prob = ODEProblem(f,u0,(t[1],t[end]),p)
@@ -81,7 +81,7 @@ function get_steady_state(
 end
 
 
-function simulate!(p::Vector{Float64}, u0::Vector{Float64})
+function simulate!(p::Vector{Float64}, u0::Vector{Float64})::Union{Bool, Nothing}
     # get steady state
     p[C.Ligand] = p[C.no_ligand]
     u0 = get_steady_state(diffeq,u0,p)
